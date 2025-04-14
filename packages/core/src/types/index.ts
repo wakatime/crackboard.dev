@@ -16,6 +16,7 @@ export interface AuthContextType {
   refetch?: () => unknown;
   signOut: () => Promise<void>;
 }
+
 export interface OAuthResponse {
   access_token: string;
   expires_at?: string | null;
