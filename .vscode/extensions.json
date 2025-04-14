@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "wakatime.vscode-wakatime",
+    "esbenp.prettier-vscode",
+    "austenc.tailwind-docs",
+    "dbaeumer.vscode-eslint"
+  ]
+}

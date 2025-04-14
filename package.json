@@ -1,0 +1,46 @@
+{
+  "name": "crackboard.dev",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:turbo": "turbo run build",
+    "build:web": "turbo run build --filter=@acme/web",
+    "build:ios": "pnpm -F @acme/mobile build:ios",
+    "build:android": "pnpm -F @acme/mobile build:android",
+    "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=@acme/web",
+    "start": "turbo run start",
+    "start:web": "turbo run start --filter=@acme/web",
+    "clean": "turbo run clean && rm -rf node_modules .turbo",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "turbo run test",
+    "generate": "pnpm -F @acme/db generate",
+    "migrate": "pnpm -F @acme/db migrate",
+    "check": "pnpm -F @acme/db check",
+    "studio": "pnpm -F @acme/db studio",
+    "db-up": "pnpm -F @acme/db up",
+    "ui": "pnpm -F @acme/ui ui",
+    "worker": "pnpm -F @acme/tasks worker",
+    "scheduler": "pnpm -F @acme/tasks scheduler",
+    "info": "pnpm -F @acme/tasks info",
+    "purge": "pnpm -F @acme/tasks purge",
+    "ios": "pnpm -F @acme/mobile ios",
+    "android": "pnpm -F @acme/mobile android",
+    "expo:prebuild": "pnpm -F @acme/mobile prebuild",
+    "expo:prebuild:clean": "pnpm -F @acme/mobile prebuild:clean",
+    "prebuild": "pnpm -F @acme/mobile prebuild",
+    "prebuild:clean": "pnpm -F @acme/mobile prebuild:clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@acme/tsconfig": "workspace:*",
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "^2.5.0"
+  },
+  "packageManager": "pnpm@10.7.1",
+  "engines": {
+    "node": ">=20"
+  }
+}

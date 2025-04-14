@@ -1,0 +1,31 @@
+{
+  "name": "@acme/external",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./email": "./src/email.ts",
+    "./env": "./src/env.ts"
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "clean": "rm -rf .turbo node_modules",
+    "with-env": "dotenv -e ../../.env -c --"
+  },
+  "dependencies": {
+    "@t3-oss/env-nextjs": "^0.12.0",
+    "resend": "^4.2.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@acme/eslint-config": "workspace:*",
+    "@acme/tsconfig": "workspace:*",
+    "dotenv-cli": "^8.0.0",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "@types/node": "^22.14.0",
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.29.0"
+  }
+}

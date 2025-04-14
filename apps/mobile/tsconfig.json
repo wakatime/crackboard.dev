@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "incremental": true,
+    "disableSourceOfProjectReferenceRedirect": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"],
+      "@acme/core/utils/helpers": ["../../packages/core/src/utils/helpers.ts"],
+      "@acme/core/constants": ["../../packages/core/src/constants/index.ts"],
+      "@acme/core/validators": ["../../packages/core/src/validators/index.ts"],
+      "@acme/api/validators": ["../../packages/api/src/validators.ts"],
+      "@acme/db/schema": ["../../packages/db/src/schema/index.ts"]
+    },
+    "jsx": "react-native",
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "checkJs": false,
+    "allowUnreachableCode": true
+  },
+  "include": ["src", "*.ts", "*.js"],
+  "exclude": ["node_modules"],
+  "extends": "expo/tsconfig.base"
+}

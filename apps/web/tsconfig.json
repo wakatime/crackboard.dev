@@ -1,0 +1,14 @@
+{
+  "extends": "@acme/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "plugins": [{ "name": "next" }]
+  },
+  "include": [".", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
