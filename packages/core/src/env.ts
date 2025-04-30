@@ -9,42 +9,6 @@ export const env = createEnv({
     SPACES_KEY: z.string().optional(),
     SPACES_SECRET: z.string().optional(),
 
-    INTEGRATION_GITHUB_SECRET: z.string().optional(),
-    INTEGRATION_GITHUB_CLIENT_ID: z.string().optional(),
-    INTEGRATION_GITHUB_APP_ID: z.string().optional(),
-    INTEGRATION_GITHUB_SECRET_KEY: z.string().optional(),
-
-    INTEGRATION_STACK_EXCHANGE_SECRET: z.string().optional(),
-    INTEGRATION_STACK_EXCHANGE_CLIENT_ID: z.string().optional(),
-    INTEGRATION_STACK_EXCHANGE_SECRET_REQUEST_KEY: z.string().optional(),
-
-    INTEGRATION_GITLAB_SECRET: z.string().optional(),
-    INTEGRATION_GITLAB_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_LINKEDIN_SECRET: z.string().optional(),
-    INTEGRATION_LINKEDIN_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_TWITCH_SECRET: z.string().optional(),
-    INTEGRATION_TWITCH_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_PRODUCT_HUNT_SECRET: z.string().optional(),
-    INTEGRATION_PRODUCT_HUNT_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_YOUTUBE_SECRET: z.string().optional(),
-    INTEGRATION_YOUTUBE_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_UNSPLASH_SECRET: z.string().optional(),
-    INTEGRATION_UNSPLASH_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_INSTAGRAM_SECRET: z.string().optional(),
-    INTEGRATION_INSTAGRAM_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_TIKTOK_SECRET: z.string().optional(),
-    INTEGRATION_TIKTOK_CLIENT_ID: z.string().optional(),
-
-    INTEGRATION_WIKIPEDIA_SECRET: z.string().optional(),
-    INTEGRATION_WIKIPEDIA_CLIENT_ID: z.string().optional(),
-
     DISPOSABLE_EMAIL_KEY: z.string().optional(),
   },
   shared: {

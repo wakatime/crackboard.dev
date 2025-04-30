@@ -1,14 +1,11 @@
-import type { LanguageBadgeMetadata, TimelineTemplate } from '@acme/db/schema';
-import { IntegrationIdentifier } from '@acme/db/schema';
 import { init } from '@paralleldrive/cuid2';
-import { format, formatDistanceStrict, isSameMinute, isThisYear, isToday, isYesterday } from 'date-fns';
+import { format, formatDistanceStrict, isThisYear, isToday, isYesterday } from 'date-fns';
 import { humanId } from 'human-id';
 import pluralize from 'pluralize';
-import { siGithub, siStackexchange, siWakatime } from 'simple-icons';
 import { parse } from 'tldts';
 
 import { BASE_URL } from '../constants';
-import type { Message, MessageGroup, PublicProgramLanguageBadge, PublicUser } from '../types';
+import type { PublicUser } from '../types';
 
 export const roundWithPrecision = (n: number, precision = 2) => {
   const factor = Math.pow(10, precision);
@@ -179,45 +176,12 @@ export const roundToMostSignificantDigit = (n: number) => {
   return Math.floor(n / denominator) * denominator;
 };
 
-export const parsePlainTextFromTemplate = (templates: TimelineTemplate[]): string => {
-  return templates
-    .map((template) => {
-      switch (template.type) {
-        case 'text':
-          return template.text;
-        case 'link':
-          if (typeof template.children === 'string') {
-            return template.children;
-          }
-          return parsePlainTextFromTemplate(template.children);
-        case 'avatar':
-          return '';
-        case 'icon_svg':
-          return '';
-      }
-    })
-    .join();
-};
-
 export const formatListWithAnd = (items: string[]): string => {
   if (items.length <= 2) {
     return items.join(' and ');
   }
   const last = items.pop();
   return `${items.join(', ')}, and ${last}`;
-};
-
-export const getBadgeText = (badge: { provider: IntegrationIdentifier; score: number }): string => {
-  switch (badge.provider) {
-    case IntegrationIdentifier.GitHub:
-      return `${formatNumberWithSuffix(badge.score, 'star')} from ${siGithub.title}`;
-    case IntegrationIdentifier.WakaTime:
-      return `${formatNumberWithSuffix(badge.score, 'hour')} from ${siWakatime.title}`;
-    case IntegrationIdentifier.StackExchange:
-      return `${formatNumberWithSuffix(badge.score, 'karma', { plural: 'karma' })} from ${siStackexchange.title}`;
-    default:
-      return `${formatNumberWithSuffix(badge.score, 'point')} from ${badge.provider}`;
-  }
 };
 
 export const hostnameFromUrl = (url: string) => {
@@ -258,43 +222,6 @@ const _normalizeHostname = (hostname: string) => {
   }
   return hostname.toLowerCase();
 };
-
-export const deduplicateBadges = (programLanguageBadges: PublicProgramLanguageBadge[]) => {
-  const x = programLanguageBadges.reduce<
-    Record<
-      string,
-      {
-        connections: { provider: IntegrationIdentifier; metadata: LanguageBadgeMetadata | null; score: number }[];
-        maxScore: number;
-        name: string;
-        score: number;
-      }
-    >
-  >((p, c) => {
-    if (c.maxScore < 100) {
-      return p;
-    }
-    const rec = p[c.programLanguageName] ?? {
-      connections: [],
-      maxScore: c.maxScore,
-      name: c.programLanguageName,
-      score: 0,
-    };
-    rec.score += c.score;
-    rec.connections.push({ provider: c.provider, score: c.score, metadata: c.metadata });
-    p[c.programLanguageName] = rec;
-    return p;
-  }, {});
-  return Object.keys(x)
-    .sort((a, b) => {
-      const pA = (x[a]?.maxScore ?? 0) > 0 ? (x[a]?.score ?? 0) / (x[a]?.maxScore ?? 0) : 0;
-      const pB = (x[b]?.maxScore ?? 0) > 0 ? (x[b]?.score ?? 0) / (x[b]?.maxScore ?? 0) : 0;
-      return pB - pA;
-    })
-    .map((name) => x[name])
-    .filter((item) => !!item);
-};
-
 export const makeExternalUrl = (url: string) => {
   url = url.trim();
   if (url.endsWith('/')) {
@@ -409,49 +336,3 @@ export function formatDateForChat(date: Date) {
     return format(date, 'yyyy');
   }
 }
-
-export const groupMessages = (messages: Message[]): MessageGroup[] => {
-  const messageGroups: MessageGroup[] = [];
-
-  let group: Message[] = [];
-  let senderId: string | null = null;
-  let timestamp: Date | null = null;
-  for (const message of messages) {
-    if (group.length === 0) {
-      group = [message];
-      senderId = message.senderId;
-      timestamp = message.sentAt;
-    } else {
-      if (senderId && senderId === message.senderId && timestamp && isSameMinute(timestamp, message.sentAt)) {
-        group = [message, ...group];
-      } else {
-        const lastMessage = group[group.length - 1];
-        if (lastMessage) {
-          messageGroups.push({
-            messages: group,
-            senderId: lastMessage.senderId,
-            timestamp: lastMessage.sentAt,
-            lastMessageId: lastMessage.id,
-            sender: lastMessage.sender,
-          });
-        }
-        group = [message];
-        senderId = message.senderId;
-        timestamp = message.sentAt;
-      }
-    }
-  }
-  if (group.length > 0) {
-    const lastMessage = group[group.length - 1];
-    if (lastMessage) {
-      messageGroups.push({
-        messages: group,
-        senderId: lastMessage.senderId,
-        timestamp: lastMessage.sentAt,
-        lastMessageId: lastMessage.id,
-        sender: lastMessage.sender,
-      });
-    }
-  }
-  return messageGroups;
-};
