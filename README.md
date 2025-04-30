@@ -29,7 +29,7 @@ pnpm ios
 - [shadcn/ui](https://ui.shadcn.com/docs)
 - [tRPC](https://trpc.io)
 - [Expo](https://expo.dev/)
-- [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform)/[Vercel](https://vercel.com/)
+- [DigitalOcean App Platform](https://www.digitalocean.com/products/app-platform) or [Vercel](https://vercel.com/)
 
 ## Adding npm dependencies
 
