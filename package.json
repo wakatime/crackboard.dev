@@ -37,7 +37,7 @@
     "@acme/tsconfig": "workspace:*",
     "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "turbo": "^2.5.0"
+    "turbo": "^2.5.2"
   },
   "packageManager": "pnpm@10.10.0",
   "engines": {
