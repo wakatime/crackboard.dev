@@ -14,11 +14,11 @@ psql -c "CREATE ROLE crackboarddev WITH LOGIN SUPERUSER PASSWORD 'crackboarddev'
 psql -c "CREATE DATABASE crackboarddev WITH OWNER crackboarddev;"
 psql -d crackboarddev -c "CREATE EXTENSION citext;"
 cp .env.example .env
-npm i
-npm run migrate
-npm run dev
-npm run android
-npm run ios
+pnpm i
+pnpm migrate
+pnpm dev
+pnpm android
+pnpm ios
 ```
 
 ## Tech Stack
@@ -35,7 +35,7 @@ npm run ios
 
 To add a package, first choose the workspace(s) where it's going to be used then install for a workspace with:
 
-`npm add <package> --workspace=@acme/web`
+`pnpm add <package> --filter=@acme/web`
 
 ## Authentication
 
@@ -48,26 +48,11 @@ Create a new [WakaTime OAuth App](https://wakatime.com/apps) and add your app’
 WAKATIME_APP_ID=1234
 WAKATIME_APP_SECRET=waka_sec_123
 ```
+
 ## Admin
 
 To access your local admin, [get your WakaTime user id](https://wakatime.com/me/id) and add to `ADMIN_USER_IDS` in your `.env` file.
 Then visit http://localhost:3000/admin
-
-## Fix for android and ios build failed for the package react-native-pager-view
-
-Remove nullability of command id
-
-```kt
-// node_modules/react-native-pager-view/android/src/fabric/java/com/reactnativepagerview/PagerViewViewManager.kt
-40-      override fun receiveCommand(root: NestedScrollableHost, commandId: String?, args: ReadableArray?)
-40+      override fun receiveCommand(root: NestedScrollableHost, commandId: String, args: ReadableArray?)
-```
-
-```kt
-// node_modules/react-native-pager-view/android/src/paper/java/com/reactnativepagerview/PagerViewViewManager.kt
-135-     override fun receiveCommand(root: NestedScrollableHost, commandId: String?, args: ReadableArray?) {
-135+     override fun receiveCommand(root: NestedScrollableHost, commandId: String, args: ReadableArray?) {
-```
 
 ## Use production API for local mobile
 
