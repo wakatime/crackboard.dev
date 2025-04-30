@@ -13,8 +13,8 @@
     "lint:fix": "eslint src --fix",
     "prebuild": "expo prebuild",
     "prebuild:clean": "expo prebuild --clean",
-    "build:ios": "eas build --platform ios --local --profile production",
-    "build:android": "eas build --platform android --local --profile production"
+    "ios:build": "eas build --platform ios --local --profile production",
+    "android:build": "eas build --platform android --local --profile production"
   },
   "dependencies": {
     "@acme/core": "workspace:*",

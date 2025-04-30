@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 export default function UserAvatar({ user, className }: { user?: Pick<PublicUser, 'avatarUrl'> | null; className?: string }) {
   return (
     <Avatar className={cn('border', className)}>
-      {user ? <AvatarImage src={user.avatarUrl} /> : null}
+      {user?.avatarUrl ? <AvatarImage src={user.avatarUrl} /> : null}
       <AvatarFallback>
         <LuUser className="size-1/2" />
       </AvatarFallback>

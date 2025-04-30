@@ -40,7 +40,7 @@ export function AuthProvider({
     retry: false,
   });
 
-  const signOutMut = api.auth.signout.useMutation();
+  const signOutMut = api.auth.signOut.useMutation();
   const isAuthRequiredRoute = useMemo(
     () => authRequiredPaths.findIndex((path) => (path.exact ? path.href === pathname : pathname.startsWith(path.href))) !== -1,
     [pathname],

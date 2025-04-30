@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build:turbo": "turbo run build",
+    "build": "turbo run build",
     "build:web": "turbo run build --filter=@acme/web",
     "build:ios": "pnpm -F @acme/mobile build:ios",
     "build:android": "pnpm -F @acme/mobile build:android",

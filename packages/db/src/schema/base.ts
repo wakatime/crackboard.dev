@@ -1,6 +1,6 @@
 import { createId } from '@paralleldrive/cuid2';
 import { relations } from 'drizzle-orm';
-import { index, jsonb, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { index, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { citext } from './types';
 
@@ -16,6 +16,8 @@ export const User = pgTable('User', {
   username: citext().unique(),
   fullName: varchar(),
   accessToken: varchar().notNull(),
+  avatarUrl: text(),
+  bio: text(),
 });
 
 export const userRelations = relations(User, ({ many }) => ({

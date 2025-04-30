@@ -1,10 +1,10 @@
 export interface PublicUser {
-  avatarUrl: string;
-  createdAt: Date;
   id: string;
+  createdAt: Date;
   name: string | null;
   url: string;
   username: string | null;
+  avatarUrl?: string | null;
   bio?: string | null;
 }
 
