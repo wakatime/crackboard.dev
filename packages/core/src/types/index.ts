@@ -41,11 +41,12 @@ export interface OAuthLoginState {
 }
 
 export interface WakaTimeUser {
+  id: string;
   email?: string | null;
   full_name: string | null;
-  id: string;
   total_seconds?: number;
   username: string | null;
+  photo: string | null;
 }
 
 // https://wakatime.com/developers/#stats

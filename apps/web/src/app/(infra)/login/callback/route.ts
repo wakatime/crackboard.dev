@@ -1,0 +1,132 @@
+import { validateCSRFTokenCookie } from '@acme/core/backend/csrf';
+import { APP_NAME, APP_SCHEME, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@acme/core/constants';
+import type { WakaTimeUser } from '@acme/core/types';
+import { isNonEmptyString, parseJSONObject } from '@acme/core/validators';
+import { db, eq } from '@acme/db/drizzle';
+import { User } from '@acme/db/schema';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+
+import { env } from '~/env';
+import { loginUser } from '~/utils/server-auth';
+import { makeUrlSafe } from '~/utils/urlHelpers';
+
+const stateSchema = z.object({
+  c: z.string(),
+  n: z.string().optional().nullable(),
+  m: z.boolean().optional().nullable(),
+  follow: z.string().optional().nullable(),
+});
+
+export const GET = async (req: NextRequest) => {
+  const code = req.nextUrl.searchParams.get('code');
+  const state = req.nextUrl.searchParams.get('state');
+
+  if (!isNonEmptyString(code)) {
+    return new NextResponse('Invalid OAuth code.', { status: 400 });
+  }
+
+  const s = stateSchema.safeParse(parseJSONObject(state));
+
+  if (!s.success) {
+    console.error(s.error.message);
+    return new NextResponse('Invalid OAuth state.', { status: 400 });
+  }
+
+  if (s.data.m) {
+    const params = new URLSearchParams({
+      code: code ?? '',
+    });
+    return NextResponse.redirect(`${APP_SCHEME}login/callback?${params.toString()}`);
+  }
+
+  if (!(await validateCSRFTokenCookie(req, s.data.c))) {
+    return new NextResponse('Invalid CSRF token.', { status: 400 });
+  }
+
+  const tokenResponse = await fetch(WAKATIME_TOKEN_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      client_id: env.WAKATIME_APP_ID,
+      client_secret: env.WAKATIME_APP_SECRET,
+      redirect_uri: WAKATIME_REDIRECT_URI,
+      grant_type: 'authorization_code',
+      code,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'User-Agent': APP_NAME,
+    },
+  });
+
+  if (tokenResponse.status !== 200) {
+    return new NextResponse('Invalid OAuth code.', { status: 400 });
+  }
+
+  const accessToken = ((await tokenResponse.json()) as { access_token: string }).access_token;
+
+  const url = 'https://api.wakatime.com/api/v1/users/current';
+  const wakatimeResponse = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'User-Agent': APP_NAME,
+    },
+  });
+
+  if (wakatimeResponse.status !== 200) {
+    return new NextResponse('Invalid OAuth code.', { status: 400 });
+  }
+
+  const wakatimeUser = (parseJSONObject(await wakatimeResponse.text()) as { data: WakaTimeUser }).data;
+  const wakatimeId = wakatimeUser.id;
+  const wakatimeUsername = wakatimeUser.username;
+  console.log({ wakatimeUser, wakatimeId, username: wakatimeUsername });
+
+  let isNewUser = false;
+  let user = await db.query.User.findFirst({ where: eq(User.id, wakatimeId) });
+
+  console.log({
+    id: wakatimeId,
+    username: wakatimeUsername,
+    fullName: wakatimeUser.full_name,
+    avatarUrl: wakatimeUser.photo,
+    accessToken,
+  });
+
+  if (!user) {
+    user = await db.transaction(async (tx) => {
+      const [newUser] = await tx
+        .insert(User)
+        .values({
+          id: wakatimeId,
+          username: wakatimeUsername,
+          fullName: wakatimeUser.full_name,
+          avatarUrl: wakatimeUser.photo,
+          accessToken,
+        })
+        .onConflictDoNothing()
+        .returning();
+      if (!newUser) {
+        return await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
+      }
+      return newUser;
+    });
+    if (!user) {
+      user = await db.query.User.findFirst({ where: eq(User.id, wakatimeId) });
+      if (!user) {
+        throw new Error('User not found.');
+      }
+    } else {
+      isNewUser = true;
+    }
+  }
+
+  console.log({ user });
+
+  await loginUser(user, wakatimeUsername, isNewUser);
+
+  return NextResponse.redirect(makeUrlSafe(s.data.n, '/onboarding'));
+};
