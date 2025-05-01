@@ -108,7 +108,7 @@ export const GET = async (req: NextRequest) => {
   });
 
   if (!user) {
-    throw new Error('User not found.');
+    return new NextResponse('User not found.', { status: 404 });
   }
 
   await loginUser(user, wakatimeUsername, isNewUser);
