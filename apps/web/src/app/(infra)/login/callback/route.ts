@@ -85,44 +85,31 @@ export const GET = async (req: NextRequest) => {
   const wakatimeUsername = wakatimeUser.username;
   console.log({ wakatimeUser, wakatimeId, username: wakatimeUsername });
 
-  let isNewUser = false;
-  let user = await db.query.User.findFirst({ where: eq(User.id, wakatimeId) });
-
-  console.log({
-    id: wakatimeId,
-    username: wakatimeUsername,
-    fullName: wakatimeUser.full_name,
-    avatarUrl: wakatimeUser.photo,
-    accessToken,
-  });
-
-  if (!user) {
-    user = await db.transaction(async (tx) => {
-      const [newUser] = await tx
-        .insert(User)
-        .values({
-          id: wakatimeId,
-          username: wakatimeUsername,
-          fullName: wakatimeUser.full_name,
-          avatarUrl: wakatimeUser.photo,
-          accessToken,
-        })
-        .onConflictDoNothing()
-        .returning();
-      if (!newUser) {
-        return await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
-      }
-      return newUser;
-    });
-    if (!user) {
-      user = await db.query.User.findFirst({ where: eq(User.id, wakatimeId) });
-      if (!user) {
-        throw new Error('User not found.');
-      }
-    } else {
-      isNewUser = true;
+  const [user, isNewUser] = await db.transaction(async (tx) => {
+    const user = await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
+    if (user) {
+      return [user, false];
     }
-  }
+    const [newUser] = await tx
+      .insert(User)
+      .values({
+        id: wakatimeId,
+        username: wakatimeUsername,
+        fullName: wakatimeUser.full_name,
+        avatarUrl: wakatimeUser.photo,
+        accessToken,
+      })
+      .onConflictDoNothing()
+      .returning();
+    if (newUser) {
+      return [newUser, true];
+    }
+    const retryUser = await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
+    if (!retryUser) {
+      throw new Error('User not found.');
+    }
+    return [retryUser, false];
+  });
 
   console.log({ user });
 
