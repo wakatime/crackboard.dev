@@ -1,6 +1,9 @@
 import '@workspace/ui/globals.css';
 
-import { APP_NAME } from '@workspace/core/constants';
+import { authenticatedUserFromRequest } from '@workspace/core/backend/auth';
+import { userToPublicUser } from '@workspace/core/backend/helpers/users';
+import { APP_DESC, APP_NAME } from '@workspace/core/constants';
+import type { PublicUser } from '@workspace/core/types';
 import { Toaster } from '@workspace/ui/components/sonner';
 import { TooltipProvider } from '@workspace/ui/components/tooltip';
 import { cn } from '@workspace/ui/lib/utils';
@@ -19,9 +22,17 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: APP_NAME,
+  description: APP_DESC,
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  let currentUser: PublicUser | null = null;
+
+  const user = await authenticatedUserFromRequest();
+  if (user) {
+    currentUser = await userToPublicUser(user);
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(fontSans.variable, 'bg-background flex min-h-screen flex-col font-sans antialiased')}>
@@ -29,7 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <TrpcProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <TooltipProvider>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider currentUser={currentUser}>{children}</AuthProvider>
             </TooltipProvider>
           </ThemeProvider>
         </TrpcProvider>

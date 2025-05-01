@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-properties */
+import { createEnv } from '@t3-oss/env-nextjs';
 import { env as apiEnv } from '@workspace/api/env';
 import { env as coreEnv } from '@workspace/core/env';
 import { env as dbEnv } from '@workspace/db/env';
 import { env as externalEnv } from '@workspace/external/env';
-import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
 export const env = createEnv({

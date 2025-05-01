@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { env } from '~/env';
-import { loginUser } from '~/utils/server-auth';
+import { loginUser } from '~/server/auth';
 import { makeUrlSafe } from '~/utils/urlHelpers';
 
 const stateSchema = z.object({
