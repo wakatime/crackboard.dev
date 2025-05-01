@@ -1,6 +1,6 @@
-import { eq } from '@acme/db';
-import { db } from '@acme/db/drizzle';
-import { User } from '@acme/db/schema';
+import { eq } from '@workspace/db';
+import { db } from '@workspace/db/drizzle';
+import { User } from '@workspace/db/schema';
 import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 

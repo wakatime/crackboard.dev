@@ -18,7 +18,7 @@ const config = {
     "<THIRD_PARTY_MODULES>",
     "",
     "<TYPES>^@acme",
-    "^@acme/(.*)$",
+    "^@workspace/(.*)$",
     "",
     "<TYPES>^[.|..|~]",
     "^~/",

@@ -1,9 +1,9 @@
-import { validateCSRFTokenCookie } from '@acme/core/backend/csrf';
-import { APP_NAME, APP_SCHEME, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@acme/core/constants';
-import type { WakaTimeUser } from '@acme/core/types';
-import { isNonEmptyString, parseJSONObject } from '@acme/core/validators';
-import { db, eq } from '@acme/db/drizzle';
-import { User } from '@acme/db/schema';
+import { validateCSRFTokenCookie } from '@workspace/core/backend/csrf';
+import { APP_NAME, APP_SCHEME, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
+import type { WakaTimeUser } from '@workspace/core/types';
+import { isNonEmptyString, parseJSONObject } from '@workspace/core/validators';
+import { db, eq } from '@workspace/db/drizzle';
+import { User } from '@workspace/db/schema';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';

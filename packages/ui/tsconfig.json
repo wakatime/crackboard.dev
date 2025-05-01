@@ -1,10 +1,10 @@
 {
-  "extends": "@acme/tsconfig/react-library.json",
+  "extends": "@workspace/tsconfig/react-library.json",
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "baseUrl": ".",
     "paths": {
-      "@acme/ui/*": ["../../packages/ui/src/*"]
+      "@workspace/ui/*": ["./src/*"]
     }
   },
   "include": ["."],

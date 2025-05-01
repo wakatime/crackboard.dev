@@ -1,4 +1,4 @@
-import { Button } from '@acme/ui/components/ui/button';
+import { Button } from '@workspace/ui/components/button';
 import Link from 'next/link';
 
 const NotFoundPage = () => {

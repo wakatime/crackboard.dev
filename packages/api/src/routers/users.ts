@@ -1,8 +1,8 @@
-import { userToPublicUser } from '@acme/core/backend/helpers/users';
-import { eq } from '@acme/db';
-import { db } from '@acme/db/drizzle';
-import { User } from '@acme/db/schema';
 import { TRPCError } from '@trpc/server';
+import { userToPublicUser } from '@workspace/core/backend/helpers/users';
+import { eq } from '@workspace/db';
+import { db } from '@workspace/db/drizzle';
+import { User } from '@workspace/db/schema';
 import { z } from 'zod';
 
 import { createTRPCRouter, publicProcedure } from '../trpc';

@@ -1,6 +1,6 @@
 'use client';
 
-import { isExternalUrl } from '@acme/core/utils';
+import { isExternalUrl } from '@workspace/core/utils';
 import NextLink from 'next/link';
 import type { MouseEventHandler, ReactNode } from 'react';
 import { forwardRef } from 'react';

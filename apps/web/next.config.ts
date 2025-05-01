@@ -14,7 +14,7 @@ const config: NextConfig = {
   reactStrictMode: false,
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  transpilePackages: ['@acme/api', '@acme/db', '@acme/tasks', '@acme/core', '@acme/ui', '@acme/external'],
+  transpilePackages: ['@workspace/api', '@workspace/db', '@workspace/tasks', '@workspace/core', '@workspace/ui', '@workspace/external'],
 
   // Not supported in app router
   // i18n: {

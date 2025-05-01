@@ -1,5 +1,5 @@
 {
-  "name": "@acme/prettier-config",
+  "name": "@workspace/prettier-config",
   "version": "0.1.0",
   "private": true,
   "exports": {
@@ -13,8 +13,8 @@
   "devDependencies": {
     "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "@acme/tsconfig": "workspace:*",
+    "@workspace/tsconfig": "workspace:*",
     "typescript": "catalog:"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@workspace/prettier-config"
 }

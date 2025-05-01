@@ -35,7 +35,7 @@ pnpm ios
 
 To add a package, first choose the workspace(s) where it's going to be used then install for a workspace with:
 
-`pnpm add <package> --filter=@acme/web`
+`pnpm add <package> --filter=@workspace/web`
 
 ## Authentication
 

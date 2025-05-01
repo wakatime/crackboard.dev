@@ -1,4 +1,4 @@
-import type { PublicUser } from '@acme/core/types';
+import type { PublicUser } from '@workspace/core/types';
 import { LuUser } from 'react-icons/lu';
 
 import { cn } from '../lib/utils';

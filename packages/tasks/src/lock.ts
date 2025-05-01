@@ -1,5 +1,5 @@
-import { asDuration } from '@acme/core/backend/duration';
-import { redis } from '@acme/db/redis';
+import { asDuration } from '@workspace/core/backend/duration';
+import { redis } from '@workspace/db/redis';
 import type { Callback, Result } from 'ioredis';
 import type { Duration } from 'ts-duration';
 import { v4 as uuid } from 'uuid';

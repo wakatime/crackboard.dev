@@ -1,5 +1,6 @@
-import { userToPublicUser } from '@acme/core/backend/helpers/users';
-import { encodeAuthJWT } from '@acme/core/backend/jwt';
+import { ipAddress } from '@vercel/functions';
+import { userToPublicUser } from '@workspace/core/backend/helpers/users';
+import { encodeAuthJWT } from '@workspace/core/backend/jwt';
 import {
   AUDIT_LOG_LOGIN,
   AUDIT_LOG_USER_CREATED,
@@ -7,11 +8,10 @@ import {
   AUDIT_LOG_USERNAME_CHANGED,
   CSRF_COOKIE,
   LOGIN_COOKIE,
-} from '@acme/core/constants';
-import type { PublicUser } from '@acme/core/types';
-import { db, eq } from '@acme/db/drizzle';
-import { AuditLog, User } from '@acme/db/schema';
-import { ipAddress } from '@vercel/functions';
+} from '@workspace/core/constants';
+import type { PublicUser } from '@workspace/core/types';
+import { db, eq } from '@workspace/db/drizzle';
+import { AuditLog, User } from '@workspace/db/schema';
 import { cookies } from 'next/headers';
 
 import { env } from '../env';

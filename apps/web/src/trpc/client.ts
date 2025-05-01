@@ -1,6 +1,6 @@
-import type { AppRouter } from '@acme/api';
 import { createTRPCReact } from '@trpc/react-query';
+import type { AppRouter } from '@workspace/api';
 
-export type { RouterInputs, RouterOutputs } from '@acme/api';
+export type { RouterInputs, RouterOutputs } from '@workspace/api';
 
 export const api = createTRPCReact<AppRouter>();

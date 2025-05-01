@@ -1,5 +1,5 @@
 {
-  "name": "@acme/core",
+  "name": "@workspace/core",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -22,7 +22,7 @@
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {
-    "@acme/db": "workspace:*",
+    "@workspace/db": "workspace:*",
     "@aws-sdk/client-s3": "^3.782.0",
     "@panva/hkdf": "^1.2.1",
     "@paralleldrive/cuid2": "^2.2.2",
@@ -48,8 +48,8 @@
     "@types/node": "^22.14.0",
     "@types/pluralize": "^0.0.33",
     "@types/uuid": "^10.0.0",
-    "@acme/eslint-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "next": "^15.2.4",
     "typescript": "catalog:"

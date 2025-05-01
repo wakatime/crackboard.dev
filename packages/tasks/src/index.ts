@@ -1,5 +1,5 @@
-import { WAKAQ_TASKS_DISABLED_KEY } from '@acme/core/constants';
-import { redis } from '@acme/db/redis';
+import { WAKAQ_TASKS_DISABLED_KEY } from '@workspace/core/constants';
+import { redis } from '@workspace/db/redis';
 import { Duration } from 'ts-duration';
 import { CronTask, Level, WakaQ, WakaQueue } from 'wakaq';
 import { PreventTaskExecution } from 'wakaq/dist/exceptions.js';

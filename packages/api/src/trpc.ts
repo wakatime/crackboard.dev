@@ -6,8 +6,8 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { authenticatedUserFromRequest, isAdmin } from '@acme/core/backend/auth';
 import { initTRPC, TRPCError } from '@trpc/server';
+import { authenticatedUserFromRequest, isAdmin } from '@workspace/core/backend/auth';
 import type { NextRequest } from 'next/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';

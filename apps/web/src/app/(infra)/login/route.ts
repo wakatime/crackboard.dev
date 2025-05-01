@@ -1,6 +1,6 @@
-import { createCSRFToken } from '@acme/core/backend/csrf';
-import { CSRF_COOKIE, CSRF_EXPIRES, WAKATIME_AUTHORIZE_URL, WAKATIME_REDIRECT_URI } from '@acme/core/constants';
-import type { OAuthLoginState } from '@acme/core/types';
+import { createCSRFToken } from '@workspace/core/backend/csrf';
+import { CSRF_COOKIE, CSRF_EXPIRES, WAKATIME_AUTHORIZE_URL, WAKATIME_REDIRECT_URI } from '@workspace/core/constants';
+import type { OAuthLoginState } from '@workspace/core/types';
 import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';

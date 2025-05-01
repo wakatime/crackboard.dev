@@ -1,10 +1,7 @@
-import { sessionIdFromRequest } from '@acme/core/backend/auth';
-import { setCSRFTokenCookie, validateCSRFTokenCookie } from '@acme/core/backend/csrf';
-import { CSRF_COOKIE, CSRF_PROTECTED_METHODS, CSRF_TOKEN_HEADER } from '@acme/core/constants';
+import { setCSRFTokenCookie, validateCSRFTokenCookie } from '@workspace/core/backend/csrf';
+import { CSRF_COOKIE, CSRF_PROTECTED_METHODS, CSRF_TOKEN_HEADER } from '@workspace/core/constants';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-
-import { makeUrlSafe } from './utils/urlHelpers';
 
 const isMobileApp = (req: NextRequest) => {
   return req.headers.get('x-trpc-source') === 'expo-react';
@@ -13,13 +10,13 @@ const isMobileApp = (req: NextRequest) => {
 export async function middleware(req: NextRequest): Promise<NextResponse | void> {
   const isFromApp = isMobileApp(req);
 
-  const sessionId = await sessionIdFromRequest(req);
+  // const sessionId = await sessionIdFromRequest(req);
 
-  if (sessionId && req.nextUrl.pathname === '/') {
-    const url = makeUrlSafe('/home');
-    url.search = req.nextUrl.search;
-    return NextResponse.redirect(url);
-  }
+  // if (sessionId && req.nextUrl.pathname === '/') {
+  //   const url = makeUrlSafe('/home');
+  //   url.search = req.nextUrl.search;
+  //   return NextResponse.redirect(url);
+  // }
 
   // validate csrf token on modifying requests
   const method = req.method.toUpperCase();

@@ -19,11 +19,11 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
-      "@acme/core/utils/helpers": ["../../packages/core/src/utils/helpers.ts"],
-      "@acme/core/constants": ["../../packages/core/src/constants/index.ts"],
-      "@acme/core/validators": ["../../packages/core/src/validators/index.ts"],
-      "@acme/api/validators": ["../../packages/api/src/validators.ts"],
-      "@acme/db/schema": ["../../packages/db/src/schema/index.ts"]
+      "@workspace/core/utils/helpers": ["../../packages/core/src/utils/helpers.ts"],
+      "@workspace/core/constants": ["../../packages/core/src/constants/index.ts"],
+      "@workspace/core/validators": ["../../packages/core/src/validators/index.ts"],
+      "@workspace/api/validators": ["../../packages/api/src/validators.ts"],
+      "@workspace/db/schema": ["../../packages/db/src/schema/index.ts"]
     },
     "jsx": "react-native",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",

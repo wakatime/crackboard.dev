@@ -1,5 +1,5 @@
 {
-  "name": "@acme/db",
+  "name": "@workspace/db",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -34,8 +34,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "dotenv-cli": "^8.0.0",
     "drizzle-kit": "^0.30.5",

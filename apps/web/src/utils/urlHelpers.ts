@@ -1,4 +1,4 @@
-import { BASE_URL } from '@acme/core/constants';
+import { BASE_URL } from '@workspace/core/constants';
 
 /**
  * Converts a URL string or URL object into a safe, absolute URL

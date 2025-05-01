@@ -1,4 +1,4 @@
-import type { User } from '@acme/db/schema';
+import type { User } from '@workspace/db/schema';
 
 import { BASE_URL } from '../../constants';
 import type { PublicUser } from '../../types';

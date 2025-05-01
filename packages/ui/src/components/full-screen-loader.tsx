@@ -1,4 +1,4 @@
-import { BASE_URL } from '@acme/core/constants';
+import { BASE_URL } from '@workspace/core/constants';
 import Image from 'next/image';
 
 import { cn } from '../lib/utils';

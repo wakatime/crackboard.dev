@@ -1,5 +1,5 @@
 {
-  "extends": "@acme/tsconfig/internal-package.json",
+  "extends": "@workspace/tsconfig/internal-package.json",
   "compilerOptions": {
     "forceConsistentCasingInFileNames": true,
     "verbatimModuleSyntax": true,

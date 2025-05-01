@@ -1,3 +1,3 @@
-# `@acme/eslint-config`
+# `@workspace/eslint-config`
 
 Collection of internal eslint configurations.

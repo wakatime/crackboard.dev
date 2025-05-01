@@ -1,5 +1,5 @@
-import baseConfig, { restrictEnvAccess } from '@acme/eslint-config/base';
-import reactConfig from '@acme/eslint-config/react';
+import baseConfig, { restrictEnvAccess } from '@workspace/eslint-config/base';
+import reactConfig from '@workspace/eslint-config/react';
 
 /** @type {import('typescript-eslint').Config} */
 export default [

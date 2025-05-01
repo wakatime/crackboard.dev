@@ -1,5 +1,5 @@
 {
-  "name": "@acme/mobile",
+  "name": "@workspace/mobile",
   "main": "./src/index.ts",
   "version": "0.1.0",
   "private": true,
@@ -17,7 +17,7 @@
     "android:build": "eas build --platform android --local --profile production"
   },
   "dependencies": {
-    "@acme/core": "workspace:*",
+    "@workspace/core": "workspace:*",
     "@expo/react-native-action-sheet": "^4.1.0",
     "@expo/vector-icons": "14.0.4",
     "@formidable-webview/webshell": "^2.6.0",
@@ -88,10 +88,10 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@acme/api": "workspace:*",
-    "@acme/db": "workspace:*",
-    "@acme/eslint-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@workspace/api": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/tsconfig": "workspace:*",
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.7",
     "@babel/runtime": "^7.25.7",
