@@ -83,7 +83,6 @@ export const GET = async (req: NextRequest) => {
   const wakatimeUser = (parseJSONObject(await wakatimeResponse.text()) as { data: WakaTimeUser }).data;
   const wakatimeId = wakatimeUser.id;
   const wakatimeUsername = wakatimeUser.username;
-  console.log({ wakatimeUser, wakatimeId, username: wakatimeUsername });
 
   const [user, isNewUser] = await db.transaction(async (tx) => {
     const user = await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
@@ -105,13 +104,12 @@ export const GET = async (req: NextRequest) => {
       return [newUser, true];
     }
     const retryUser = await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
-    if (!retryUser) {
-      throw new Error('User not found.');
-    }
     return [retryUser, false];
   });
 
-  console.log({ user });
+  if (!user) {
+    throw new Error('User not found.');
+  }
 
   await loginUser(user, wakatimeUsername, isNewUser);
 
