@@ -1,18 +1,21 @@
-import { date, jsonb, pgTable } from 'drizzle-orm/pg-core';
+import { date, jsonb, pgTable, uuid } from 'drizzle-orm/pg-core';
 
 import type { Leader } from '../types';
 
 export const DailyLeaderboard = pgTable('DailyLeaderboard', {
+  id: uuid().notNull().primaryKey().defaultRandom(),
   date: date().notNull(),
   leaders: jsonb('details').$type<Leader[]>().notNull(),
 });
 
 export const WeeklyLeaderboard = pgTable('WeeklyLeaderboard', {
+  id: uuid().notNull().primaryKey().defaultRandom(),
   weekEndDate: date().notNull(),
   leaders: jsonb('details').$type<Leader[]>().notNull(),
 });
 
 export const MonthlyLeaderboard = pgTable('MonthlyLeaderboard', {
+  id: uuid().notNull().primaryKey().defaultRandom(),
   monthEndDate: date().notNull(),
   leaders: jsonb('details').$type<Leader[]>().notNull(),
 });
