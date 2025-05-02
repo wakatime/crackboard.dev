@@ -37,7 +37,7 @@ export const AuditLog = pgTable(
     ip: varchar(),
     metadata: jsonb().notNull().default('{}'),
     userAgent: varchar(),
-    userId: varchar()
+    userId: citext()
       .notNull()
       .references(() => User.id, { onDelete: 'cascade' }),
   },
@@ -53,9 +53,6 @@ export const auditLogRelations = relations(AuditLog, ({ one }) => ({
 
 export const ProgramLanguage = pgTable('ProgramLanguage', {
   color: varchar(),
-  createdAt: timestamp()
-    .notNull()
-    .$default(() => new Date()),
   name: citext().primaryKey(),
 });
 
@@ -69,3 +66,8 @@ export const ProgramLanguageAlias = pgTable(
   },
   (table) => [index().on(table.programLanguageName)],
 );
+
+export const Editor = pgTable('Editor', {
+  color: varchar(),
+  name: citext().primaryKey(),
+});

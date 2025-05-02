@@ -114,7 +114,7 @@ export interface WakaTimeSummaries {
 
 // https://wakatime.com/developers/#summaries
 export interface WakaTimeSummary {
-  categories: {
+  categories?: {
     hours: number;
     minutes: number;
     name: string;
@@ -142,7 +142,7 @@ export interface WakaTimeSummary {
     text: string;
     total_seconds: number;
   }[];
-  operating_systems: {
+  operating_systems?: {
     hours: number;
     minutes: number;
     name: string;
@@ -166,4 +166,18 @@ export interface WakaTimeSummary {
     text: string;
     total_seconds: number;
   };
+}
+
+export interface Leader {
+  rank: number;
+  id: string;
+  username: string | undefined;
+  totalSeconds: number;
+  languages: LeaderStat[];
+  editors: LeaderStat[];
+}
+
+export interface LeaderStat {
+  name: string;
+  totalSeconds: number;
 }
