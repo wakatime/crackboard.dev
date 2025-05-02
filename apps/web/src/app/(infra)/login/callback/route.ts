@@ -103,8 +103,7 @@ export const GET = async (req: NextRequest) => {
     if (newUser) {
       return [newUser, true];
     }
-    const retryUser = await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
-    return [retryUser, false];
+    return [await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) }), false];
   });
 
   if (!user) {
