@@ -24,6 +24,7 @@ export const TEST_USER_ID = 'u_dz4qmd0ugvj1n6mm0ecui9kk';
 export const WAKATIME_AUTHORIZE_URL = 'https://wakatime.com/oauth/authorize';
 export const WAKATIME_TOKEN_URL = 'https://wakatime.com/oauth/token';
 export const WAKATIME_REDIRECT_URI = `${BASE_URL}/login/callback`;
+export const WAKATIME_API_URI = 'https://api.wakatime.com/api/v1';
 
 export const WAKAQ_TASKS_DISABLED_KEY = 'wakaq-disabled';
 

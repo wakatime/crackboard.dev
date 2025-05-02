@@ -1,5 +1,5 @@
 import { validateCSRFTokenCookie } from '@workspace/core/backend/csrf';
-import { APP_NAME, APP_SCHEME, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
+import { APP_NAME, APP_SCHEME, WAKATIME_API_URI, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
 import type { WakaTimeUser } from '@workspace/core/types';
 import { isNonEmptyString, parseJSONObject } from '@workspace/core/validators';
 import { db, eq } from '@workspace/db/drizzle';
@@ -67,8 +67,7 @@ export const GET = async (req: NextRequest) => {
 
   const accessToken = ((await tokenResponse.json()) as { access_token: string }).access_token;
 
-  const url = 'https://api.wakatime.com/api/v1/users/current';
-  const wakatimeResponse = await fetch(url, {
+  const wakatimeResponse = await fetch(`${WAKATIME_API_URI}/users/current`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
