@@ -1,9 +1,9 @@
 import { TRPCError } from '@trpc/server';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
+import { today } from '@workspace/core/utils/helpers';
 import { and, db, desc, eq } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
-import { format } from 'date-fns';
 import { z } from 'zod';
 
 import { createTRPCRouter, publicProcedure } from '../trpc';
@@ -26,7 +26,7 @@ export const leaderboardRouter = createTRPCRouter({
       const limit = input.limit ?? 20;
       const cursor = input.cursor ?? 0;
 
-      const date = input.date ?? format(new Date(), 'yyyy-MM-dd');
+      const date = input.date ?? today();
 
       const leaders = await db
         .select()

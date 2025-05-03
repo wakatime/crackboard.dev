@@ -325,6 +325,15 @@ export function swapElements<T>(array: T[], index1: number, index2: number): T[]
   return array;
 }
 
+export function today() {
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const month = String(now.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(now.getUTCDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
 export function formatDateForChat(date: Date) {
   if (isToday(date)) {
     return format(date, 'h:mm a');

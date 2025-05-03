@@ -1,9 +1,9 @@
 'use client';
 
+import { today } from '@workspace/core/utils/helpers';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { Button } from '@workspace/ui/components/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
-import { format } from 'date-fns';
 import Link from 'next/link';
 import { useState } from 'react';
 import { LuUser } from 'react-icons/lu';
@@ -19,7 +19,7 @@ export default function PageClient() {
 }
 
 function LeadersTable() {
-  const [date] = useState(() => format(new Date(), 'yyyy-MM-dd'));
+  const [date] = useState(() => today());
   const leadersQuery = api.leaderboard.getLeaders.useQuery({ date });
 
   if (leadersQuery.isPending) {
