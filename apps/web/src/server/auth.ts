@@ -1,4 +1,4 @@
-import { authenticatedUserFromRequest, isAdminUserId } from '@workspace/core/backend/auth';
+import { authenticatedUserFromRequest } from '@workspace/core/backend/auth';
 import { encodeAuthJWT } from '@workspace/core/backend/jwt';
 import { AUDIT_LOG_LOGIN, AUDIT_LOG_USER_CREATED, AUDIT_LOG_USERNAME_CHANGED, JWT_EXPIRES, LOGIN_COOKIE } from '@workspace/core/constants';
 import { db, eq } from '@workspace/db/drizzle';
@@ -60,5 +60,5 @@ export const isAdminUser = async (user?: typeof User.$inferSelect | null): Promi
     return false;
   }
 
-  return isAdminUserId(user.id);
+  return !!user.isOwner;
 };

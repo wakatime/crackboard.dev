@@ -48,16 +48,12 @@ export const sessionIdFromRequest = async (req?: NextRequest) => {
   return id;
 };
 
-export function isAdmin(user?: { id: string } | null): boolean {
+export function isAdmin(user?: { isOwner: boolean | null | undefined } | null): boolean {
   if (!user) {
     return false;
   }
 
-  return isAdminUserId(user.id);
-}
-
-export function isAdminUserId(userId: string): boolean {
-  return (env.ADMIN_IDS?.split(',').map((s) => s.trim()) ?? []).includes(userId);
+  return !!user.isOwner;
 }
 
 export const authenticatedUserFromRequest = async (req?: NextRequest, sessionId?: string) => {

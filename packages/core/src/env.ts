@@ -5,7 +5,6 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     JWT_SECRET: z.string().min(1),
-    ADMIN_IDS: z.string().optional(),
     SPACES_KEY: z.string().optional(),
     SPACES_SECRET: z.string().optional(),
 

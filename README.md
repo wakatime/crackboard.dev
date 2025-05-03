@@ -51,8 +51,8 @@ WAKATIME_APP_SECRET=waka_sec_123
 
 ## Admin
 
-To access your local admin, [get your WakaTime user id](https://wakatime.com/me/id) and add to `ADMIN_USER_IDS` in your `.env` file.
-Then visit http://localhost:3000/admin
+To access the admin, make sure you’re the first sign up and you'll become the leaderboard’s admin.
+Then visit http://localhost:3000/admin.
 
 ## Use production API for local mobile
 

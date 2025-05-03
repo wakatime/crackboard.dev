@@ -7,7 +7,6 @@ export const APP_DESC = 'The daily leaderboard for devs';
 // export const JWT_SECRET = env.JWT_SECRET;
 export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://crackboard.dev' : 'http://localhost:3000';
 export const APP_SCHEME = 'crackboard.dev://';
-// export const ADMIN_IDS = env.ADMIN_IDS?.split(',').map((s) => s.trim()) ?? [];
 // export const LOG_SQL = env.LOG_SQL ?? false;
 export const SS_LOCATION_HISTORY = 'location-history';
 

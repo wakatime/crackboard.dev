@@ -97,7 +97,7 @@ export const GET = async (req: NextRequest) => {
         username: wakatimeUsername,
         fullName: wakatimeUser.full_name,
         avatarUrl: wakatimeUser.photo,
-        isOwner: !anyUser, // first sign up is the owner
+        isOwner: anyUser ? null : true, // first sign up is the owner
         accessToken,
       })
       .onConflictDoNothing()

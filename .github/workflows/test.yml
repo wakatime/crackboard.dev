@@ -24,7 +24,6 @@ jobs:
       JWT_SECRET: 1234
       WAKATIME_APP_ID: abc
       WAKATIME_APP_SECRET: abc
-      ADMIN_IDS: abc
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
