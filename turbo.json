@@ -5,6 +5,7 @@
   ],
   "globalEnv": [
     "DATABASE_URL",
+    "NEXT_PUBLIC_APP_DOMAIN",
     "NEXT_PUBLIC_BASE_URL",
     "JWT_SECRET",
     "WAKATIME_APP_ID",

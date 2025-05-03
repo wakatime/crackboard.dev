@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup]
     env:
+      NEXT_PUBLIC_APP_DOMAIN: crackboard.dev
       NEXT_PUBLIC_BASE_URL: http://localhost:3000
       DATABASE_URL: file:./dev.db
       JWT_SECRET: 1234

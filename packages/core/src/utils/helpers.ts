@@ -4,7 +4,7 @@ import { humanId } from 'human-id';
 import pluralize from 'pluralize';
 import { parse } from 'tldts';
 
-import { APP_NAME, BASE_URL } from '../constants';
+import { APP_DOMAIN, BASE_URL } from '../constants';
 import type { PublicUser } from '../types';
 
 export const roundWithPrecision = (n: number, precision = 2) => {
@@ -357,7 +357,7 @@ export const betterFetch = async (url: string, init?: FetchOptions): Promise<Res
 
   options.headers = new Headers(options.headers ?? {});
   if (!options.headers.has('User-Agent')) {
-    options.headers.set('User-Agent', APP_NAME);
+    options.headers.set('User-Agent', APP_DOMAIN);
   }
   if (isJson && !options.headers.has('Accept')) {
     options.headers.set('Accept', 'application/json');

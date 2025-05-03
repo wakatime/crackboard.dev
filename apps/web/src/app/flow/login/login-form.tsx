@@ -1,6 +1,6 @@
 'use client';
 
-import { APP_NAME } from '@workspace/core/constants';
+import { APP_DOMAIN } from '@workspace/core/constants';
 import { Button } from '@workspace/ui/components//button';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ export default function LogInForm({ next }: { next?: string }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Log In to {APP_NAME}</CardTitle>
+        <CardTitle>Log In to {APP_DOMAIN}</CardTitle>
       </CardHeader>
       <CardContent>
         <Button asChild>

@@ -1,4 +1,4 @@
-import { APP_NAME, WAKATIME_API_URI } from '@workspace/core/constants';
+import { APP_DOMAIN, WAKATIME_API_URI } from '@workspace/core/constants';
 import { betterFetch } from '@workspace/core/utils/helpers';
 import { count, db, eq } from '@workspace/db/drizzle';
 import { User } from '@workspace/db/schema';
@@ -27,7 +27,7 @@ export const registerWithDirectory = wakaq.task(
         Authorization: `Bearer ${user.accessToken}`,
       },
       body: JSON.stringify({
-        domain: APP_NAME,
+        domain: APP_DOMAIN,
         num_members: numMembers,
       }),
     });

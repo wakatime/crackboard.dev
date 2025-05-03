@@ -14,10 +14,12 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   },
   client: {
-    NEXT_PUBLIC_BASE_URL: z.string().optional(),
+    NEXT_PUBLIC_APP_DOMAIN: z.string(),
+    NEXT_PUBLIC_BASE_URL: z.string(),
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   },
   skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,

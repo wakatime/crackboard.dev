@@ -1,13 +1,10 @@
-/* eslint-disable no-restricted-properties */
+import { env } from '../env';
 
-export const APP_NAME = 'crackboard.dev';
+export const APP_DOMAIN = env.NEXT_PUBLIC_APP_DOMAIN;
 export const APP_DESC = 'The daily leaderboard for devs';
 
-// export const NODE_ENV = env.NODE_ENV;
-// export const JWT_SECRET = env.JWT_SECRET;
-export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://crackboard.dev' : 'http://localhost:3000';
+export const BASE_URL = env.NEXT_PUBLIC_BASE_URL;
 export const APP_SCHEME = 'crackboard.dev://';
-// export const LOG_SQL = env.LOG_SQL ?? false;
 export const SS_LOCATION_HISTORY = 'location-history';
 
 export const DAY = 24 * 60 * 60;
