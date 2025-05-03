@@ -1,5 +1,5 @@
 import { APP_NAME, WAKATIME_API_URI } from '@workspace/core/constants';
-import { db, eq, sql } from '@workspace/db/drizzle';
+import { db, eq } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { z } from 'zod';
 
@@ -41,54 +41,57 @@ async function _processSummary(user: typeof User.$inferSelect, summary: Summary)
     .onConflictDoUpdate({
       target: [UserSummary.date, UserSummary.userId],
       set: {
-        // excluded is a special reference that refer to the row that was proposed for insertion, but wasn’t inserted because of the conflict.
-        totalSeconds: sql.raw(`excluded."${UserSummary.totalSeconds.name}"`),
+        totalSeconds: Math.floor(summary.grand_total.total_seconds),
       },
     });
 
-  const languageSummaryValues = summary.languages.map(
-    (stat) =>
-      ({
-        date: summary.range.date,
-        userId: user.id,
-        programLanguageName: stat.name,
-        totalSeconds: Math.floor(stat.total_seconds),
-      }) satisfies typeof UserSummaryLanguage.$inferInsert,
+  await Promise.all(
+    summary.languages.map(async (stat) => {
+      try {
+        await db
+          .insert(UserSummaryLanguage)
+          .values({
+            date: summary.range.date,
+            userId: user.id,
+            programLanguageName: stat.name,
+            totalSeconds: Math.floor(stat.total_seconds),
+          })
+          .onConflictDoUpdate({
+            target: [UserSummaryLanguage.date, UserSummaryLanguage.userId, UserSummaryLanguage.programLanguageName],
+            set: {
+              totalSeconds: Math.floor(stat.total_seconds),
+            },
+          });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        wakaq.logger?.error(`Failed to upsert UserSummaryLanguage for language ${stat.name}`);
+      }
+    }),
   );
 
-  if (languageSummaryValues.length > 0) {
-    await db
-      .insert(UserSummaryLanguage)
-      .values(languageSummaryValues)
-      .onConflictDoUpdate({
-        target: [UserSummaryLanguage.date, UserSummaryLanguage.userId, UserSummaryLanguage.programLanguageName],
-        set: {
-          totalSeconds: sql.raw(`excluded."${UserSummaryLanguage.totalSeconds.name}"`),
-        },
-      });
-  }
-
-  const editorSummaryValues = summary.editors.map(
-    (stat) =>
-      ({
-        date: summary.range.date,
-        userId: user.id,
-        editorName: stat.name,
-        totalSeconds: Math.floor(stat.total_seconds),
-      }) satisfies typeof UserSummaryEditor.$inferInsert,
+  await Promise.all(
+    summary.editors.map(async (stat) => {
+      try {
+        await db
+          .insert(UserSummaryEditor)
+          .values({
+            date: summary.range.date,
+            userId: user.id,
+            editorName: stat.name,
+            totalSeconds: Math.floor(stat.total_seconds),
+          })
+          .onConflictDoUpdate({
+            target: [UserSummaryEditor.date, UserSummaryEditor.userId, UserSummaryEditor.editorName],
+            set: {
+              totalSeconds: Math.floor(stat.total_seconds),
+            },
+          });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+        wakaq.logger?.error(`Failed to upsert UserSummaryEditor for editor ${stat.name}`);
+      }
+    }),
   );
-
-  if (editorSummaryValues.length > 0) {
-    await db
-      .insert(UserSummaryEditor)
-      .values(editorSummaryValues)
-      .onConflictDoUpdate({
-        target: [UserSummaryEditor.date, UserSummaryEditor.userId, UserSummaryEditor.editorName],
-        set: {
-          totalSeconds: sql.raw(`excluded."${UserSummaryEditor.totalSeconds.name}"`),
-        },
-      });
-  }
 }
 
 export const syncUserSummaries = wakaq.task(
