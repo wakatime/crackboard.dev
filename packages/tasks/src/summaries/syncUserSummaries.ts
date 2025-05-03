@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { wakaq } from '..';
 import type { SummariesResult } from '../types';
 
-async function syncUserSummary(user: typeof User.$inferSelect, start: Date, end: Date) {
+async function _syncUserSummary(user: typeof User.$inferSelect, start: Date, end: Date) {
   const params = new URLSearchParams({
     start: start.toISOString(),
     end: end.toISOString(),
@@ -39,13 +39,13 @@ async function syncUserSummary(user: typeof User.$inferSelect, start: Date, end:
     .values({
       date: summary.range.date,
       userId: user.id,
-      totalSeconds: summary.grand_total.total_seconds,
+      totalSeconds: Math.floor(summary.grand_total.total_seconds),
     })
     .onConflictDoUpdate({
       target: [UserSummary.date, UserSummary.userId],
       set: {
         // excluded is a special reference that refer to the row that was proposed for insertion, but wasn’t inserted because of the conflict.
-        totalSeconds: sql.raw(`excluded.${UserSummary.totalSeconds.name}`),
+        totalSeconds: sql.raw(`excluded."${UserSummary.totalSeconds.name}"`),
       },
     });
 
@@ -55,7 +55,7 @@ async function syncUserSummary(user: typeof User.$inferSelect, start: Date, end:
         date: summary.range.date,
         userId: user.id,
         programLanguageName: stat.name,
-        totalSeconds: stat.total_seconds,
+        totalSeconds: Math.floor(stat.total_seconds),
       }) satisfies typeof UserSummaryLanguage.$inferInsert,
   );
 
@@ -66,7 +66,7 @@ async function syncUserSummary(user: typeof User.$inferSelect, start: Date, end:
       .onConflictDoUpdate({
         target: [UserSummaryLanguage.date, UserSummaryLanguage.userId, UserSummaryLanguage.programLanguageName],
         set: {
-          totalSeconds: sql.raw(`excluded.${UserSummaryLanguage.totalSeconds.name}`),
+          totalSeconds: sql.raw(`excluded."${UserSummaryLanguage.totalSeconds.name}"`),
         },
       });
   }
@@ -77,7 +77,7 @@ async function syncUserSummary(user: typeof User.$inferSelect, start: Date, end:
         date: summary.range.date,
         userId: user.id,
         editorName: stat.name,
-        totalSeconds: stat.total_seconds,
+        totalSeconds: Math.floor(stat.total_seconds),
       }) satisfies typeof UserSummaryEditor.$inferInsert,
   );
 
@@ -88,13 +88,13 @@ async function syncUserSummary(user: typeof User.$inferSelect, start: Date, end:
       .onConflictDoUpdate({
         target: [UserSummaryEditor.date, UserSummaryEditor.userId, UserSummaryEditor.editorName],
         set: {
-          totalSeconds: sql.raw(`excluded.${UserSummaryEditor.totalSeconds.name}`),
+          totalSeconds: sql.raw(`excluded."${UserSummaryEditor.totalSeconds.name}"`),
         },
       });
   }
 }
 
-export const getUserSummary = wakaq.task(
+export const syncUserSummaries = wakaq.task(
   async (userId: unknown) => {
     const result = z.string().nonempty().safeParse(userId);
 
@@ -112,8 +112,8 @@ export const getUserSummary = wakaq.task(
 
     wakaq.logger?.debug(`Fetching WakaTime summaries for user ${user.id}.`);
 
-    await syncUserSummary(user, startOfToday(), endOfToday());
-    await syncUserSummary(user, startOfYesterday(), endOfYesterday());
+    await _syncUserSummary(user, startOfToday(), endOfToday());
+    await _syncUserSummary(user, startOfYesterday(), endOfYesterday());
   },
   { name: 'getUserSummary' },
 );

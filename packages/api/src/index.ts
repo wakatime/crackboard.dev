@@ -1,5 +1,6 @@
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 
+import { adminRouter } from './routers/admin';
 import { authRouter } from './routers/auth';
 import { leadersRouter } from './routers/leaders';
 import { usersRouter } from './routers/users';
@@ -14,6 +15,7 @@ export type { TRPCError } from '@trpc/server';
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  admin: adminRouter,
   auth: authRouter,
   leaders: leadersRouter,
   users: usersRouter,

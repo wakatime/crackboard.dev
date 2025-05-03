@@ -250,7 +250,7 @@ importers:
         version: 4.10.0(react-native@0.79.0-rc.4(@babel/core@7.27.1)(@types/react@19.1.0)(react@19.0.0))(react@19.0.0)
       react-native-super-grid:
         specifier: ^6.0.1
-        version: 6.0.1(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(react-native@0.79.0-rc.4(@babel/core@7.27.1)(@types/react@19.1.0)(react@19.0.0))(react@19.0.0)
+        version: 6.0.1(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(react-native@0.79.0-rc.4(@babel/core@7.27.1)(@types/react@19.1.0)(react@19.0.0))(react@19.0.0)
       react-native-svg:
         specifier: 15.11.2
         version: 15.11.2(react-native@0.79.0-rc.4(@babel/core@7.27.1)(@types/react@19.1.0)(react@19.0.0))(react@19.0.0)
@@ -417,6 +417,9 @@ importers:
       sharp:
         specifier: 'catalog:'
         version: 0.34.0
+      sonner:
+        specifier: ^2.0.3
+        version: 2.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       superjson:
         specifier: 'catalog:'
         version: 2.2.2
@@ -15164,7 +15167,7 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
-  eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       confusing-browser-globals: 1.0.11
       eslint: 8.57.1
@@ -15173,10 +15176,10 @@ snapshots:
       object.entries: 1.1.9
       semver: 6.3.1
 
-  eslint-config-airbnb@19.0.4(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(eslint-plugin-react@7.37.5(eslint@8.57.1))(eslint@8.57.1):
+  eslint-config-airbnb@19.0.4(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(eslint-plugin-react@7.37.5(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
-      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.0)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
@@ -17877,10 +17880,10 @@ snapshots:
       react-native: 0.79.0-rc.4(@babel/core@7.27.1)(@types/react@19.1.0)(react@19.0.0)
       warn-once: 0.1.1
 
-  react-native-super-grid@6.0.1(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(react-native@0.79.0-rc.4(@babel/core@7.27.1)(@types/react@19.1.0)(react@19.0.0))(react@19.0.0):
+  react-native-super-grid@6.0.1(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(react-native@0.79.0-rc.4(@babel/core@7.27.1)(@types/react@19.1.0)(react@19.0.0))(react@19.0.0):
     dependencies:
       eslint: 8.57.1
-      eslint-config-airbnb: 19.0.4(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1))(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(eslint-plugin-react@7.37.5(eslint@8.57.1))(eslint@8.57.1)
+      eslint-config-airbnb: 19.0.4(eslint-plugin-import@2.31.0(eslint@8.57.1))(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@5.2.0(eslint@8.57.1))(eslint-plugin-react@7.37.5(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.31.1(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.0)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)

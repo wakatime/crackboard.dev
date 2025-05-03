@@ -4,8 +4,8 @@ import 'dotenv/config';
 import { WakaQChildWorker } from 'wakaq';
 
 import { wakaq } from '..';
-import * as getSummaryForAllUsers from '../summaries/getSummaryForAllUsers';
-import * as getUserSummary from '../summaries/getUserSummary';
+import * as syncSummariesForAllUsers from '../summaries/syncSummariesForAllUsers';
+import * as syncUserSummaries from '../summaries/syncUserSummaries';
 
 await new WakaQChildWorker(wakaq).start();
 wakaq.disconnect();
