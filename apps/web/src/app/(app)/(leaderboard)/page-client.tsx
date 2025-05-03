@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/av
 import { Button } from '@workspace/ui/components/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
 import { format } from 'date-fns';
+import Link from 'next/link';
 import { useState } from 'react';
 import { LuUser } from 'react-icons/lu';
 
@@ -65,14 +66,22 @@ function LeadersTable() {
                 <TableCell>
                   <div className="flex max-w-md min-w-0 items-center gap-2">
                     <Avatar className="size-10">
-                      {leader.user.avatarUrl ? <AvatarImage src={leader.user.avatarUrl} /> : null}
+                      {leader.user.avatarUrl ? (
+                        <Link href={leader.user.url}>
+                          <AvatarImage src={leader.user.avatarUrl} />
+                        </Link>
+                      ) : null}
                       <AvatarFallback>
                         <LuUser className="size-5" />
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
-                      <p className="flex-1 truncate font-semibold">{leader.user.name}</p>
-                      <p className="text-muted-foreground flex-1 truncate">@{leader.user.username}</p>
+                      <p className="flex-1 truncate font-semibold">
+                        <Link href={leader.user.url}>{leader.user.name}</Link>
+                      </p>
+                      <p className="text-muted-foreground flex-1 truncate">
+                        <Link href={leader.user.url}>@{leader.user.username}</Link>
+                      </p>
                     </div>
                   </div>
                 </TableCell>

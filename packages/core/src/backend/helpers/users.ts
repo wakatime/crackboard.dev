@@ -1,6 +1,5 @@
 import type { User } from '@workspace/db/schema';
 
-import { BASE_URL } from '../../constants';
 import type { PublicUser } from '../../types';
 
 export const userToPublicUser = async (
@@ -13,7 +12,7 @@ export const userToPublicUser = async (
     createdAt: user.createdAt,
     avatarUrl: user.avatarUrl,
     name: user.fullName,
-    url: `${BASE_URL}/${encodeURIComponent(user.username ?? user.id)}`,
+    url: `https://wakatime.com/${encodeURIComponent(user.username ?? user.id)}`,
     bio: user.bio,
   };
 };
