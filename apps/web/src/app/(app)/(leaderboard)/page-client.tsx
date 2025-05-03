@@ -81,20 +81,24 @@ function LeadersTable() {
                 </TableCell>
                 <TableCell>
                   <div className="flex max-w-md flex-wrap gap-2">
-                    {leader.languages.map((language) => (
-                      <Button key={language.programLanguageName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
-                        {`${language.programLanguageName} - ${formatSeconds(language.totalSeconds)}`}
-                      </Button>
-                    ))}
+                    {leader.languages.map((language, index) =>
+                      language.totalSeconds < 60 && index > 0 ? null : (
+                        <Button key={language.programLanguageName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
+                          {`${language.programLanguageName} - ${formatSeconds(language.totalSeconds)}`}
+                        </Button>
+                      ),
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="flex max-w-md flex-wrap gap-2">
-                    {leader.editors.map((editor) => (
-                      <Button key={editor.editorName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
-                        {`${editor.editorName} - ${formatSeconds(editor.totalSeconds)}`}
-                      </Button>
-                    ))}
+                    {leader.editors.map((editor, index) =>
+                      editor.totalSeconds < 60 && index > 0 ? null : (
+                        <Button key={editor.editorName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
+                          {`${editor.editorName} - ${formatSeconds(editor.totalSeconds)}`}
+                        </Button>
+                      ),
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
