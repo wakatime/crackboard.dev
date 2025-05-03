@@ -7,7 +7,11 @@ import { wakaq } from '..';
 import type { SummariesResult, Summary } from '../types';
 
 async function _syncUserSummary(user: typeof User.$inferSelect) {
-  const url = `${WAKATIME_API_URI}/users/current/summaries?range=Last%207%20Days&timezone=UTC`;
+  const params = new URLSearchParams({
+    range: 'Last 7 Days',
+    timezone: 'UTC',
+  });
+  const url = `${WAKATIME_API_URI}/users/current/summaries?${params.toString()}`;
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${user.accessToken}`,
