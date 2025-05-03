@@ -1,6 +1,7 @@
 import { validateCSRFTokenCookie } from '@workspace/core/backend/csrf';
-import { APP_NAME, APP_SCHEME, WAKATIME_API_URI, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
+import { APP_SCHEME, WAKATIME_API_URI, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
 import type { WakaTimeUser } from '@workspace/core/types';
+import { betterFetch } from '@workspace/core/utils/helpers';
 import { isNonEmptyString, parseJSONObject } from '@workspace/core/validators';
 import { db, eq } from '@workspace/db/drizzle';
 import { User } from '@workspace/db/schema';
@@ -46,7 +47,7 @@ export const GET = async (req: NextRequest) => {
     return new NextResponse('Invalid CSRF token.', { status: 400 });
   }
 
-  const tokenResponse = await fetch(WAKATIME_TOKEN_URL, {
+  const tokenResponse = await betterFetch(WAKATIME_TOKEN_URL, {
     method: 'POST',
     body: JSON.stringify({
       client_id: env.WAKATIME_APP_ID,
@@ -55,11 +56,6 @@ export const GET = async (req: NextRequest) => {
       grant_type: 'authorization_code',
       code,
     }),
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'User-Agent': APP_NAME,
-    },
   });
 
   if (tokenResponse.status !== 200) {
@@ -68,11 +64,9 @@ export const GET = async (req: NextRequest) => {
 
   const accessToken = ((await tokenResponse.json()) as { access_token: string }).access_token;
 
-  const wakatimeResponse = await fetch(`${WAKATIME_API_URI}/users/current`, {
+  const wakatimeResponse = await betterFetch(`${WAKATIME_API_URI}/users/current`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      'User-Agent': APP_NAME,
     },
   });
 

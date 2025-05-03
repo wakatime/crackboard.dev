@@ -25,8 +25,6 @@ export const registerWithDirectory = wakaq.task(
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user.accessToken}`,
-        'Content-Type': 'application/json',
-        'User-Agent': APP_NAME,
       },
       body: JSON.stringify({
         domain: APP_NAME,

@@ -1,4 +1,6 @@
 import { TRPCError } from '@trpc/server';
+import { WAKATIME_API_URI } from '@workspace/core/constants';
+import { betterFetch } from '@workspace/core/utils/helpers';
 import { db } from '@workspace/db/drizzle';
 import { Editor, ProgramLanguage, ProgramLanguageAlias } from '@workspace/db/schema';
 import { syncSummariesForAllUsers } from '@workspace/tasks/summaries/syncSummariesForAllUsers';
@@ -15,8 +17,8 @@ export const infraRouter = createTRPCRouter({
     await syncUserSummaries.enqueue(userId);
   }),
   syncProgramLanguages: adminProcedure.mutation(async () => {
-    const url = 'https://wakatime.com/api/v1/program_languages';
-    const resp = await fetch(url);
+    const url = `${WAKATIME_API_URI}/program_languages`;
+    const resp = await betterFetch(url);
     if (resp.status !== 200) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: `WakaTime API response status ${resp.status}.` });
     }
@@ -60,8 +62,8 @@ export const infraRouter = createTRPCRouter({
     return { updated };
   }),
   syncEditors: adminProcedure.mutation(async () => {
-    const url = 'https://wakatime.com/api/v1/editors';
-    const resp = await fetch(url);
+    const url = `${WAKATIME_API_URI}/editors`;
+    const resp = await betterFetch(url);
     if (resp.status !== 200) {
       throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: `WakaTime API response status ${resp.status}.` });
     }
