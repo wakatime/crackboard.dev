@@ -66,7 +66,7 @@ async function _processSummary(user: typeof User.$inferSelect, summary: Summary)
           });
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        wakaq.logger?.error(`Failed to upsert UserSummaryLanguage for language ${stat.name}`);
+        wakaq.logger?.debug(`Failed to upsert UserSummaryLanguage for language ${stat.name}`);
       }
     }),
   );
@@ -93,7 +93,7 @@ async function _processSummary(user: typeof User.$inferSelect, summary: Summary)
           });
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        wakaq.logger?.error(`Failed to upsert UserSummaryEditor for editor ${stat.name}`);
+        wakaq.logger?.debug(`Failed to upsert UserSummaryEditor for editor ${stat.name}`);
       }
     }),
   );

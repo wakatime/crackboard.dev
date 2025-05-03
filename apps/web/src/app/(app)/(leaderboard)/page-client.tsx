@@ -76,12 +76,14 @@ function LeadersTable() {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell>{getMinutesStringFromSeconds(leader.totalSeconds)}</TableCell>
+                <TableCell>
+                  <div className="text-lg">{formatSeconds(leader.totalSeconds)}</div>
+                </TableCell>
                 <TableCell>
                   <div className="flex max-w-md flex-wrap gap-2">
                     {leader.languages.map((language) => (
                       <Button key={language.programLanguageName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
-                        {`${language.programLanguageName} - ${getMinutesStringFromSeconds(language.totalSeconds)}`}
+                        {`${language.programLanguageName} - ${formatSeconds(language.totalSeconds)}`}
                       </Button>
                     ))}
                   </div>
@@ -90,7 +92,7 @@ function LeadersTable() {
                   <div className="flex max-w-md flex-wrap gap-2">
                     {leader.editors.map((editor) => (
                       <Button key={editor.editorName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
-                        {`${editor.editorName} - ${getMinutesStringFromSeconds(editor.totalSeconds)}`}
+                        {`${editor.editorName} - ${formatSeconds(editor.totalSeconds)}`}
                       </Button>
                     ))}
                   </div>
@@ -104,6 +106,24 @@ function LeadersTable() {
   );
 }
 
-function getMinutesStringFromSeconds(seconds: number) {
-  return `${Math.round(seconds / 60).toLocaleString()}m`;
+function numberWithCommas(x: number) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function formatSeconds(totalSeconds: number) {
+  let text = '';
+
+  if (totalSeconds < 60) {
+    return '0 m';
+  }
+
+  const hours = Math.floor(totalSeconds / 3600.0);
+  const minutes = Math.floor(totalSeconds / 60.0) % 60;
+  if (hours > 0) {
+    text += numberWithCommas(hours) + ' h';
+  }
+  if (minutes > 0) {
+    text += ' ' + minutes + ' m';
+  }
+  return text.trim();
 }
