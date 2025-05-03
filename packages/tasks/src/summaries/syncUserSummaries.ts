@@ -46,6 +46,9 @@ async function _processSummary(user: typeof User.$inferSelect, summary: Summary)
 
   await Promise.all(
     summary.languages.map(async (stat) => {
+      if (stat.name === 'Other') {
+        return;
+      }
       try {
         await db
           .insert(UserSummaryLanguage)
@@ -70,6 +73,9 @@ async function _processSummary(user: typeof User.$inferSelect, summary: Summary)
 
   await Promise.all(
     summary.editors.map(async (stat) => {
+      if (stat.name === 'Unknown Editor') {
+        return;
+      }
       try {
         await db
           .insert(UserSummaryEditor)
