@@ -334,9 +334,9 @@ export function today() {
   return `${year}-${month}-${day}`;
 }
 
-export function getReadableTextColor(hex?: string): 'black' | 'white' {
+export function getReadableTextColor(hex?: string, def: 'black' | 'white' = 'white'): 'black' | 'white' {
   if (!hex) {
-    return 'white';
+    return def;
   }
 
   hex = hex.replace('#', '');

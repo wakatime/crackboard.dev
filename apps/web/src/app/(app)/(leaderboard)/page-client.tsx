@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/av
 import { Button } from '@workspace/ui/components/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 import { useMemo, useState } from 'react';
 import { LuUser } from 'react-icons/lu';
 
@@ -20,6 +21,7 @@ export default function PageClient() {
 
 function LeadersTable() {
   const [date] = useState(() => today());
+  const { theme } = useTheme();
   const leadersQuery = api.leaderboard.getLeaders.useQuery({ date });
   const programLanguagesQuery = api.languages.getAllProgramLanguages.useQuery();
   const editorsQuery = api.editors.getAllEditors.useQuery();
@@ -104,7 +106,7 @@ function LeadersTable() {
                         return null;
                       }
                       const bgColor = languages.get(language.programLanguageName) ?? undefined;
-                      const color = getReadableTextColor(bgColor);
+                      const color = getReadableTextColor(bgColor, theme === 'dark' ? 'white' : 'black');
                       return (
                         <Button
                           key={language.programLanguageName}
@@ -126,7 +128,7 @@ function LeadersTable() {
                         return null;
                       }
                       const bgColor = editors.get(editor.editorName) ?? undefined;
-                      const color = getReadableTextColor(bgColor);
+                      const color = getReadableTextColor(bgColor, theme === 'dark' ? 'white' : 'black');
                       return (
                         <Button
                           key={editor.editorName}
