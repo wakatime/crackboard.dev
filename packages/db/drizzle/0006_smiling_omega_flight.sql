@@ -1,0 +1,1 @@
+ALTER TABLE "LeaderboardConfig" ALTER COLUMN "isPublic" SET DEFAULT true;

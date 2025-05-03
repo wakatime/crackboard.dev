@@ -44,5 +44,5 @@ export const Editor = pgTable('Editor', {
 
 export const LeaderboardConfig = pgTable('LeaderboardConfig', {
   id: varchar().notNull().primaryKey(),
-  isPublic: boolean().notNull().default(false),
+  isPublic: boolean().notNull().default(true),
 });

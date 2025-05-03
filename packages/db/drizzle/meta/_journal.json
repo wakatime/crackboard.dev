@@ -43,6 +43,13 @@
       "when": 1746264520448,
       "tag": "0005_brown_silver_fox",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1746268827070,
+      "tag": "0006_smiling_omega_flight",
+      "breakpoints": true
     }
   ]
 }
