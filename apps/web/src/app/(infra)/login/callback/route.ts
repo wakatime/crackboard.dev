@@ -6,6 +6,7 @@ import { isNonEmptyString, parseJSONObject } from '@workspace/core/validators';
 import { db, eq } from '@workspace/db/drizzle';
 import { User } from '@workspace/db/schema';
 import { registerWithDirectory } from '@workspace/tasks/register/registerWithDirectory';
+import { syncUserSummaries } from '@workspace/tasks/summaries/syncUserSummaries';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -108,6 +109,7 @@ export const GET = async (req: NextRequest) => {
 
   if (isNewUser) {
     await registerWithDirectory.enqueue();
+    await syncUserSummaries.enqueue(user.id);
   }
 
   await loginUser(user, wakatimeUsername, isNewUser);
