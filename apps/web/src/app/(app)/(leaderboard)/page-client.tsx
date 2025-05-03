@@ -1,11 +1,11 @@
 'use client';
 
-import { today } from '@workspace/core/utils/helpers';
+import { getReadableTextColor, today } from '@workspace/core/utils/helpers';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { Button } from '@workspace/ui/components/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LuUser } from 'react-icons/lu';
 
 import { api } from '~/trpc/client';
@@ -21,6 +21,15 @@ export default function PageClient() {
 function LeadersTable() {
   const [date] = useState(() => today());
   const leadersQuery = api.leaderboard.getLeaders.useQuery({ date });
+  const programLanguagesQuery = api.languages.getAllProgramLanguages.useQuery();
+  const editorsQuery = api.editors.getAllEditors.useQuery();
+
+  const languages = useMemo(() => {
+    return new Map<string, string | null>(programLanguagesQuery.data?.map((lang) => [lang.name, lang.color]) ?? []);
+  }, [programLanguagesQuery.data]);
+  const editors = useMemo(() => {
+    return new Map<string, string | null>(editorsQuery.data?.map((editor) => [editor.name, editor.color]) ?? []);
+  }, [editorsQuery.data]);
 
   if (leadersQuery.isPending) {
     return <p>Loading...</p>;
@@ -90,24 +99,46 @@ function LeadersTable() {
                 </TableCell>
                 <TableCell>
                   <div className="flex max-w-md flex-wrap gap-2">
-                    {leader.languages.map((language, index) =>
-                      language.totalSeconds < 60 && index > 0 ? null : (
-                        <Button key={language.programLanguageName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
+                    {leader.languages.map((language, index) => {
+                      if (language.totalSeconds < 60 && index > 0) {
+                        return null;
+                      }
+                      const bgColor = languages.get(language.programLanguageName) ?? undefined;
+                      const color = getReadableTextColor(bgColor);
+                      return (
+                        <Button
+                          key={language.programLanguageName}
+                          size="sm"
+                          variant="secondary"
+                          className="h-fit px-2 py-1.5 text-xs"
+                          style={{ backgroundColor: bgColor, color }}
+                        >
                           {`${language.programLanguageName} - ${formatSeconds(language.totalSeconds)}`}
                         </Button>
-                      ),
-                    )}
+                      );
+                    })}
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="flex max-w-md flex-wrap gap-2">
-                    {leader.editors.map((editor, index) =>
-                      editor.totalSeconds < 60 && index > 0 ? null : (
-                        <Button key={editor.editorName} size="sm" variant="secondary" className="h-fit px-2 py-1.5 text-xs">
+                    {leader.editors.map((editor, index) => {
+                      if (editor.totalSeconds < 60 && index > 0) {
+                        return null;
+                      }
+                      const bgColor = editors.get(editor.editorName) ?? undefined;
+                      const color = getReadableTextColor(bgColor);
+                      return (
+                        <Button
+                          key={editor.editorName}
+                          size="sm"
+                          variant="secondary"
+                          className="h-fit px-2 py-1.5 text-xs"
+                          style={{ backgroundColor: bgColor, color }}
+                        >
                           {`${editor.editorName} - ${formatSeconds(editor.totalSeconds)}`}
                         </Button>
-                      ),
-                    )}
+                      );
+                    })}
                   </div>
                 </TableCell>
               </TableRow>

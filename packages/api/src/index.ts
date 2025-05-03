@@ -2,6 +2,8 @@ import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 
 import { adminRouter } from './routers/admin';
 import { authRouter } from './routers/auth';
+import { editorsRouter } from './routers/editors';
+import { languagesRouter } from './routers/languages';
 import { leaderboardRouter } from './routers/leaderboard';
 import { usersRouter } from './routers/users';
 import { createTRPCRouter } from './trpc';
@@ -17,8 +19,10 @@ export type { TRPCError } from '@trpc/server';
 export const appRouter = createTRPCRouter({
   admin: adminRouter,
   auth: authRouter,
-  users: usersRouter,
+  editors: editorsRouter,
+  languages: languagesRouter,
   leaderboard: leaderboardRouter,
+  users: usersRouter,
 });
 
 // export type definition of API

@@ -1,5 +1,5 @@
 import { init } from '@paralleldrive/cuid2';
-import { format, formatDistanceStrict, isThisYear, isToday, isYesterday } from 'date-fns';
+import { formatDistanceStrict } from 'date-fns';
 import { humanId } from 'human-id';
 import pluralize from 'pluralize';
 import { parse } from 'tldts';
@@ -334,16 +334,22 @@ export function today() {
   return `${year}-${month}-${day}`;
 }
 
-export function formatDateForChat(date: Date) {
-  if (isToday(date)) {
-    return format(date, 'h:mm a');
-  } else if (isYesterday(date)) {
-    return 'Yesterday';
-  } else if (isThisYear(date)) {
-    return format(date, 'MMM d');
-  } else {
-    return format(date, 'yyyy');
+export function getReadableTextColor(hex?: string): 'black' | 'white' {
+  if (!hex) {
+    return 'white';
   }
+
+  hex = hex.replace('#', '');
+
+  // parse r, g, b
+  const r = parseInt(hex.substr(0, 2), 16);
+  const g = parseInt(hex.substr(2, 2), 16);
+  const b = parseInt(hex.substr(4, 2), 16);
+
+  // YIQ formula
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  return yiq >= 128 ? 'black' : 'white';
 }
 
 export interface FetchOptions extends RequestInit {
