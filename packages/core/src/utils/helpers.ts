@@ -4,7 +4,7 @@ import { humanId } from 'human-id';
 import pluralize from 'pluralize';
 import { parse } from 'tldts';
 
-import { BASE_URL } from '../constants';
+import { APP_NAME, BASE_URL } from '../constants';
 import type { PublicUser } from '../types';
 
 export const roundWithPrecision = (n: number, precision = 2) => {
@@ -336,3 +336,44 @@ export function formatDateForChat(date: Date) {
     return format(date, 'yyyy');
   }
 }
+
+export interface FetchOptions extends RequestInit {
+  /** Sets Accept and Content-Type headers. */
+  isJson?: boolean;
+  /** Number of seconds to wait for response before aborting the request. */
+  timeout?: number;
+}
+
+/* betterFetch is a wrapper around node fetch that:
+   - Sets a default User-Agent
+   - Sets a default Request Timeout
+   - Sets Accept and Content-Type headers if isJson is true.
+ */
+export const betterFetch = async (url: string, init?: FetchOptions): Promise<Response> => {
+  const timeout = init?.timeout ?? 10;
+  const isJson = init?.isJson ?? true;
+
+  const options: RequestInit = init ?? {};
+
+  options.headers = new Headers(options.headers ?? {});
+  if (!options.headers.has('User-Agent')) {
+    options.headers.set('User-Agent', APP_NAME);
+  }
+  if (isJson && !options.headers.has('Accept')) {
+    options.headers.set('Accept', 'application/json');
+  }
+
+  if (!options.method) {
+    options.method = 'GET';
+  }
+
+  if (isJson && options.method !== 'GET' && !options.headers.has('Content-Type')) {
+    options.headers.set('Content-Type', 'application/json');
+  }
+
+  if (!options.signal) {
+    options.signal = AbortSignal.timeout(timeout * 1000);
+  }
+
+  return fetch(url, options);
+};

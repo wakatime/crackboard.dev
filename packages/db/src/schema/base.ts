@@ -1,24 +1,29 @@
 import { createId } from '@paralleldrive/cuid2';
 import { relations } from 'drizzle-orm';
-import { index, jsonb, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { boolean, index, jsonb, pgTable, text, timestamp, unique, varchar } from 'drizzle-orm/pg-core';
 
 import { citext } from './types';
 
-export const User = pgTable('User', {
-  createdAt: timestamp()
-    .notNull()
-    .$default(() => new Date()),
-  id: varchar().primaryKey(),
-  sessionId: varchar()
-    .notNull()
-    .unique()
-    .$defaultFn(() => `crackboardsession_${createId()}`),
-  username: citext().unique(),
-  fullName: varchar(),
-  accessToken: varchar().notNull(),
-  avatarUrl: text(),
-  bio: text(),
-});
+export const User = pgTable(
+  'User',
+  {
+    createdAt: timestamp()
+      .notNull()
+      .$default(() => new Date()),
+    id: varchar().primaryKey(),
+    sessionId: varchar()
+      .notNull()
+      .unique()
+      .$defaultFn(() => `crackboardsession_${createId()}`),
+    username: citext().unique(),
+    fullName: varchar(),
+    accessToken: varchar().notNull(),
+    avatarUrl: text(),
+    bio: text(),
+    isOwner: boolean(),
+  },
+  (table) => [index().on(table.username), unique().on(table.isOwner)],
+);
 
 export const userRelations = relations(User, ({ many }) => ({
   auditLogs: many(AuditLog),

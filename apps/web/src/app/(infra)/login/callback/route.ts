@@ -4,6 +4,7 @@ import type { WakaTimeUser } from '@workspace/core/types';
 import { isNonEmptyString, parseJSONObject } from '@workspace/core/validators';
 import { db, eq } from '@workspace/db/drizzle';
 import { User } from '@workspace/db/schema';
+import { registerWithDirectory } from '@workspace/tasks/register/registerWithDirectory';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -88,6 +89,7 @@ export const GET = async (req: NextRequest) => {
     if (user) {
       return [user, false];
     }
+    const anyUser = await tx.query.User.findFirst({ columns: { id: true } });
     const [newUser] = await tx
       .insert(User)
       .values({
@@ -95,6 +97,7 @@ export const GET = async (req: NextRequest) => {
         username: wakatimeUsername,
         fullName: wakatimeUser.full_name,
         avatarUrl: wakatimeUser.photo,
+        isOwner: !anyUser, // first sign up is the owner
         accessToken,
       })
       .onConflictDoNothing()
@@ -107,6 +110,10 @@ export const GET = async (req: NextRequest) => {
 
   if (!user) {
     return new NextResponse('User not found.', { status: 404 });
+  }
+
+  if (isNewUser) {
+    await registerWithDirectory.enqueue();
   }
 
   await loginUser(user, wakatimeUsername, isNewUser);

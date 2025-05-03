@@ -29,6 +29,13 @@
       "when": 1746183361083,
       "tag": "0003_awesome_gideon",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1746262295573,
+      "tag": "0004_fearless_thunderbird",
+      "breakpoints": true
     }
   ]
 }

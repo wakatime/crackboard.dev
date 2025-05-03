@@ -1,4 +1,5 @@
-import { APP_NAME, WAKATIME_API_URI } from '@workspace/core/constants';
+import { WAKATIME_API_URI } from '@workspace/core/constants';
+import { betterFetch } from '@workspace/core/utils/helpers';
 import { db, eq } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { z } from 'zod';
@@ -12,11 +13,9 @@ async function _syncUserSummary(user: typeof User.$inferSelect) {
     timezone: 'UTC',
   });
   const url = `${WAKATIME_API_URI}/users/current/summaries?${params.toString()}`;
-  const res = await fetch(url, {
+  const res = await betterFetch(url, {
     headers: {
       Authorization: `Bearer ${user.accessToken}`,
-      'Content-Type': 'application/json',
-      'User-Agent': APP_NAME,
     },
   });
 

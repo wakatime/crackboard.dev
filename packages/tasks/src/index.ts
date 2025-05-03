@@ -18,11 +18,7 @@ export const wakaq = new WakaQ({
   queues: [new WakaQueue('default')],
   schedules: [
     // runs task (m h dom mon dow)
-    new CronTask('0 0 * * *', 'syncUserInfoForAllUsers'),
-    new CronTask('0 12 1 * *', 'scrapeIntegrationForAllUsers'),
-    // new CronTask('0 0 * * *', 'syncIntegrationTimelineForAllUsers'),
-    new CronTask('0 0 * * *', 'populateSuggestFollowUsersTable'),
-    new CronTask('0 * * * *', 'refreshTrendingPosts'),
+    new CronTask('0 0 * * *', 'syncSummariesForAllUsers'),
   ],
 
   workerLogLevel: process.env.NODE_ENV == 'development' ? Level.DEBUG : undefined,

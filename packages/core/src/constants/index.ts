@@ -15,11 +15,10 @@ export const DAY = 24 * 60 * 60;
 export const JWT_EXPIRES = 400 * DAY;
 export const CSRF_EXPIRES = 7 * DAY;
 
-export const LOGIN_COOKIE = 'logins';
+export const LOGIN_COOKIE = 'login';
 export const CSRF_COOKIE = 'csrftoken';
 export const CSRF_TOKEN_HEADER = 'X-CSRF-Token';
 export const CSRF_PROTECTED_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
-export const TEST_USER_ID = 'u_dz4qmd0ugvj1n6mm0ecui9kk';
 
 export const WAKATIME_AUTHORIZE_URL = 'https://wakatime.com/oauth/authorize';
 export const WAKATIME_TOKEN_URL = 'https://wakatime.com/oauth/token';
