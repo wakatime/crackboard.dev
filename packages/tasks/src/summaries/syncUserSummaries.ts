@@ -1,20 +1,14 @@
 import { APP_NAME, WAKATIME_API_URI } from '@workspace/core/constants';
 import { db, eq, sql } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
-import { endOfToday, endOfYesterday, startOfToday, startOfYesterday } from 'date-fns';
 import { z } from 'zod';
 
 import { wakaq } from '..';
-import type { SummariesResult } from '../types';
+import type { SummariesResult, Summary } from '../types';
 
-async function _syncUserSummary(user: typeof User.$inferSelect, start: Date, end: Date) {
-  const params = new URLSearchParams({
-    start: start.toISOString(),
-    end: end.toISOString(),
-    timezone: 'UTC',
-  });
-
-  const res = await fetch(`${WAKATIME_API_URI}/users/current/summaries?${params.toString()}`, {
+async function _syncUserSummary(user: typeof User.$inferSelect) {
+  const url = `${WAKATIME_API_URI}/users/current/summaries?range=Last%207%20Days&timezone=UTC`;
+  const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${user.accessToken}`,
       'Content-Type': 'application/json',
@@ -27,13 +21,12 @@ async function _syncUserSummary(user: typeof User.$inferSelect, start: Date, end
     return;
   }
 
-  const summeriesResult = (await res.json()) as SummariesResult;
+  const summaries = ((await res.json()) as SummariesResult).data;
 
-  const summary = summeriesResult.data[0];
-  if (!summary) {
-    return;
-  }
+  await Promise.all(summaries.map((summary) => _processSummary(user, summary)));
+}
 
+async function _processSummary(user: typeof User.$inferSelect, summary: Summary) {
   await db
     .insert(UserSummary)
     .values({
@@ -112,8 +105,7 @@ export const syncUserSummaries = wakaq.task(
 
     wakaq.logger?.debug(`Fetching WakaTime summaries for user ${user.id}.`);
 
-    await _syncUserSummary(user, startOfToday(), endOfToday());
-    await _syncUserSummary(user, startOfYesterday(), endOfYesterday());
+    await _syncUserSummary(user);
   },
   { name: 'getUserSummary' },
 );

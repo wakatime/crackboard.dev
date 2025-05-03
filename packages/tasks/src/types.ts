@@ -11,25 +11,7 @@ export interface Stat {
 }
 
 export interface SummariesResult {
-  data: {
-    grand_total: {
-      hours: number;
-      minutes: number;
-      total_seconds: number;
-      digital: string;
-      decimal: string;
-      text: string;
-    };
-    range: {
-      start: string;
-      end: string;
-      date: string;
-      text: string;
-      timezone: string;
-    };
-    languages: Stat[];
-    editors: Stat[];
-  }[];
+  data: Summary[];
   start: string;
   end: string;
   cumulative_total: {
@@ -47,4 +29,24 @@ export interface SummariesResult {
     text: string;
     text_including_other_language: string;
   };
+}
+
+export interface Summary {
+  grand_total: {
+    hours: number;
+    minutes: number;
+    total_seconds: number;
+    digital: string;
+    decimal: string;
+    text: string;
+  };
+  range: {
+    start: string;
+    end: string;
+    date: string;
+    text: string;
+    timezone: string;
+  };
+  languages: Stat[];
+  editors: Stat[];
 }
