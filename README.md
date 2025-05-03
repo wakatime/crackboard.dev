@@ -1,6 +1,6 @@
-# crackboard.dev
+# crackedboard.dev
 
-- Prod: https://crackboard.dev
+- Prod: https://crackedboard.dev
 - Dev: http://localhost:3000
 
 ## Setup
@@ -43,7 +43,6 @@ Auth is handled by logging in with WakaTime.
 Create a new [WakaTime OAuth App](https://wakatime.com/apps):
 
 ![WakaTime OAuth App Settings](./wakatime-oauth-app.png)
-
 
 Add your app’s `App ID` and `App Secret` to your local `.env` and your production app’s env vars:
 

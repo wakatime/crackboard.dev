@@ -4,7 +4,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   version: '1.3.0',
   owner: 'wakatime_llc',
-  name: 'crackboard.dev',
+  name: 'crackedboard.dev',
   slug: 'crackboarddev',
   orientation: 'portrait',
   userInterfaceStyle: 'automatic',
