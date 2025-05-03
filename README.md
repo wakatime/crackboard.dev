@@ -40,7 +40,12 @@ To add a package, first choose the workspace(s) where it's going to be used then
 ## Authentication
 
 Auth is handled by logging in with WakaTime.
-Create a new [WakaTime OAuth App](https://wakatime.com/apps) and add your app’s `App ID` and `App Secret` to your local `.env` or your production app’s env vars:
+Create a new [WakaTime OAuth App](https://wakatime.com/apps):
+
+![WakaTime OAuth App Settings](./wakatime-oauth-app.png)
+
+
+Add your app’s `App ID` and `App Secret` to your local `.env` and your production app’s env vars:
 
 `.env`
 
