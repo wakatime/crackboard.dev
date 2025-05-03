@@ -3,6 +3,8 @@ import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboar
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import NavBar from './nav-bar';
+
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const config = await getLeaderboardConfig();
 
@@ -14,5 +16,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     }
   }
 
-  return children;
+  return (
+    <>
+      <NavBar />
+      {children}
+    </>
+  );
 }
