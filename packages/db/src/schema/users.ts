@@ -55,29 +55,3 @@ export const auditLogRelations = relations(AuditLog, ({ one }) => ({
     references: [User.id],
   }),
 }));
-
-export const ProgramLanguage = pgTable('ProgramLanguage', {
-  color: varchar(),
-  name: citext().primaryKey(),
-});
-
-export const ProgramLanguageAlias = pgTable(
-  'ProgramLanguageAlias',
-  {
-    id: citext().primaryKey(),
-    programLanguageName: citext()
-      .notNull()
-      .references(() => ProgramLanguage.name, { onDelete: 'cascade' }),
-  },
-  (table) => [index().on(table.programLanguageName)],
-);
-
-export const Editor = pgTable('Editor', {
-  color: varchar(),
-  name: citext().primaryKey(),
-});
-
-export const LeaderboardConfig = pgTable('LeaderboardConfig', {
-  id: varchar().notNull().primaryKey(),
-  isPublic: boolean().notNull().default(false),
-});

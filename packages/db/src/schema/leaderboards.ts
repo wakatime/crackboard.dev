@@ -1,6 +1,7 @@
-import { date, jsonb, pgTable, uuid } from 'drizzle-orm/pg-core';
+import { boolean, date, index, jsonb, pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
 
 import type { Leader } from '../types';
+import { citext } from './types';
 
 export const DailyLeaderboard = pgTable('DailyLeaderboard', {
   id: uuid().notNull().primaryKey().defaultRandom(),
@@ -18,4 +19,30 @@ export const MonthlyLeaderboard = pgTable('MonthlyLeaderboard', {
   id: uuid().notNull().primaryKey().defaultRandom(),
   monthEndDate: date().notNull(),
   leaders: jsonb('details').$type<Leader[]>().notNull(),
+});
+
+export const ProgramLanguage = pgTable('ProgramLanguage', {
+  color: varchar(),
+  name: citext().primaryKey(),
+});
+
+export const ProgramLanguageAlias = pgTable(
+  'ProgramLanguageAlias',
+  {
+    id: citext().primaryKey(),
+    programLanguageName: citext()
+      .notNull()
+      .references(() => ProgramLanguage.name, { onDelete: 'cascade' }),
+  },
+  (table) => [index().on(table.programLanguageName)],
+);
+
+export const Editor = pgTable('Editor', {
+  color: varchar(),
+  name: citext().primaryKey(),
+});
+
+export const LeaderboardConfig = pgTable('LeaderboardConfig', {
+  id: varchar().notNull().primaryKey(),
+  isPublic: boolean().notNull().default(false),
 });

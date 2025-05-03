@@ -1,6 +1,6 @@
 import { date, integer, pgTable, unique } from 'drizzle-orm/pg-core';
 
-import { Editor, ProgramLanguage, User } from './base';
+import { Editor, ProgramLanguage, User } from './users';
 import { citext } from './types';
 
 export const UserSummary = pgTable(
