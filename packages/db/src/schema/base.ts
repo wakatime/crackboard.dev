@@ -76,3 +76,8 @@ export const Editor = pgTable('Editor', {
   color: varchar(),
   name: citext().primaryKey(),
 });
+
+export const LeaderboardConfig = pgTable('LeaderboardConfig', {
+  id: varchar().notNull().primaryKey(),
+  isPublic: boolean().notNull().default(false),
+});
