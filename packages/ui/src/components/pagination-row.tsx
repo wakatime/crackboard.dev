@@ -58,6 +58,10 @@ export default function PaginationRow({ page: currentPage, totalPages, onPageCha
     return pages;
   }, [currentPage, totalPages]);
 
+  if (totalPages === 1) {
+    return;
+  }
+
   return (
     <Pagination {...props}>
       <PaginationContent>
