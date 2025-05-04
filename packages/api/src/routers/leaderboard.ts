@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
 import { today } from '@workspace/core/utils/helpers';
-import { and, db, desc, eq } from '@workspace/db/drizzle';
+import { and, count, db, desc, eq } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { z } from 'zod';
 
@@ -13,8 +13,8 @@ export const leaderboardRouter = createTRPCRouter({
     .input(
       z.object({
         date: z.string().date().optional(),
-        cursor: z.number().positive().nullish(),
-        limit: z.number().positive().min(1).optional(),
+        page: z.number().positive().min(1).nullish(),
+        limit: z.number().positive().min(1).max(500).optional(),
       }),
     )
     .query(async ({ ctx: { currentUser }, input }) => {
@@ -24,7 +24,7 @@ export const leaderboardRouter = createTRPCRouter({
       }
 
       const limit = input.limit ?? 20;
-      const cursor = input.cursor ?? 0;
+      const page = input.page ?? 1;
 
       const date = input.date ?? today();
 
@@ -35,36 +35,49 @@ export const leaderboardRouter = createTRPCRouter({
         .where(eq(UserSummary.date, date))
         .orderBy(desc(UserSummary.totalSeconds))
         .limit(limit)
-        .offset(limit * cursor);
+        .offset(limit * (page - 1));
+
+      const items = await Promise.all(
+        leaders.map(async (leader) => {
+          const [user, languages, editors] = await Promise.all([
+            userToPublicUser(leader.User),
+            db
+              .select()
+              .from(UserSummaryLanguage)
+              .where(and(eq(UserSummaryLanguage.userId, leader.User.id), eq(UserSummaryLanguage.date, date)))
+              .orderBy(desc(UserSummaryLanguage.totalSeconds)),
+            db
+              .select()
+              .from(UserSummaryEditor)
+              .where(and(eq(UserSummaryEditor.userId, leader.User.id), eq(UserSummaryEditor.date, date)))
+              .orderBy(desc(UserSummaryEditor.totalSeconds)),
+          ]);
+
+          return {
+            date,
+            totalSeconds: leader.UserSummary.totalSeconds,
+            user,
+            languages,
+            editors,
+          };
+        }),
+      );
+
+      const totalCount = await db
+        .select({ count: count() })
+        .from(UserSummary)
+        .innerJoin(User, eq(User.id, UserSummary.userId))
+        .where(eq(UserSummary.date, date))
+        .then((res) => res[0]?.count ?? 0);
 
       return {
         date,
-        items: await Promise.all(
-          leaders.map(async (leader) => {
-            const [user, languages, editors] = await Promise.all([
-              userToPublicUser(leader.User),
-              db
-                .select()
-                .from(UserSummaryLanguage)
-                .where(and(eq(UserSummaryLanguage.userId, leader.User.id), eq(UserSummaryLanguage.date, date)))
-                .orderBy(desc(UserSummaryLanguage.totalSeconds)),
-              db
-                .select()
-                .from(UserSummaryEditor)
-                .where(and(eq(UserSummaryEditor.userId, leader.User.id), eq(UserSummaryEditor.date, date)))
-                .orderBy(desc(UserSummaryEditor.totalSeconds)),
-            ]);
-
-            return {
-              date,
-              totalSeconds: leader.UserSummary.totalSeconds,
-              user,
-              languages,
-              editors,
-            };
-          }),
-        ),
-        nextCursor: leaders.length >= limit ? cursor + 1 : null,
+        items,
+        limit,
+        page,
+        prevPage: page > 2 ? page - 1 : null,
+        nextPage: leaders.length >= limit ? page + 1 : null,
+        totalPages: Math.ceil(totalCount / limit),
       };
     }),
 });
