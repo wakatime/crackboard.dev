@@ -105,7 +105,7 @@ function LeaderboardConfigUpdateForm({ config }: { config: typeof LeaderboardCon
 
           <CardFooter>
             <Button type="submit" disabled={updateLeaderboardConfigMut.isPending || !form.formState.isDirty}>
-              Update
+              Save changes
             </Button>
           </CardFooter>
         </Card>
