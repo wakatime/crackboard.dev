@@ -25,6 +25,8 @@ export const WAKAQ_TASKS_DISABLED_KEY = 'wakaq-disabled';
 
 export const REFRESH_RATE = env.NEXT_PUBLIC_REFRESH_RATE ?? 12;
 
+export const COMMIT_SHA = env.NEXT_PUBLIC_COMMIT_SHA ?? '';
+
 export const AUDIT_LOG_LOGIN = 'login';
 export const AUDIT_LOG_USERNAME_CHANGED = 'username changed';
 export const AUDIT_LOG_USER_CREATED = 'user created';

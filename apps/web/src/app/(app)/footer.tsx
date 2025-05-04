@@ -1,5 +1,6 @@
 'use client';
 
+import { COMMIT_SHA } from '@workspace/core/constants';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
@@ -10,7 +11,7 @@ export default function Footer() {
         <div className="flex-1"></div>
 
         <div className="flex items-center gap-2">
-          <Link href="https://github.com/wakatime/crackboard.dev">
+          <Link href="https://github.com/wakatime/crackboard.dev" title={COMMIT_SHA}>
             <FaGithub />
           </Link>
         </div>

@@ -14,7 +14,8 @@
     "REDIS_PORT",
     "REDIS_USERNAME",
     "REDIS_PASSWORD",
-    "NEXT_PUBLIC_REFRESH_RATE"
+    "NEXT_PUBLIC_REFRESH_RATE",
+    "NEXT_PUBLIC_COMMIT_SHA"
   ],
   "tasks": {
     "build": {
