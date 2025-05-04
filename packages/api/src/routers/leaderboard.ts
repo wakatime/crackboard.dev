@@ -23,7 +23,7 @@ export const leaderboardRouter = createTRPCRouter({
         throw new TRPCError({ code: 'UNAUTHORIZED' });
       }
 
-      const limit = input.limit ?? 20;
+      const limit = input.limit ?? 500;
       const page = input.page ?? 1;
 
       const date = input.date ?? today();
