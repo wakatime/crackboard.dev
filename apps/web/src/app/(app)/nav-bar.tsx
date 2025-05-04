@@ -11,8 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@workspace/ui/components/dropdown-menu';
 import Link from 'next/link';
-import React from 'react';
-import { LuUser } from 'react-icons/lu';
+import { useTheme } from 'next-themes';
+import React, { useCallback } from 'react';
+import { LuMoon, LuSun, LuUser } from 'react-icons/lu';
 
 import ThemeToggleDropdownItem from '~/components/theme-toggle-dropdown-item';
 import { useAuth } from '~/providers/auth-providers';
@@ -28,13 +29,18 @@ export default function NavBar() {
         </Link>
         <div className="flex-1"></div>
 
-        {currentUser ? (
-          <UserButton />
-        ) : (
-          <Button asChild>
-            <Link href="/flow/login">Sign In</Link>
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {currentUser ? (
+            <UserButton />
+          ) : (
+            <>
+              <ThemeToggleButton />
+              <Button asChild>
+                <Link href="/flow/login">Sign In</Link>
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
@@ -63,5 +69,20 @@ function UserButton() {
         <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function ThemeToggleButton() {
+  const { setTheme, resolvedTheme } = useTheme();
+
+  const toggleTheme = useCallback(() => {
+    setTheme(resolvedTheme === 'light' ? 'dark' : 'light');
+  }, [resolvedTheme, setTheme]);
+
+  return (
+    <Button onClick={toggleTheme} size="icon" variant="outline">
+      <LuSun className="dark:hidden" />
+      <LuMoon className="hidden dark:block" />
+    </Button>
   );
 }
