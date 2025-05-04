@@ -57,6 +57,13 @@
       "when": 1746339105725,
       "tag": "0007_gorgeous_tusk",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1746341729556,
+      "tag": "0008_open_ironclad",
+      "breakpoints": true
     }
   ]
 }

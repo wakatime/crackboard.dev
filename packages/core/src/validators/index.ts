@@ -68,6 +68,7 @@ export const stripControlChars = (text: string): string => {
 
 export const updateLeaderboardConfigSchema = z.object({
   isPublic: z.boolean(),
+  isInviteOnly: z.boolean(),
 });
 
 export type UpdateLeaderboardConfigData = z.infer<typeof updateLeaderboardConfigSchema>;

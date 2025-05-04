@@ -77,7 +77,7 @@ function LeaderboardConfigUpdateForm({ config }: { config: typeof LeaderboardCon
               name="isPublic"
               render={({ field }) => (
                 <FormItem className="flex">
-                  <FormLabel>Is public?</FormLabel>
+                  <FormLabel>Is publicly viewable?</FormLabel>
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -86,6 +86,23 @@ function LeaderboardConfigUpdateForm({ config }: { config: typeof LeaderboardCon
               )}
             />
           </CardContent>
+
+          <CardContent>
+            <FormField
+              control={form.control}
+              name="isInviteOnly"
+              render={({ field }) => (
+                <FormItem className="flex">
+                  <FormLabel>Require approval for new signups?</FormLabel>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+
           <CardFooter>
             <Button type="submit" disabled={updateLeaderboardConfigMut.isPending || !form.formState.isDirty}>
               Update
