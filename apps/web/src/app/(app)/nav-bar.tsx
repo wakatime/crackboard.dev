@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@workspace/ui/components/dropdown-menu';
 import { MoonIcon, SunIcon, UserIcon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { useCallback } from 'react';
@@ -23,11 +24,15 @@ export default function NavBar() {
 
   return (
     <header className="bg-background sticky top-0 z-30">
-      <div className="container mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 md:px-8">
-        <Link className="text-xl font-semibold" href="/">
-          {APP_DOMAIN}
+      <div className="container mx-auto flex h-28 max-w-7xl items-center gap-4 px-4 md:px-8">
+        <Link href="/">
+          <Image alt={APP_DOMAIN} height={120} src="/logo.svg" width={120} className="inline object-contain" />
         </Link>
-        <div className="flex-1"></div>
+        <div className="flex-1 text-center">
+          <Link className="mr-12 text-xl font-semibold" href="/">
+            {APP_DOMAIN}
+          </Link>
+        </div>
 
         <div className="flex items-center gap-2">
           {currentUser ? (
