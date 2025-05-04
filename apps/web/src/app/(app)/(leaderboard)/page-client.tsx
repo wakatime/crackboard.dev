@@ -1,15 +1,19 @@
 'use client';
 
-import { getReadableTextColor, today } from '@workspace/core/utils/helpers';
+import { dateStringToDate, dateToDateString, getReadableTextColor } from '@workspace/core/utils/helpers';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { Button } from '@workspace/ui/components/button';
+import { Calendar } from '@workspace/ui/components/calendar';
 import PaginationRow from '@workspace/ui/components/pagination-row';
+import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@workspace/ui/components/tooltip';
+import { add, format, isFuture, isToday, isYesterday, sub } from 'date-fns';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useCallback, useMemo, useState } from 'react';
-import { LuLoaderCircle, LuUser } from 'react-icons/lu';
+import { LuChevronLeft, LuChevronRight, LuLoaderCircle, LuUser } from 'react-icons/lu';
 
 import { api } from '~/trpc/client';
 
@@ -22,20 +26,37 @@ export default function PageClient() {
 }
 
 function LeadersTable() {
-  const [date] = useState(() => today());
   const { theme } = useTheme();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [limit] = useState(20);
-  const [page, setPage] = useState(() => {
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+  const router = useRouter();
+
+  const currentDate = useMemo(() => {
+    const date = searchParams.get('date');
+    if (!date) {
+      return new Date();
+    }
+    try {
+      return dateStringToDate(date);
+    } catch (error) {
+      console.error(error);
+      return new Date();
+    }
+  }, [searchParams]);
+
+  const page = useMemo(() => {
     const page = searchParams.get('page');
     if (!page || isNaN(Number(page)) || Number(page) < 1) {
       return 1;
     }
     return Number(page);
-  });
+  }, [searchParams]);
 
-  const leadersQuery = api.leaderboard.getLeaders.useQuery({ date, page, limit });
+  const dateString = useMemo(() => dateToDateString(currentDate), [currentDate]);
+
+  const leadersQuery = api.leaderboard.getLeaders.useQuery({ date: dateString, page, limit });
   const programLanguagesQuery = api.languages.getAllProgramLanguages.useQuery();
   const editorsQuery = api.editors.getAllEditors.useQuery();
 
@@ -47,18 +68,88 @@ function LeadersTable() {
     return new Map<string, string | null>(editorsQuery.data?.map((editor) => [editor.name, editor.color]) ?? []);
   }, [editorsQuery.data]);
 
+  const previousDate = useMemo(() => {
+    return sub(currentDate, { days: 1 });
+  }, [currentDate]);
+
+  const nextDate = useMemo(() => {
+    return add(currentDate, { days: 1 });
+  }, [currentDate]);
+
   const handleSetPage = useCallback(
     (page: number) => {
-      setPage(page);
       const params = new URLSearchParams(searchParams.toString());
-      params.set('page', String(page));
-      window.history.pushState(null, '', `${pathname}?${params.toString()}`);
+      if (page > 1) {
+        params.set('page', String(page));
+      } else {
+        params.delete('page');
+      }
+      router.push(`${pathname}?${params.toString()}`);
     },
-    [pathname, searchParams],
+    [pathname, router, searchParams],
+  );
+
+  const handleSetDate = useCallback(
+    (date: Date) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (isToday(date)) {
+        params.delete('date');
+      } else {
+        params.set('date', dateToDateString(date));
+      }
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [pathname, router, searchParams],
   );
 
   return (
     <>
+      <div className="mb-4 flex items-center gap-4">
+        <div className="flex-1"></div>
+        <div className="flex gap-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="outline" onClick={() => handleSetDate(previousDate)}>
+                <LuChevronLeft />
+                <div className="sr-only">{isYesterday(previousDate) ? 'Yesterday' : formatDate(previousDate)}</div>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{isYesterday(previousDate) ? 'Yesterday' : formatDate(previousDate)}</TooltipContent>
+          </Tooltip>
+
+          <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline">{formatDate(currentDate)}</Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={currentDate}
+                onSelect={(date) => {
+                  if (date) {
+                    handleSetDate(date);
+                    setDatePickerOpen(false);
+                  }
+                }}
+                initialFocus
+                required
+                toDate={new Date()}
+              />
+            </PopoverContent>
+          </Popover>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" disabled={isFuture(nextDate)} onClick={() => handleSetDate(nextDate)}>
+                <LuChevronRight />
+                <div className="sr-only">{isToday(nextDate) ? 'Today' : formatDate(nextDate)}</div>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{isToday(nextDate) ? 'Today' : formatDate(nextDate)}</TooltipContent>
+          </Tooltip>
+        </div>
+      </div>
+
       <div className="rounded-lg border">
         <Table>
           <TableHeader>
@@ -131,7 +222,7 @@ function LeadersTable() {
                     <div className="text-lg">{formatSeconds(leader.totalSeconds)}</div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex max-w-md flex-wrap gap-2">
+                    <div className="flex max-w-md min-w-xs flex-wrap gap-2">
                       {leader.languages.map((language, index) => {
                         if (language.totalSeconds < 60 && index > 0) {
                           return null;
@@ -153,7 +244,7 @@ function LeadersTable() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex max-w-md flex-wrap gap-2">
+                    <div className="flex max-w-md min-w-xs flex-wrap gap-2">
                       {leader.editors.map((editor, index) => {
                         if (editor.totalSeconds < 60 && index > 0) {
                           return null;
@@ -208,4 +299,8 @@ function formatSeconds(totalSeconds: number) {
     text += ' ' + minutes + ' m';
   }
   return text.trim();
+}
+
+function formatDate(date: Date) {
+  return format(date, 'E MMM do yyyy');
 }

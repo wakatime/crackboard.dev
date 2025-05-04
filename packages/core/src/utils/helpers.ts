@@ -327,11 +327,31 @@ export function swapElements<T>(array: T[], index1: number, index2: number): T[]
 
 export function today() {
   const now = new Date();
-  const year = now.getUTCFullYear();
-  const month = String(now.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
-  const day = String(now.getUTCDate()).padStart(2, '0');
+  return dateToDateString(now);
+}
+
+export function dateToDateString(date: Date) {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getUTCDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
+}
+
+export function dateStringToDate(date: string) {
+  const reg = new RegExp(/^\d{4}-\d{2}-\d{2}$/);
+  if (!reg.test(date)) {
+    throw new Error('Invalid date!');
+  }
+
+  const [year, month, day] = date.split('-');
+
+  const d = new Date();
+  d.setUTCFullYear(Number(year));
+  d.setUTCMonth(Number(month) - 1);
+  d.setUTCDate(Number(day));
+
+  return d;
 }
 
 export function getReadableTextColor(hex?: string, def: 'black' | 'white' = 'white'): 'black' | 'white' {
