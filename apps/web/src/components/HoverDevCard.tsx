@@ -1,7 +1,7 @@
 import type { PublicUser } from '@acme/core/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import Link from 'next/link';
-import { LuLink, LuUser } from 'react-icons/lu';
+import { LuUser } from 'react-icons/lu';
 
 export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) {
   return (
@@ -47,7 +47,6 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
             rel="nofollow noopener me"
             target="_blank"
           >
-            <LuLink className="mr-1 inline h-4 w-4" />
             {user.wonderfulDevUrl}
           </Link>
         </div>
