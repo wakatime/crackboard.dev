@@ -20,6 +20,7 @@ export const User = pgTable(
     accessToken: varchar().notNull(),
     avatarUrl: text(),
     bio: text(),
+    wonderfulDevUsername: text(),
     isOwner: boolean(),
     lastSyncedStatsAt: timestamp(),
   },

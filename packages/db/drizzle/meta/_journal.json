@@ -71,6 +71,13 @@
       "when": 1746344032852,
       "tag": "0009_bizarre_magus",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1746372084283,
+      "tag": "0010_fat_quasar",
+      "breakpoints": true
     }
   ]
 }

@@ -106,6 +106,7 @@ export const GET = async (req: NextRequest) => {
       .values({
         id: wakatimeId,
         username: wakatimeUsername,
+        wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
         fullName: wakatimeUser.full_name,
         avatarUrl: wakatimeUser.photo,
         isOwner: anyUser ? null : true, // first sign up is the owner
@@ -116,7 +117,21 @@ export const GET = async (req: NextRequest) => {
     if (newUser) {
       return [newUser, true];
     }
-    return [await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) }), false];
+    return [
+      (
+        await tx
+          .update(User)
+          .set({
+            username: wakatimeUsername,
+            fullName: wakatimeUser.full_name,
+            avatarUrl: wakatimeUser.photo,
+            wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
+          })
+          .where(eq(User.id, wakatimeId))
+          .returning()
+      )[0],
+      false,
+    ];
   });
 
   if (!user) {

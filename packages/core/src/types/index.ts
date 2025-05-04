@@ -3,6 +3,7 @@ export interface PublicUser {
   createdAt: Date;
   name: string | null;
   url: string;
+  wonderfulDevUrl: string | null;
   username: string | null;
   avatarUrl?: string | null;
   bio?: string | null;
@@ -46,6 +47,7 @@ export interface WakaTimeUser {
   full_name: string | null;
   total_seconds?: number;
   username: string | null;
+  wonderfuldev_username: string | null;
   photo: string | null;
 }
 
