@@ -1,9 +1,5 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { PublicUser } from '@workspace/core/types';
-import type { UpdateUserData } from '@workspace/core/validators';
-import { updateUserSchema } from '@workspace/core/validators';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,13 +12,8 @@ import {
   AlertDialogTrigger,
 } from '@workspace/ui/components/alert-dialog';
 import { Button, buttonVariants } from '@workspace/ui/components/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui/components/form';
-import { Input } from '@workspace/ui/components/input';
-import { Textarea } from '@workspace/ui/components/textarea';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
-import { useForm } from 'react-hook-form';
 import { LuLoaderCircle } from 'react-icons/lu';
 import { toast } from 'sonner';
 
@@ -38,94 +29,8 @@ export default function PageClient() {
 
   return (
     <main className="container mx-auto my-8 max-w-3xl space-y-6 px-4 md:px-8">
-      <GeneralSettings user={currentUser} />
       <DeleteAccount />
     </main>
-  );
-}
-
-function GeneralSettings({ user }: { user: PublicUser }) {
-  const form = useForm<UpdateUserData>({
-    resolver: zodResolver(updateUserSchema),
-    defaultValues: {
-      name: user.name ?? '',
-      bio: user.bio ?? '',
-    },
-  });
-
-  const utils = api.useUtils();
-
-  const updateUserMut = api.users.updateUser.useMutation({
-    onMutate: () => {
-      const toastId = toast.loading('Updating user...');
-      return { toastId };
-    },
-    onSuccess: (data, _vars, ctx) => {
-      form.reset({ bio: data.bio ?? '', name: data.name ?? '' });
-      void utils.auth.currentUser.invalidate();
-      toast.success('User updated successfully', {
-        id: ctx.toastId,
-      });
-    },
-    onError: (error, _vars, ctx) => {
-      toast.error('Failed to update user', {
-        description: error.message,
-        id: ctx?.toastId,
-      });
-    },
-  });
-
-  const hanldeSubmit = useCallback(
-    (data: UpdateUserData) => {
-      updateUserMut.mutate(data);
-    },
-    [updateUserMut],
-  );
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(hanldeSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle>General Settings</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="John Doe" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bio</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-          <CardFooter>
-            <Button disabled={!form.formState.isDirty || updateUserMut.isPending} type="submit">
-              {updateUserMut.isPending ? <LuLoaderCircle className="animate-spin" /> : null}
-              Update
-            </Button>
-          </CardFooter>
-        </Card>
-      </form>
-    </Form>
   );
 }
 
