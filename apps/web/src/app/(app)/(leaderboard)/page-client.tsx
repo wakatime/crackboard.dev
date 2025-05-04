@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { useMemo, useState } from 'react';
-import { LuUser } from 'react-icons/lu';
+import { LuLoaderCircle, LuUser } from 'react-icons/lu';
 
 import { api } from '~/trpc/client';
 
@@ -29,17 +29,10 @@ function LeadersTable() {
   const languages = useMemo(() => {
     return new Map<string, string | null>(programLanguagesQuery.data?.map((lang) => [lang.name, lang.color]) ?? []);
   }, [programLanguagesQuery.data]);
+
   const editors = useMemo(() => {
     return new Map<string, string | null>(editorsQuery.data?.map((editor) => [editor.name, editor.color]) ?? []);
   }, [editorsQuery.data]);
-
-  if (leadersQuery.isPending) {
-    return <p>Loading...</p>;
-  }
-
-  if (leadersQuery.isError) {
-    return <p>{leadersQuery.error.message}</p>;
-  }
 
   return (
     <div className="rounded-lg border">
@@ -54,10 +47,24 @@ function LeadersTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {leadersQuery.data.items.length === 0 ? (
+          {leadersQuery.isPending ? (
             <TableRow>
-              <TableCell colSpan={5} className="text-muted-foreground p-4 text-center">
-                No users found.
+              <TableCell colSpan={5}>
+                <div className="flex items-center justify-center px-4 py-16">
+                  <LuLoaderCircle className="size-6 animate-spin" />
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : leadersQuery.isError ? (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <div className="text-muted-foreground p-4 text-center">{leadersQuery.error.message}</div>
+              </TableCell>
+            </TableRow>
+          ) : leadersQuery.data.items.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={5}>
+                <div className="text-muted-foreground p-4 text-center">No users found.</div>
               </TableCell>
             </TableRow>
           ) : (
