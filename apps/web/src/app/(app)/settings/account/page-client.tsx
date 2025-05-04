@@ -13,6 +13,7 @@ import {
 } from '@workspace/ui/components/alert-dialog';
 import { Button, buttonVariants } from '@workspace/ui/components/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { cn } from '@workspace/ui/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { LuLoaderCircle } from 'react-icons/lu';
@@ -81,7 +82,7 @@ function DeleteAccount() {
       <CardFooter>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" disabled={deleteAccountMut.isPending || deleteAccountMut.isSuccess}>
+            <Button className="cursor-pointer" variant="destructive" disabled={deleteAccountMut.isPending || deleteAccountMut.isSuccess}>
               {deleteAccountMut.isPending ? <LuLoaderCircle className="animate-spin" /> : null}
               Delete Account
             </Button>
@@ -94,9 +95,9 @@ function DeleteAccount() {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
               <AlertDialogAction
-                className={buttonVariants({ variant: 'destructive' })}
+                className={cn('cursor-pointer', buttonVariants({ variant: 'destructive' }))}
                 onClick={() => deleteAccountMut.mutate()}
                 disabled={deleteAccountMut.isPending}
               >
