@@ -2,12 +2,13 @@ import { WAKATIME_API_URI } from '@workspace/core/constants';
 import { betterFetch } from '@workspace/core/utils/helpers';
 import { db, eq } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
+import { differenceInMinutes } from 'date-fns';
 import { z } from 'zod';
 
 import { wakaq } from '..';
 import type { SummariesResult, Summary } from '../types';
 
-async function _syncUserSummary(user: typeof User.$inferSelect) {
+async function _syncUserSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }) {
   const params = new URLSearchParams({
     range: 'Last 7 Days',
     timezone: 'UTC',
@@ -27,9 +28,11 @@ async function _syncUserSummary(user: typeof User.$inferSelect) {
   const summaries = ((await res.json()) as SummariesResult).data;
 
   await Promise.all(summaries.map((summary) => _processSummary(user, summary)));
+
+  await db.update(User).set({ lastSyncedStatsAt: new Date() }).where(eq(User.id, user.id));
 }
 
-async function _processSummary(user: typeof User.$inferSelect, summary: Summary) {
+async function _processSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }, summary: Summary) {
   await db
     .insert(UserSummary)
     .values({
@@ -108,10 +111,19 @@ export const syncUserSummaries = wakaq.task(
       return;
     }
 
-    const [user] = await db.select().from(User).where(eq(User.id, result.data));
+    const user = await db.query.User.findFirst({
+      where: eq(User.id, result.data),
+      columns: { id: true, accessToken: true, lastSyncedStatsAt: true },
+    });
 
     if (!user) {
       wakaq.logger?.error('No user found with id: ', result.data);
+      return;
+    }
+
+    const minsSinceSync = user.lastSyncedStatsAt ? differenceInMinutes(new Date(), user.lastSyncedStatsAt) : Infinity;
+    if (minsSinceSync < 30) {
+      wakaq.logger?.debug(`Recently synced this user’s stats ${minsSinceSync} mins ago, skipping`);
       return;
     }
 

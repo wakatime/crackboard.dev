@@ -21,6 +21,7 @@ export const User = pgTable(
     avatarUrl: text(),
     bio: text(),
     isOwner: boolean(),
+    lastSyncedStatsAt: timestamp(),
   },
   (table) => [index().on(table.username), unique().on(table.isOwner)],
 );
