@@ -35,9 +35,9 @@ export interface OAuthToken {
 
 export interface OAuthLoginState {
   c: string;
-  follow?: string;
   n?: string;
   m?: boolean;
+  ic?: string;
 }
 
 export interface WakaTimeUser {

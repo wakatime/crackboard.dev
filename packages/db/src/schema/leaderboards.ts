@@ -46,4 +46,5 @@ export const LeaderboardConfig = pgTable('LeaderboardConfig', {
   id: varchar().notNull().primaryKey(),
   isPublic: boolean().notNull().default(true),
   isInviteOnly: boolean().notNull().default(false),
+  inviteCode: varchar(),
 });

@@ -1,4 +1,5 @@
 import { createCSRFToken } from '@workspace/core/backend/csrf';
+import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { CSRF_COOKIE, CSRF_EXPIRES, WAKATIME_AUTHORIZE_URL, WAKATIME_REDIRECT_URI } from '@workspace/core/constants';
 import type { OAuthLoginState } from '@workspace/core/types';
 import { cookies } from 'next/headers';
@@ -11,6 +12,13 @@ import { makeUrlSafe } from '~/utils/urlHelpers';
 export const GET = async (req: NextRequest) => {
   const next = req.nextUrl.searchParams.get('next');
   const isMobile = req.nextUrl.searchParams.get('device') === 'mobile';
+  const inviteCode = req.nextUrl.searchParams.get('inviteCode') ?? undefined;
+
+  const config = await getLeaderboardConfig();
+  if (config.isInviteOnly && config.inviteCode !== inviteCode) {
+    console.error(`Invalid invite code: ${inviteCode}`);
+    return new NextResponse('Invalid invite code.', { status: 400 });
+  }
 
   const token = createCSRFToken();
   const cookieStore = await cookies();
@@ -21,7 +29,7 @@ export const GET = async (req: NextRequest) => {
     secure: env.NODE_ENV === 'production',
     value: token,
   });
-  const state: OAuthLoginState = { c: token, n: makeUrlSafe(next ?? '/').toString(), m: isMobile };
+  const state: OAuthLoginState = { c: token, n: makeUrlSafe(next ?? '/').toString(), m: isMobile, ic: inviteCode };
 
   const params = new URLSearchParams({
     client_id: env.WAKATIME_APP_ID,

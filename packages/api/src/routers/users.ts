@@ -15,8 +15,6 @@ export const usersRouter = createTRPCRouter({
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found.' });
     }
 
-    const pubUser = await userToPublicUser(user);
-
-    return pubUser;
+    return await userToPublicUser(user);
   }),
 });

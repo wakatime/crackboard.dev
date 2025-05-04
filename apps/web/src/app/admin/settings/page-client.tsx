@@ -1,12 +1,14 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { BASE_URL } from '@workspace/core/constants';
 import type { UpdateLeaderboardConfigData } from '@workspace/core/validators';
 import { updateLeaderboardConfigSchema } from '@workspace/core/validators';
 import type { LeaderboardConfig } from '@workspace/db/schema';
 import { Button } from '@workspace/ui/components/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui/components/form';
+import { Input } from '@workspace/ui/components/input';
 import { SidebarTrigger } from '@workspace/ui/components/sidebar';
 import { Switch } from '@workspace/ui/components/switch';
 import { useCallback } from 'react';
@@ -39,6 +41,7 @@ export default function PageClient() {
 }
 
 function LeaderboardConfigUpdateForm({ config }: { config: typeof LeaderboardConfig.$inferSelect }) {
+  const utils = api.useUtils();
   const form = useForm<UpdateLeaderboardConfigData>({
     resolver: zodResolver(updateLeaderboardConfigSchema),
     defaultValues: config,
@@ -47,6 +50,7 @@ function LeaderboardConfigUpdateForm({ config }: { config: typeof LeaderboardCon
   const updateLeaderboardConfigMut = api.admin.leaderboardConfig.updateConfig.useMutation({
     onSuccess: (data) => {
       form.reset(data);
+      void utils.admin.leaderboardConfig.invalidate();
       toast.success('Updated successfully.');
     },
     onError: (error) => {
@@ -102,6 +106,17 @@ function LeaderboardConfigUpdateForm({ config }: { config: typeof LeaderboardCon
               )}
             />
           </CardContent>
+
+          {config.isInviteOnly && config.inviteCode && (
+            <CardContent>
+              <Input
+                name="_inviteCode"
+                value={`${BASE_URL}/flow/login?inviteCode=${config.inviteCode}`}
+                contentEditable={false}
+                readOnly={true}
+              />
+            </CardContent>
+          )}
 
           <CardFooter>
             <Button type="submit" disabled={updateLeaderboardConfigMut.isPending || !form.formState.isDirty}>

@@ -1,4 +1,5 @@
 import { validateCSRFTokenCookie } from '@workspace/core/backend/csrf';
+import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { APP_SCHEME, WAKATIME_API_URI, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
 import type { WakaTimeUser } from '@workspace/core/types';
 import { betterFetch } from '@workspace/core/utils/helpers';
@@ -19,7 +20,7 @@ const stateSchema = z.object({
   c: z.string(),
   n: z.string().optional().nullable(),
   m: z.boolean().optional().nullable(),
-  follow: z.string().optional().nullable(),
+  ic: z.string().optional().nullable(),
 });
 
 export const GET = async (req: NextRequest) => {
@@ -35,6 +36,12 @@ export const GET = async (req: NextRequest) => {
   if (!s.success) {
     console.error(s.error.message);
     return new NextResponse('Invalid OAuth state.', { status: 400 });
+  }
+
+  const config = await getLeaderboardConfig();
+  if (config.isInviteOnly && s.data.ic !== config.inviteCode) {
+    console.error(`Invalid invite code: ${s.data.ic}`);
+    return new NextResponse('Invalid invite code.', { status: 400 });
   }
 
   if (s.data.m) {

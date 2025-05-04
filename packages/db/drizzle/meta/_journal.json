@@ -64,6 +64,13 @@
       "when": 1746341729556,
       "tag": "0008_open_ironclad",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1746344032852,
+      "tag": "0009_bizarre_magus",
+      "breakpoints": true
     }
   ]
 }
