@@ -1,8 +1,10 @@
 import { WAKATIME_API_URI } from '@workspace/core/constants';
 import { betterFetch } from '@workspace/core/utils/helpers';
 import { db, eq } from '@workspace/db/drizzle';
+import { redis } from '@workspace/db/redis';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { differenceInMinutes } from 'date-fns';
+import { Duration } from 'ts-duration';
 import { z } from 'zod';
 
 import { wakaq } from '..';
@@ -10,6 +12,15 @@ import type { SummariesResult, Summary } from '../types';
 
 export const syncUserSummaries = wakaq.task(
   async (userId: unknown) => {
+    const rateLimitKey = 'syncUserSummaries-rate-limited';
+    const now = nowSeconds();
+    const limitedUntil = await redis.expiretime(rateLimitKey);
+    if (limitedUntil > now) {
+      const eta = Duration.minute(limitedUntil - now + Math.floor(Math.random() * 10));
+      await syncUserSummaries.enqueueAfterDelay(eta, userId);
+      return;
+    }
+
     const result = z.string().nonempty().safeParse(userId);
 
     if (!result.success) {
@@ -35,34 +46,42 @@ export const syncUserSummaries = wakaq.task(
 
     wakaq.logger?.debug(`Fetching WakaTime summaries for user ${user.id}.`);
 
-    await _syncUserSummary(user);
+    const params = new URLSearchParams({
+      range: 'Last 7 Days',
+      timezone: 'UTC',
+    });
+    const url = `${WAKATIME_API_URI}/users/current/summaries?${params.toString()}`;
+    let res: Response;
+    try {
+      res = await betterFetch(url, {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+    } catch (e) {
+      wakaq.logger?.error(e);
+      return;
+    }
+
+    if (res.status !== 200) {
+      if (res.status === 429 || res.status >= 500) {
+        await redis.setex(rateLimitKey, Duration.minute(1).seconds, '1');
+        const eta = Duration.minute(Math.floor(Math.random() * 10));
+        await syncUserSummaries.enqueueAfterDelay(eta, userId);
+        return;
+      }
+      wakaq.logger?.error('Failed to fetch summary!', await res.text());
+      return;
+    }
+
+    const summaries = ((await res.json()) as SummariesResult).data;
+
+    await Promise.all(summaries.map((summary) => _processSummary(user, summary)));
+
+    await db.update(User).set({ lastSyncedStatsAt: new Date() }).where(eq(User.id, user.id));
   },
   { name: 'getUserSummary' },
 );
-
-async function _syncUserSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }) {
-  const params = new URLSearchParams({
-    range: 'Last 7 Days',
-    timezone: 'UTC',
-  });
-  const url = `${WAKATIME_API_URI}/users/current/summaries?${params.toString()}`;
-  const res = await betterFetch(url, {
-    headers: {
-      Authorization: `Bearer ${user.accessToken}`,
-    },
-  });
-
-  if (res.status !== 200) {
-    wakaq.logger?.error('Failed to fetch summary!', await res.text());
-    return;
-  }
-
-  const summaries = ((await res.json()) as SummariesResult).data;
-
-  await Promise.all(summaries.map((summary) => _processSummary(user, summary)));
-
-  await db.update(User).set({ lastSyncedStatsAt: new Date() }).where(eq(User.id, user.id));
-}
 
 async function _processSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }, summary: Summary) {
   await db
@@ -133,3 +152,5 @@ async function _processSummary(user: { id: string; accessToken: string; lastSync
     }),
   );
 }
+
+const nowSeconds = () => Math.round(Date.now() / 1000);
