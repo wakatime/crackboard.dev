@@ -45,7 +45,7 @@ function LeadersTable() {
     <div className="rounded-lg border">
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow noHover={true}>
             <TableHead className="pl-4">Position</TableHead>
             <TableHead>User</TableHead>
             <TableHead>Time Today</TableHead>
