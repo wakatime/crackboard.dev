@@ -1,14 +1,22 @@
+import { authenticatedUserFromRequest } from '@workspace/core/backend/auth';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { incrementRateLimitCounter, isRateLimited } from '@workspace/core/backend/rateLimit';
 import { headers } from 'next/headers';
+import { redirect, RedirectType } from 'next/navigation';
 
 import InviteCodeNeeded from './invite-code-needed';
 import LogInForm from './login-form';
 
 export default async function LogInPage({ searchParams }: { searchParams: Promise<{ next?: string; inviteCode?: string }> }) {
-  const { next, inviteCode } = await searchParams;
+  const { next = '/', inviteCode } = await searchParams;
+
+  const user = await authenticatedUserFromRequest();
+  if (user) {
+    redirect(next, RedirectType.replace);
+  }
 
   const config = await getLeaderboardConfig();
+
   if (config.isInviteOnly) {
     const headersList = await headers();
     const ip = headersList.get('X-Real-Ip');
