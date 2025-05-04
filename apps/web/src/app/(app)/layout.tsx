@@ -3,6 +3,7 @@ import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboar
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import Footer from './footer';
 import NavBar from './nav-bar';
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
@@ -20,6 +21,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     <>
       <NavBar />
       {children}
+      <Footer />
     </>
   );
 }
