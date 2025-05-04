@@ -8,6 +8,38 @@ import { z } from 'zod';
 import { wakaq } from '..';
 import type { SummariesResult, Summary } from '../types';
 
+export const syncUserSummaries = wakaq.task(
+  async (userId: unknown) => {
+    const result = z.string().nonempty().safeParse(userId);
+
+    if (!result.success) {
+      wakaq.logger?.error(result.error.message);
+      return;
+    }
+
+    const user = await db.query.User.findFirst({
+      where: eq(User.id, result.data),
+      columns: { id: true, accessToken: true, lastSyncedStatsAt: true },
+    });
+
+    if (!user) {
+      wakaq.logger?.error('No user found with id: ', result.data);
+      return;
+    }
+
+    const minsSinceSync = user.lastSyncedStatsAt ? differenceInMinutes(new Date(), user.lastSyncedStatsAt) : Infinity;
+    if (minsSinceSync < 30) {
+      wakaq.logger?.debug(`Recently synced this user’s stats ${minsSinceSync} mins ago, skipping`);
+      return;
+    }
+
+    wakaq.logger?.debug(`Fetching WakaTime summaries for user ${user.id}.`);
+
+    await _syncUserSummary(user);
+  },
+  { name: 'getUserSummary' },
+);
+
 async function _syncUserSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }) {
   const params = new URLSearchParams({
     range: 'Last 7 Days',
@@ -101,35 +133,3 @@ async function _processSummary(user: { id: string; accessToken: string; lastSync
     }),
   );
 }
-
-export const syncUserSummaries = wakaq.task(
-  async (userId: unknown) => {
-    const result = z.string().nonempty().safeParse(userId);
-
-    if (!result.success) {
-      wakaq.logger?.error(result.error.message);
-      return;
-    }
-
-    const user = await db.query.User.findFirst({
-      where: eq(User.id, result.data),
-      columns: { id: true, accessToken: true, lastSyncedStatsAt: true },
-    });
-
-    if (!user) {
-      wakaq.logger?.error('No user found with id: ', result.data);
-      return;
-    }
-
-    const minsSinceSync = user.lastSyncedStatsAt ? differenceInMinutes(new Date(), user.lastSyncedStatsAt) : Infinity;
-    if (minsSinceSync < 30) {
-      wakaq.logger?.debug(`Recently synced this user’s stats ${minsSinceSync} mins ago, skipping`);
-      return;
-    }
-
-    wakaq.logger?.debug(`Fetching WakaTime summaries for user ${user.id}.`);
-
-    await _syncUserSummary(user);
-  },
-  { name: 'getUserSummary' },
-);
