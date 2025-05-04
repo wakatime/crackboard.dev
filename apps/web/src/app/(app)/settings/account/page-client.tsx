@@ -12,7 +12,8 @@ import {
   AlertDialogTrigger,
 } from '@workspace/ui/components/alert-dialog';
 import { Button, buttonVariants } from '@workspace/ui/components/button';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@workspace/ui/components/card';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { LuLoaderCircle } from 'react-icons/lu';
 import { toast } from 'sonner';
@@ -29,6 +30,20 @@ export default function PageClient() {
 
   return (
     <main className="container mx-auto my-8 max-w-3xl space-y-6 px-4 md:px-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Settings</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-6">
+          <p>
+            To change your name or other info, update your{' '}
+            <Link href="https://wakatime.com/settings/profile" target="_blank" className="underline">
+              WakaTime profile
+            </Link>
+            , then re-login here.
+          </p>
+        </CardContent>
+      </Card>
       <DeleteAccount />
     </main>
   );
