@@ -60,7 +60,7 @@ function UserButton() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <Avatar className="size-10">
           {currentUser.avatarUrl ? <AvatarImage src={currentUser.avatarUrl} /> : null}
           <AvatarFallback>
@@ -69,13 +69,15 @@ function UserButton() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild className="cursor-pointer">
           <Link href={`/settings/account`}>Account</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <ThemeToggleDropdownItem />
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer" onClick={signOut}>
+          Sign Out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

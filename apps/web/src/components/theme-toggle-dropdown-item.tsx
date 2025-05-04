@@ -16,7 +16,7 @@ export default function ThemeToggleDropdownItem() {
   );
 
   return (
-    <DropdownMenuItem onClick={toggleTheme}>
+    <DropdownMenuItem onClick={toggleTheme} className="cursor-pointer">
       Dark mode
       <Switch checked={resolvedTheme === 'dark'} className="pointer-events-none ml-2" />
     </DropdownMenuItem>
