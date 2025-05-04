@@ -5,8 +5,7 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     JWT_SECRET: z.string().min(1),
-    SPACES_KEY: z.string().optional(),
-    SPACES_SECRET: z.string().optional(),
+    REFRESH_RATE: z.number().min(1).max(24).optional(),
 
     DISPOSABLE_EMAIL_KEY: z.string().optional(),
   },

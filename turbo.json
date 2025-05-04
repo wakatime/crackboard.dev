@@ -9,7 +9,12 @@
     "NEXT_PUBLIC_BASE_URL",
     "JWT_SECRET",
     "WAKATIME_APP_ID",
-    "WAKATIME_APP_SECRET"
+    "WAKATIME_APP_SECRET",
+    "REDIS_HOST",
+    "REDIS_PORT",
+    "REDIS_USERNAME",
+    "REDIS_PASSWORD",
+    "REFRESH_RATE"
   ],
   "tasks": {
     "build": {
