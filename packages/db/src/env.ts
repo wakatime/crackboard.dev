@@ -10,7 +10,6 @@ export const env = createEnv({
     REDIS_PASSWORD: z.string().optional(),
     REDIS_PORT: z.string().optional(),
     REDIS_USERNAME: z.string().optional(),
-    REFRESH_RATE: z.number().min(1).max(24).optional(),
   },
   shared: {
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),

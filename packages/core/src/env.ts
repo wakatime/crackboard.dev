@@ -5,7 +5,6 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     JWT_SECRET: z.string().min(1),
-    REFRESH_RATE: z.number().min(1).max(24).optional(),
 
     DISPOSABLE_EMAIL_KEY: z.string().optional(),
   },
@@ -15,11 +14,13 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_DOMAIN: z.string(),
     NEXT_PUBLIC_BASE_URL: z.string(),
+    NEXT_PUBLIC_REFRESH_RATE: z.number().min(1).max(24).optional(),
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_REFRESH_RATE: process.env.NEXT_PUBLIC_REFRESH_RATE,
   },
   skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
 });

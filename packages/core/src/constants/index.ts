@@ -23,7 +23,7 @@ export const WAKATIME_API_URI = 'https://api.wakatime.com/api/v1';
 
 export const WAKAQ_TASKS_DISABLED_KEY = 'wakaq-disabled';
 
-export const REFRESH_RATE = env.REFRESH_RATE ?? 12;
+export const REFRESH_RATE = env.NEXT_PUBLIC_REFRESH_RATE ?? 12;
 
 export const AUDIT_LOG_LOGIN = 'login';
 export const AUDIT_LOG_USERNAME_CHANGED = 'username changed';
