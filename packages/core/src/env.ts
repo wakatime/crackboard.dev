@@ -14,7 +14,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_DOMAIN: z.string(),
     NEXT_PUBLIC_BASE_URL: z.string(),
-    NEXT_PUBLIC_REFRESH_RATE: z.number().min(1).max(24).optional(),
+    NEXT_PUBLIC_REFRESH_RATE: z.string().optional(),
     NEXT_PUBLIC_COMMIT_SHA: z.string().optional(),
   },
   experimental__runtimeEnv: {
