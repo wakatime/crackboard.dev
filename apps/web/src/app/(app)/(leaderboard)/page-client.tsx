@@ -218,12 +218,42 @@ function LeadersTable() {
                         </HoverCardContent>
                       </HoverCard>
                       <div className="min-w-0 flex-1">
-                        <p className="flex-1 truncate font-semibold">
-                          <Link href={leader.user.url}>{leader.user.name}</Link>
-                        </p>
-                        <p className="text-muted-foreground flex-1 truncate">
-                          <Link href={leader.user.url}>@{leader.user.username}</Link>
-                        </p>
+                        {!leader.user.name && !leader.user.username && (
+                          <p className="flex-1 truncate font-semibold">
+                            <HoverCard>
+                              <HoverCardTrigger asChild>
+                                <Link href={leader.user.url}>@{leader.user.id}</Link>
+                              </HoverCardTrigger>
+                              <HoverCardContent className="pointer-events-auto">
+                                <HoverDevCard user={leader.user} />
+                              </HoverCardContent>
+                            </HoverCard>
+                          </p>
+                        )}
+                        {leader.user.name && (
+                          <p className="flex-1 truncate font-semibold">
+                            <HoverCard>
+                              <HoverCardTrigger asChild>
+                                <Link href={leader.user.url}>{leader.user.name}</Link>
+                              </HoverCardTrigger>
+                              <HoverCardContent className="pointer-events-auto">
+                                <HoverDevCard user={leader.user} />
+                              </HoverCardContent>
+                            </HoverCard>
+                          </p>
+                        )}
+                        {leader.user.username && (
+                          <p className="text-muted-foreground flex-1 truncate">
+                            <HoverCard>
+                              <HoverCardTrigger asChild>
+                                <Link href={leader.user.url}>@{leader.user.username}</Link>
+                              </HoverCardTrigger>
+                              <HoverCardContent className="pointer-events-auto">
+                                <HoverDevCard user={leader.user} />
+                              </HoverCardContent>
+                            </HoverCard>
+                          </p>
+                        )}
                       </div>
                     </div>
                   </TableCell>
