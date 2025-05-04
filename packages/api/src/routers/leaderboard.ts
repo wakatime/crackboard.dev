@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
 import { today } from '@workspace/core/utils/helpers';
-import { and, count, db, desc, eq } from '@workspace/db/drizzle';
+import { and, count, db, desc, eq, gt } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { z } from 'zod';
 
@@ -32,7 +32,7 @@ export const leaderboardRouter = createTRPCRouter({
         .select()
         .from(UserSummary)
         .innerJoin(User, eq(User.id, UserSummary.userId))
-        .where(eq(UserSummary.date, date))
+        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60)))
         .orderBy(desc(UserSummary.totalSeconds))
         .limit(limit)
         .offset(limit * (page - 1));
