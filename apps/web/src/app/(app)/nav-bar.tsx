@@ -3,11 +3,18 @@
 import { APP_DOMAIN } from '@workspace/core/constants';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { Button } from '@workspace/ui/components/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@workspace/ui/components/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@workspace/ui/components/dropdown-menu';
 import Link from 'next/link';
 import React from 'react';
 import { LuUser } from 'react-icons/lu';
 
+import ThemeToggleDropdownItem from '~/components/theme-toggle-dropdown-item';
 import { useAuth } from '~/providers/auth-providers';
 
 export default function NavBar() {
@@ -51,6 +58,8 @@ function UserButton() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
+        <ThemeToggleDropdownItem />
+        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
