@@ -156,7 +156,7 @@ function LeadersTable() {
             <TableRow noHover={true}>
               <TableHead className="pl-4">Position</TableHead>
               <TableHead>User</TableHead>
-              <TableHead>Time Today</TableHead>
+              <TableHead>{isToday(currentDate) ? 'Time Today' : formatDate(currentDate)}</TableHead>
               <TableHead>Languages</TableHead>
               <TableHead>Editors</TableHead>
             </TableRow>

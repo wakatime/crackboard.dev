@@ -12,7 +12,7 @@ export const wakaq = new WakaQ({
       throw new PreventTaskExecution();
     }
   },
-  concurrency: 6,
+  concurrency: 2,
   hardTimeout: Duration.minute(3),
   host: env.REDIS_HOST,
   password: env.REDIS_PASSWORD,
