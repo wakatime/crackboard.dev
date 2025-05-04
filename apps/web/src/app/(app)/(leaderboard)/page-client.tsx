@@ -4,6 +4,7 @@ import { dateStringToDate, dateToDateString, getReadableTextColor } from '@works
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { Button } from '@workspace/ui/components/button';
 import { Calendar } from '@workspace/ui/components/calendar';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@workspace/ui/components/hover-card';
 import PaginationRow from '@workspace/ui/components/pagination-row';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
@@ -15,6 +16,7 @@ import { useTheme } from 'next-themes';
 import { useCallback, useMemo, useState } from 'react';
 import { LuChevronLeft, LuChevronRight, LuLoaderCircle, LuUser } from 'react-icons/lu';
 
+import HoverDevCard from '~/components/HoverDevCard';
 import { api } from '~/trpc/client';
 
 export default function PageClient() {
@@ -198,16 +200,23 @@ function LeadersTable() {
                   </TableCell>
                   <TableCell>
                     <div className="flex max-w-md min-w-0 items-center gap-2">
-                      <Avatar className="size-10">
-                        {leader.user.avatarUrl ? (
-                          <Link href={leader.user.url}>
-                            <AvatarImage src={leader.user.avatarUrl} />
-                          </Link>
-                        ) : null}
-                        <AvatarFallback>
-                          <LuUser className="size-5" />
-                        </AvatarFallback>
-                      </Avatar>
+                      <HoverCard>
+                        <HoverCardTrigger asChild>
+                          <Avatar className="size-10">
+                            {leader.user.avatarUrl ? (
+                              <Link href={leader.user.url}>
+                                <AvatarImage src={leader.user.avatarUrl} />
+                              </Link>
+                            ) : null}
+                            <AvatarFallback>
+                              <LuUser className="size-5" />
+                            </AvatarFallback>
+                          </Avatar>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="pointer-events-auto">
+                          <HoverDevCard user={leader.user} />
+                        </HoverCardContent>
+                      </HoverCard>
                       <div className="min-w-0 flex-1">
                         <p className="flex-1 truncate font-semibold">
                           <Link href={leader.user.url}>{leader.user.name}</Link>
