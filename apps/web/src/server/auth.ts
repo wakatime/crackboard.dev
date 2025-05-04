@@ -9,7 +9,7 @@ import { env } from '~/env';
 
 export const loginUser = async (user: typeof User.$inferSelect, username: string | null, isNewUser: boolean, skipAuditLog = false) => {
   const headersObj = await headers();
-  const ip = headersObj.get('X-Forwarded-For') ?? '';
+  const ip = headersObj.get('X-Real-Ip') ?? '';
   const userAgent = headersObj.get('user-agent');
 
   if (!skipAuditLog) {

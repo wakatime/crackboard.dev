@@ -1,5 +1,6 @@
 import { validateCSRFTokenCookie } from '@workspace/core/backend/csrf';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
+import { incrementRateLimitCounter, isRateLimited } from '@workspace/core/backend/rateLimit';
 import { APP_SCHEME, WAKATIME_API_URI, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
 import type { WakaTimeUser } from '@workspace/core/types';
 import { betterFetch } from '@workspace/core/utils/helpers';
@@ -39,9 +40,17 @@ export const GET = async (req: NextRequest) => {
   }
 
   const config = await getLeaderboardConfig();
-  if (config.isInviteOnly && s.data.ic !== config.inviteCode) {
-    console.error(`Invalid invite code: ${s.data.ic}`);
-    return new NextResponse('Invalid invite code.', { status: 400 });
+  if (config.isInviteOnly) {
+    const ip = req.headers.get('X-Real-Ip');
+    const key = `invite-code-ip-${ip}`;
+    const count = await incrementRateLimitCounter(key);
+    if (await isRateLimited(key, 10, count)) {
+      return new NextResponse('Invalid invite code.', { status: 400 });
+    }
+    if (s.data.ic !== config.inviteCode) {
+      console.error(`Invalid invite code: ${s.data.ic}`);
+      return new NextResponse('Invalid invite code.', { status: 400 });
+    }
   }
 
   if (s.data.m) {

@@ -1,5 +1,6 @@
 import { createCSRFToken } from '@workspace/core/backend/csrf';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
+import { incrementRateLimitCounter, isRateLimited } from '@workspace/core/backend/rateLimit';
 import { CSRF_COOKIE, CSRF_EXPIRES, WAKATIME_AUTHORIZE_URL, WAKATIME_REDIRECT_URI } from '@workspace/core/constants';
 import type { OAuthLoginState } from '@workspace/core/types';
 import { cookies } from 'next/headers';
@@ -15,9 +16,17 @@ export const GET = async (req: NextRequest) => {
   const inviteCode = req.nextUrl.searchParams.get('inviteCode') ?? undefined;
 
   const config = await getLeaderboardConfig();
-  if (config.isInviteOnly && config.inviteCode !== inviteCode) {
-    console.error(`Invalid invite code: ${inviteCode}`);
-    return new NextResponse('Invalid invite code.', { status: 400 });
+  if (config.isInviteOnly) {
+    const ip = req.headers.get('X-Real-Ip');
+    const key = `invite-code-ip-${ip}`;
+    const count = await incrementRateLimitCounter(key);
+    if (await isRateLimited(key, 10, count)) {
+      return new NextResponse('Invalid invite code.', { status: 400 });
+    }
+    if (config.inviteCode !== inviteCode) {
+      console.error(`Invalid invite code: ${inviteCode}`);
+      return new NextResponse('Invalid invite code.', { status: 400 });
+    }
   }
 
   const token = createCSRFToken();
