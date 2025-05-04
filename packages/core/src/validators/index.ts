@@ -72,3 +72,10 @@ export const updateLeaderboardConfigSchema = z.object({
 });
 
 export type UpdateLeaderboardConfigData = z.infer<typeof updateLeaderboardConfigSchema>;
+
+export const updateUserSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100).optional(),
+  bio: z.string().max(500).optional(),
+});
+
+export type UpdateUserData = z.infer<typeof updateUserSchema>;

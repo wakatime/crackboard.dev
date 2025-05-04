@@ -10,10 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@workspace/ui/components/dropdown-menu';
+import { MoonIcon, SunIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import React, { useCallback } from 'react';
-import { LuMoon, LuSun, LuUser } from 'react-icons/lu';
+import { useCallback } from 'react';
 
 import ThemeToggleDropdownItem from '~/components/theme-toggle-dropdown-item';
 import { useAuth } from '~/providers/auth-providers';
@@ -59,11 +59,15 @@ function UserButton() {
         <Avatar className="size-10">
           {currentUser.avatarUrl ? <AvatarImage src={currentUser.avatarUrl} /> : null}
           <AvatarFallback>
-            <LuUser className="size-5" />
+            <UserIcon className="size-5" />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
+        <DropdownMenuItem asChild>
+          <Link href={`/settings/account`}>Account</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <ThemeToggleDropdownItem />
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
@@ -81,8 +85,8 @@ function ThemeToggleButton() {
 
   return (
     <Button onClick={toggleTheme} size="icon" variant="outline">
-      <LuSun className="dark:hidden" />
-      <LuMoon className="hidden dark:block" />
+      <SunIcon className="dark:hidden" />
+      <MoonIcon className="hidden dark:block" />
     </Button>
   );
 }

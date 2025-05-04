@@ -181,7 +181,7 @@ function LeadersTable() {
         </Table>
       </div>
 
-      {leadersQuery.isSuccess ? (
+      {leadersQuery.isSuccess && leadersQuery.data.totalPages > 1 ? (
         <PaginationRow className="mt-4" page={page} totalPages={leadersQuery.data.totalPages} onPageChange={handleSetPage} />
       ) : null}
     </>
