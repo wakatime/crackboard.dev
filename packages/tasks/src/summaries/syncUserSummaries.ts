@@ -107,7 +107,7 @@ async function _processSummary(user: { id: string; accessToken: string; lastSync
     });
 
   await Promise.all(
-    summary.languages.map(async (stat) => {
+    summary.languages.slice(0, 10).map(async (stat) => {
       if (stat.name === 'Other') {
         return;
       }
@@ -134,7 +134,7 @@ async function _processSummary(user: { id: string; accessToken: string; lastSync
   );
 
   await Promise.all(
-    summary.editors.map(async (stat) => {
+    summary.editors.slice(0, 10).map(async (stat) => {
       if (stat.name === 'Unknown Editor') {
         return;
       }
