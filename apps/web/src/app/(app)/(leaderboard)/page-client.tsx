@@ -32,7 +32,6 @@ function LeadersTable() {
   const searchParams = useSearchParams();
   const utils = api.useUtils();
   const pathname = usePathname();
-  const [limit] = useState(500);
   const [hasRetried, setHasRetried] = useState(false);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const router = useRouter();
@@ -60,7 +59,7 @@ function LeadersTable() {
 
   const dateString = useMemo(() => dateToDateString(currentDate), [currentDate]);
 
-  const leadersQuery = api.leaderboard.getLeaders.useQuery({ date: dateString, page, limit });
+  const leadersQuery = api.leaderboard.getLeaders.useQuery({ date: dateString, page });
   const programLanguagesQuery = api.languages.getAllProgramLanguages.useQuery();
   const editorsQuery = api.editors.getAllEditors.useQuery();
 
