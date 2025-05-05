@@ -1,5 +1,6 @@
 'use client';
 
+import { formatNumberWithSuffix } from '@workspace/core/utils';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
@@ -11,10 +12,10 @@ export default function Footer() {
   if (!leaderboardConfigQuery.data) {
     return (
       <footer className="bg-background mt-20">
-        <div className="container mx-auto flex h-28 max-w-7xl items-center gap-4 px-4 md:px-8">
-          <div className="flex-1"></div>
+        <div className="container mx-auto flex h-28 items-center gap-4 px-4 md:px-12">
+          <div className="ml-6 flex-1"></div>
 
-          <div className="flex items-center gap-2">
+          <div className="mr-2 flex items-center gap-2">
             <Link href="https://github.com/wakatime/crackboard.dev">
               <FaGithub />
             </Link>
@@ -26,10 +27,13 @@ export default function Footer() {
 
   return (
     <footer className="bg-background mt-20">
-      <div className="container mx-auto flex h-28 max-w-7xl items-center gap-4 px-4 md:px-8">
-        <div className="flex-1">{leaderboardConfigQuery.data.timezone}</div>
+      <div className="container mx-auto flex h-28 items-center gap-4 px-4 md:px-12">
+        <div className="text-muted-foreground ml-6 flex-1 text-sm">
+          Timezone {leaderboardConfigQuery.data.timezone} · Refreshing every{' '}
+          {formatNumberWithSuffix(leaderboardConfigQuery.data.refreshRateInHours, 'hour')}
+        </div>
 
-        <div className="flex items-center gap-2">
+        <div className="mr-2 flex items-center gap-2">
           <Link href="https://github.com/wakatime/crackboard.dev" title={leaderboardConfigQuery.data.commitSha}>
             <FaGithub />
           </Link>

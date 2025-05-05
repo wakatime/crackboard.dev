@@ -22,7 +22,7 @@ import { api } from '~/trpc/client';
 
 export default function PageClient() {
   return (
-    <main className="container mx-auto my-8 max-w-7xl px-4 md:px-8">
+    <main className="container mx-auto my-8 px-4 md:px-12">
       <LeadersTable />
     </main>
   );
