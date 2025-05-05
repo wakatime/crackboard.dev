@@ -9,6 +9,7 @@ import PaginationRow from '@workspace/ui/components/pagination-row';
 import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/components/popover';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@workspace/ui/components/tooltip';
+import { cn } from '@workspace/ui/lib/utils';
 import { add, format, isFuture, isToday, isYesterday, sub } from 'date-fns';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -252,7 +253,12 @@ function LeadersTable() {
                           </p>
                         )}
                         {leader.user.username && (
-                          <p className="text-muted-foreground flex-1 truncate">
+                          <p
+                            className={cn('flex-1 truncate', {
+                              'text-muted-foreground': leader.user.name,
+                              'font-semibold': !leader.user.name,
+                            })}
+                          >
                             <HoverCard>
                               <HoverCardTrigger asChild>
                                 <Link href={leader.user.url}>@{leader.user.username}</Link>
