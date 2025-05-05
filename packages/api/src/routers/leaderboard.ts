@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
+import { GitHash } from '@workspace/core/backend/git-hash';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
-import { COMMIT_SHA } from '@workspace/core/constants';
 import { today } from '@workspace/core/utils/helpers';
 import { and, count, db, desc, eq, gt } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
@@ -92,11 +92,12 @@ export const leaderboardRouter = createTRPCRouter({
       .select({ count: count() })
       .from(User)
       .then((res) => res[0]?.count ?? 0);
+    const hash = await GitHash();
     return {
       timezone: config.timezone,
       isPublic: config.isPublic,
       isInviteOnly: config.isInviteOnly,
-      commitSha: COMMIT_SHA,
+      commitSha: hash,
       createdAt: config.createdAt,
       numMembers,
     };

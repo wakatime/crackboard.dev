@@ -15,14 +15,12 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_DOMAIN: z.string(),
     NEXT_PUBLIC_BASE_URL: z.string(),
     NEXT_PUBLIC_REFRESH_RATE: z.string().optional(),
-    NEXT_PUBLIC_COMMIT_SHA: z.string().optional(),
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
     NEXT_PUBLIC_REFRESH_RATE: process.env.NEXT_PUBLIC_REFRESH_RATE,
-    NEXT_PUBLIC_COMMIT_SHA: process.env.COMMIT_SHA,
   },
   skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
 });

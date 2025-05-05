@@ -64,3 +64,5 @@ build-*
 
 # Redis Local DB File
 *.rdb
+
+/packages/core/src/generated/

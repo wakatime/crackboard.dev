@@ -19,7 +19,10 @@
   "scripts": {
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "clean": "rm -rf .turbo node_modules"
+    "clean": "rm -rf .turbo node_modules",
+    "prebuild": "node scripts/git-hash.mjs",
+    "build": "tsc --emitDeclarationOnly",
+    "dev": "node scripts/git-hash.mjs"
   },
   "dependencies": {
     "@workspace/db": "workspace:*",
