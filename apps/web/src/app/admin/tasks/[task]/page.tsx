@@ -1,4 +1,4 @@
-import TitleBar from '@acme/ui/components/title-bar';
+import TitleBar from '@workspace/ui/components/title-bar';
 
 import Breadcrumbs from '~/components/Breadcrumbs';
 

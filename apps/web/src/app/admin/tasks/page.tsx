@@ -1,5 +1,5 @@
-import TitleBar from '@acme/ui/components/title-bar';
 import { SidebarTrigger } from '@workspace/ui/components/sidebar';
+import TitleBar from '@workspace/ui/components/title-bar';
 
 import Breadcrumbs from '~/components/Breadcrumbs';
 

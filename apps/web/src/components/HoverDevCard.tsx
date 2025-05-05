@@ -1,4 +1,4 @@
-import type { PublicUser } from '@acme/core/types';
+import type { PublicUser } from '@workspace/core/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import Link from 'next/link';
 import { LuUser } from 'react-icons/lu';

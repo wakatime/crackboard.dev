@@ -1,6 +1,6 @@
 'use client';
 
-import { formatNumber, formatNumberWithSuffix } from '@acme/core/utils';
+import { formatNumber, formatNumberWithSuffix } from '@workspace/core/utils';
 import { Input } from '@workspace/ui/components/input';
 import { Skeleton } from '@workspace/ui/components/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';

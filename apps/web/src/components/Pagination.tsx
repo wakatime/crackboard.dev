@@ -1,4 +1,4 @@
-import { pagesRange } from '@acme/core/utils';
+import { pagesRange } from '@workspace/core/utils';
 import {
   Pagination as PaginationRoot,
   PaginationButton,
