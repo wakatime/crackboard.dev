@@ -23,7 +23,7 @@ export default function NavBar() {
   const { currentUser } = useAuth();
 
   return (
-    <header className="bg-background sticky top-0 z-30">
+    <header className="bg-background">
       <div className="container mx-auto flex h-28 items-center gap-4 px-4 md:px-12">
         <Link href="/">
           <Image alt={APP_DOMAIN} height={120} src="/logo.svg" width={120} className="inline object-contain" />
