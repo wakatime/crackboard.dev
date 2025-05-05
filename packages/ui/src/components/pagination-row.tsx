@@ -6,8 +6,8 @@ import {
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
+  PaginationNextButton,
+  PaginationPreviousButton,
 } from './pagination';
 
 export type PaginationRowProps = {
@@ -66,7 +66,7 @@ export default function PaginationRow({ page: currentPage, totalPages, onPageCha
     <Pagination {...props}>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious
+          <PaginationPreviousButton
             disabled={previousPage === null}
             onClick={() => {
               if (previousPage) {
@@ -91,7 +91,7 @@ export default function PaginationRow({ page: currentPage, totalPages, onPageCha
         )}
 
         <PaginationItem>
-          <PaginationNext
+          <PaginationNextButton
             disabled={!nextPage}
             onClick={() => {
               if (nextPage) {
