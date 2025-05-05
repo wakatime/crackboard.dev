@@ -244,7 +244,7 @@ function LeadersTable() {
                           <p className="flex-1 truncate font-semibold">
                             <HoverCard>
                               <HoverCardTrigger asChild>
-                                <Link href={leader.user.url}>{leader.user.name}</Link>
+                                <Link href={leader.user.url}>{truncate(leader.user.name, 20)}</Link>
                               </HoverCardTrigger>
                               <HoverCardContent className="pointer-events-auto">
                                 <HoverDevCard user={leader.user} />
@@ -261,7 +261,7 @@ function LeadersTable() {
                           >
                             <HoverCard>
                               <HoverCardTrigger asChild>
-                                <Link href={leader.user.url}>@{leader.user.username}</Link>
+                                <Link href={leader.user.url}>@{truncate(leader.user.username, 20)}</Link>
                               </HoverCardTrigger>
                               <HoverCardContent className="pointer-events-auto">
                                 <HoverDevCard user={leader.user} />
