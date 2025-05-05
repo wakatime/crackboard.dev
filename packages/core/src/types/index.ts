@@ -47,6 +47,7 @@ export interface OAuthLoginState {
 export interface WakaTimeUser {
   id: string;
   email?: string | null;
+  bio?: string | null;
   full_name: string | null;
   total_seconds?: number;
   username: string | null;

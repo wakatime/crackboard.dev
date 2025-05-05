@@ -108,6 +108,7 @@ export const GET = async (req: NextRequest) => {
               avatarUrl: wakatimeUser.photo,
               wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
               twitterUsername: wakatimeUser.twitter_username,
+              bio: wakatimeUser.bio,
             })
             .where(eq(User.id, wakatimeId))
             .returning()
@@ -123,6 +124,7 @@ export const GET = async (req: NextRequest) => {
         username: wakatimeUsername,
         wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
         twitterUsername: wakatimeUser.twitter_username,
+        bio: wakatimeUser.bio,
         fullName: wakatimeUser.full_name,
         avatarUrl: wakatimeUser.photo,
         isOwner: anyUser ? null : true, // first sign up is the owner
@@ -143,6 +145,7 @@ export const GET = async (req: NextRequest) => {
             avatarUrl: wakatimeUser.photo,
             wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
             twitterUsername: wakatimeUser.twitter_username,
+            bio: wakatimeUser.bio,
           })
           .where(eq(User.id, wakatimeId))
           .returning()
