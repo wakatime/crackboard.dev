@@ -4,6 +4,7 @@ export interface PublicUser {
   name: string | null;
   url: string;
   wonderfulDevUrl: string | null;
+  wonderfulDevUsername: string | null;
   username: string | null;
   avatarUrl?: string | null;
   bio?: string | null;

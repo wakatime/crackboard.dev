@@ -39,7 +39,7 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
           </div>
         )}
       </div>
-      {user.wonderfulDevUrl ? (
+      {user.wonderfulDevUrl && user.wonderfulDevUsername ? (
         <div className="mt-2">
           <Link
             className="text-foreground font-medium hover:underline"
@@ -47,7 +47,7 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
             rel="nofollow noopener me"
             target="_blank"
           >
-            {user.wonderfulDevUrl}
+            wonderful.dev/{user.wonderfulDevUsername}
           </Link>
         </div>
       ) : null}
