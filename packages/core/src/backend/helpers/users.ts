@@ -1,7 +1,10 @@
 import { db, eq } from '@workspace/db/drizzle';
 import { User } from '@workspace/db/schema';
 
+import { WAKATIME_INVALID_KEYWORD, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '../../constants';
+import { env } from '../../env';
 import type { PublicUser, WakaTimeUser } from '../../types';
+import { betterFetch } from '../../utils';
 
 export const userToPublicUser = async (
   user: typeof User.$inferSelect,
@@ -105,4 +108,47 @@ export const updateUser = async (wakaUser: WakaTimeUser) => {
       bio: wakaUser.bio,
     })
     .where(eq(User.id, wakaUser.id));
+};
+
+export const refreshTokenIfExpired = async (
+  originalRespStatusCode: number,
+  user: { id: string; accessToken: string; refreshToken: string },
+) => {
+  if (originalRespStatusCode !== 401 || user.refreshToken === WAKATIME_INVALID_KEYWORD) {
+    return;
+  }
+  const resp = await betterFetch(WAKATIME_TOKEN_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      client_id: env.WAKATIME_APP_ID,
+      client_secret: env.WAKATIME_APP_SECRET,
+      redirect_uri: WAKATIME_REDIRECT_URI,
+      grant_type: 'refresh_token',
+      refresh_token: user.refreshToken,
+    }),
+  });
+  if (resp.status !== 200) {
+    if (resp.status === 400) {
+      const data = (await resp.json()) as { error?: string; error_description?: string } | undefined;
+      if (data?.error === 'invalid_request') {
+        if (data.error_description === 'User is no longer valid.') {
+          await db.delete(User).where(eq(User.id, user.id));
+          return;
+        }
+        if (data.error_description === 'refresh_token is invalid.') {
+          await db
+            .update(User)
+            .set({ accessToken: WAKATIME_INVALID_KEYWORD, refreshToken: WAKATIME_INVALID_KEYWORD })
+            .where(eq(User.id, user.id));
+          return;
+        }
+      }
+    }
+    return;
+  }
+  const tokenData = (await resp.json()) as { access_token: string; refresh_token: string };
+  const accessToken = tokenData.access_token;
+  const refreshToken = tokenData.refresh_token;
+  await db.update(User).set({ accessToken, refreshToken }).where(eq(User.id, user.id));
+  return accessToken;
 };

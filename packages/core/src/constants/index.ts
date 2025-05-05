@@ -21,6 +21,7 @@ export const WAKATIME_TOKEN_URL = 'https://wakatime.com/oauth/token';
 export const WAKATIME_REDIRECT_URI = `${BASE_URL}/login/callback`;
 export const WAKATIME_API_URI = 'https://api.wakatime.com/api/v1';
 export const WAKATIME_API_RATE_LIMIT_KEY = 'wakatime-api-rate-limit';
+export const WAKATIME_INVALID_KEYWORD = 'INVALID';
 
 export const WAKAQ_TASKS_DISABLED_KEY = 'wakaq-disabled';
 

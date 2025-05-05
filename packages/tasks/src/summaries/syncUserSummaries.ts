@@ -1,3 +1,4 @@
+import { refreshTokenIfExpired } from '@workspace/core/backend/helpers/users';
 import { LEADERBOARD_CONFIG_ID, WAKATIME_API_RATE_LIMIT_KEY, WAKATIME_API_URI } from '@workspace/core/constants';
 import { betterFetch } from '@workspace/core/utils/helpers';
 import { db, eq } from '@workspace/db/drizzle';
@@ -74,6 +75,11 @@ export const syncUserSummaries = wakaq.task(
         await redis.setex(rateLimitKey, Duration.minute(1).seconds, '1');
         const eta = Duration.minute(Math.floor(Math.random() * 10));
         await syncUserSummaries.enqueueAfterDelay(eta, userId);
+        return;
+      }
+      const refreshed = await refreshTokenIfExpired(res.status, user);
+      if (refreshed) {
+        await syncUserSummaries.enqueue(userId);
         return;
       }
       wakaq.logger?.error('Failed to fetch summary!', await res.text());

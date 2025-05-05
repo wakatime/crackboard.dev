@@ -1,4 +1,4 @@
-import { updateUser } from '@workspace/core/backend/helpers/users';
+import { refreshTokenIfExpired, updateUser } from '@workspace/core/backend/helpers/users';
 import { WAKATIME_API_RATE_LIMIT_KEY, WAKATIME_API_URI } from '@workspace/core/constants';
 import type { WakaTimeUser } from '@workspace/core/types';
 import { betterFetch } from '@workspace/core/utils/helpers';
@@ -57,6 +57,11 @@ export const syncUserProfile = wakaq.task(
         await redis.setex(rateLimitKey, Duration.minute(1).seconds, '1');
         const eta = Duration.minute(Math.floor(Math.random() * 10));
         await syncUserProfile.enqueueAfterDelay(eta, userId);
+        return;
+      }
+      const refreshed = await refreshTokenIfExpired(res.status, user);
+      if (refreshed) {
+        await syncUserProfile.enqueue(userId);
         return;
       }
       wakaq.logger?.error('Failed to fetch profile!', await res.text());

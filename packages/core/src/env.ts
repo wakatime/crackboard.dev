@@ -5,8 +5,8 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     JWT_SECRET: z.string().min(1),
-
-    DISPOSABLE_EMAIL_KEY: z.string().optional(),
+    WAKATIME_APP_ID: z.string(),
+    WAKATIME_APP_SECRET: z.string(),
   },
   shared: {
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
