@@ -98,7 +98,22 @@ export const GET = async (req: NextRequest) => {
   const [user, isNewUser] = await db.transaction(async (tx) => {
     const user = await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
     if (user) {
-      return [user, false];
+      return [
+        (
+          await tx
+            .update(User)
+            .set({
+              username: wakatimeUsername,
+              fullName: wakatimeUser.full_name,
+              avatarUrl: wakatimeUser.photo,
+              wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
+              twitterUsername: wakatimeUser.twitter_username,
+            })
+            .where(eq(User.id, wakatimeId))
+            .returning()
+        )[0],
+        false,
+      ];
     }
     const anyUser = await tx.query.User.findFirst({ columns: { id: true } });
     const [newUser] = await tx
