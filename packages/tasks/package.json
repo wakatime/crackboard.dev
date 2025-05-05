@@ -21,19 +21,19 @@
     "@workspace/core": "workspace:*",
     "@workspace/db": "workspace:*",
     "@workspace/external": "workspace:*",
-    "@aws-sdk/client-s3": "^3.772.0",
+    "@aws-sdk/client-s3": "^3.802.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@vscode/vscode-languagedetection": "^1.0.22",
     "date-fns": "^4.1.0",
-    "dotenv": "^16.4.7",
-    "ioredis": "^5.6.0",
+    "dotenv": "^16.5.0",
+    "ioredis": "^5.6.1",
     "nanoid": "^5.1.5",
-    "next": "^15.2.4",
+    "next": "^15.3.1",
     "node-html-parser": "^7.0.1",
     "openai": "catalog:",
     "slugify": "^1.6.6",
     "ts-duration": "^1.1.0",
-    "tsx": "^4.19.3",
+    "tsx": "^4.19.4",
     "uuid": "^11.1.0",
     "wakaq": "^2.2.2",
     "zod": "catalog:"
@@ -47,6 +47,6 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.29.0"
+    "typescript-eslint": "^8.31.1"
   }
 }

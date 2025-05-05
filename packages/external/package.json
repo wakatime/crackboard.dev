@@ -14,8 +14,8 @@
     "with-env": "dotenv -e ../../.env -c --"
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "^0.12.0",
-    "resend": "^4.2.0",
+    "@t3-oss/env-nextjs": "^0.13.4",
+    "resend": "^4.5.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -24,8 +24,8 @@
     "dotenv-cli": "^8.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "@types/node": "^22.14.0",
+    "@types/node": "^22.15.3",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.29.0"
+    "typescript-eslint": "^8.31.1"
   }
 }

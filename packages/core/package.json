@@ -26,10 +26,10 @@
   },
   "dependencies": {
     "@workspace/db": "workspace:*",
-    "@aws-sdk/client-s3": "^3.782.0",
+    "@aws-sdk/client-s3": "^3.802.0",
     "@panva/hkdf": "^1.2.1",
     "@paralleldrive/cuid2": "^2.2.2",
-    "@t3-oss/env-nextjs": "^0.12.0",
+    "@t3-oss/env-nextjs": "^0.13.4",
     "date-fns": "^4.1.0",
     "decode-ico": "^0.4.1",
     "he": "^1.2.0",
@@ -39,7 +39,7 @@
     "pluralize": "^8.0.0",
     "sharp": "catalog:",
     "slugify": "^1.6.6",
-    "tldts": "^6.1.85",
+    "tldts": "^7.0.6",
     "ts-duration": "^1.1.0",
     "uuid": "^11.1.0",
     "zod": "catalog:"
@@ -48,13 +48,13 @@
     "http": "^0.0.1-security",
     "prettier": "catalog:",
     "@types/he": "^1.2.3",
-    "@types/node": "^22.14.0",
+    "@types/node": "^22.15.3",
     "@types/pluralize": "^0.0.33",
     "@types/uuid": "^10.0.0",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
-    "next": "^15.2.4",
+    "next": "^15.3.1",
     "typescript": "catalog:"
   }
 }
