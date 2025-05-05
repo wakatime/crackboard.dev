@@ -41,11 +41,7 @@ export default function Footer() {
 
         <div className="mr-2 flex items-center gap-2">
           <p className="text-muted-foreground text-sm">
-            <Link
-              href="https://github.com/wakatime/crackboard.dev"
-              title={leaderboardConfigQuery.data.commitSha}
-              className="text-muted-foreground"
-            >
+            <Link href="https://github.com/wakatime/crackboard.dev" title="Open source on GitHub" className="text-muted-foreground">
               <FaGithub className="inline" />
             </Link>
             {' · '}
