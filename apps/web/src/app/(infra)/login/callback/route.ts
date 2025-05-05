@@ -1,12 +1,11 @@
 import { validateCSRFTokenCookie } from '@workspace/core/backend/csrf';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
+import { createOrUpdateUser } from '@workspace/core/backend/helpers/users';
 import { incrementRateLimitCounter, isRateLimited } from '@workspace/core/backend/rateLimit';
 import { APP_SCHEME, WAKATIME_API_URI, WAKATIME_REDIRECT_URI, WAKATIME_TOKEN_URL } from '@workspace/core/constants';
 import type { WakaTimeUser } from '@workspace/core/types';
 import { betterFetch } from '@workspace/core/utils/helpers';
 import { isNonEmptyString, parseJSONObject } from '@workspace/core/validators';
-import { db, eq } from '@workspace/db/drizzle';
-import { User } from '@workspace/db/schema';
 import { registerWithDirectory } from '@workspace/tasks/register/registerWithDirectory';
 import { syncUserSummaries } from '@workspace/tasks/summaries/syncUserSummaries';
 import type { NextRequest } from 'next/server';
@@ -79,7 +78,9 @@ export const GET = async (req: NextRequest) => {
     return new NextResponse('Invalid OAuth code.', { status: 400 });
   }
 
-  const accessToken = ((await tokenResponse.json()) as { access_token: string }).access_token;
+  const tokenData = (await tokenResponse.json()) as { access_token: string; refresh_token: string };
+  const accessToken = tokenData.access_token;
+  const refreshToken = tokenData.refresh_token;
 
   const wakatimeResponse = await betterFetch(`${WAKATIME_API_URI}/users/current`, {
     headers: {
@@ -92,68 +93,8 @@ export const GET = async (req: NextRequest) => {
   }
 
   const wakatimeUser = (parseJSONObject(await wakatimeResponse.text()) as { data: WakaTimeUser }).data;
-  const wakatimeId = wakatimeUser.id;
-  const wakatimeUsername = wakatimeUser.username;
 
-  const [user, isNewUser] = await db.transaction(async (tx) => {
-    const user = await tx.query.User.findFirst({ where: eq(User.id, wakatimeId) });
-    if (user) {
-      return [
-        (
-          await tx
-            .update(User)
-            .set({
-              username: wakatimeUsername,
-              fullName: wakatimeUser.full_name,
-              avatarUrl: wakatimeUser.photo,
-              wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
-              twitterUsername: wakatimeUser.twitter_username,
-              bio: wakatimeUser.bio,
-            })
-            .where(eq(User.id, wakatimeId))
-            .returning()
-        )[0],
-        false,
-      ];
-    }
-    const anyUser = await tx.query.User.findFirst({ columns: { id: true } });
-    const [newUser] = await tx
-      .insert(User)
-      .values({
-        id: wakatimeId,
-        username: wakatimeUsername,
-        wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
-        twitterUsername: wakatimeUser.twitter_username,
-        bio: wakatimeUser.bio,
-        fullName: wakatimeUser.full_name,
-        avatarUrl: wakatimeUser.photo,
-        isOwner: anyUser ? null : true, // first sign up is the owner
-        accessToken,
-      })
-      .onConflictDoNothing()
-      .returning();
-    if (newUser) {
-      return [newUser, true];
-    }
-    return [
-      (
-        await tx
-          .update(User)
-          .set({
-            username: wakatimeUsername,
-            fullName: wakatimeUser.full_name,
-            avatarUrl: wakatimeUser.photo,
-            wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
-            twitterUsername: wakatimeUser.twitter_username,
-            bio: wakatimeUser.bio,
-          })
-          .where(eq(User.id, wakatimeId))
-          .returning()
-      )[0],
-      false,
-    ];
-  });
-
+  const [user, isNewUser] = await createOrUpdateUser(wakatimeUser, accessToken, refreshToken);
   if (!user) {
     return new NextResponse('User not found.', { status: 404 });
   }
@@ -163,7 +104,7 @@ export const GET = async (req: NextRequest) => {
     await syncUserSummaries.enqueue(user.id);
   }
 
-  await loginUser(user, wakatimeUsername, isNewUser);
+  await loginUser(user, wakatimeUser.username, isNewUser);
 
   return NextResponse.redirect(makeUrlSafe(s.data.n, '/onboarding'));
 };

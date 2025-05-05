@@ -18,6 +18,7 @@ export const User = pgTable(
     username: citext().unique(),
     fullName: varchar(),
     accessToken: varchar().notNull(),
+    refreshToken: varchar(),
     avatarUrl: text(),
     bio: text(),
     wonderfulDevUsername: text(),

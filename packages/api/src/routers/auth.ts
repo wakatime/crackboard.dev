@@ -1,66 +1,11 @@
 import { ipAddress } from '@vercel/functions';
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
-import { encodeAuthJWT } from '@workspace/core/backend/jwt';
-import {
-  AUDIT_LOG_LOGIN,
-  AUDIT_LOG_USER_CREATED,
-  AUDIT_LOG_USER_DELETED,
-  AUDIT_LOG_USERNAME_CHANGED,
-  CSRF_COOKIE,
-  LOGIN_COOKIE,
-} from '@workspace/core/constants';
-import type { PublicUser } from '@workspace/core/types';
+import { AUDIT_LOG_USER_DELETED, CSRF_COOKIE, LOGIN_COOKIE } from '@workspace/core/constants';
 import { db, eq } from '@workspace/db/drizzle';
 import { AuditLog, User } from '@workspace/db/schema';
 import { cookies } from 'next/headers';
 
-import { env } from '../env';
 import { createTRPCRouter, privateProcedure, publicProcedure } from '../trpc';
-
-const _loginUser = async (
-  req: Request,
-  user: typeof User.$inferSelect,
-  username: string | null,
-  isNewUser: boolean,
-  skipAuditLog = false,
-): Promise<{ accessToken: string; user: PublicUser }> => {
-  if (!skipAuditLog) {
-    await db.insert(AuditLog).values({
-      event: isNewUser ? AUDIT_LOG_USER_CREATED : AUDIT_LOG_LOGIN,
-      ip: ipAddress(req),
-      userAgent: req.headers.get('user-agent'),
-      metadata: { username: username },
-      userId: user.id,
-    });
-  }
-
-  // set username after user created in case the username is already taken
-  if (username && !user.username) {
-    try {
-      await db.update(User).set({ username }).where(eq(User.id, user.id));
-      if (!isNewUser && !skipAuditLog) {
-        await db.insert(AuditLog).values({
-          event: AUDIT_LOG_USERNAME_CHANGED,
-          ip: ipAddress(req),
-          userAgent: req.headers.get('user-agent'),
-          metadata: { username: username },
-          userId: user.id,
-        });
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (e) {
-      /* empty */
-    }
-  }
-
-  const accessToken = await encodeAuthJWT(user.sessionId, env.JWT_SECRET);
-  const pubUser = await userToPublicUser(user);
-
-  return {
-    accessToken,
-    user: pubUser,
-  };
-};
 
 export const authRouter = createTRPCRouter({
   currentUser: publicProcedure.query(async ({ ctx: { currentUser } }) => {
