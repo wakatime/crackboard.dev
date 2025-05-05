@@ -2,7 +2,7 @@ import '@workspace/ui/globals.css';
 
 import { authenticatedUserFromRequest } from '@workspace/core/backend/auth';
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
-import { APP_DESC, APP_DOMAIN } from '@workspace/core/constants';
+import { APP_DESC, APP_DOMAIN, BASE_URL } from '@workspace/core/constants';
 import type { PublicUser } from '@workspace/core/types';
 import { Toaster } from '@workspace/ui/components/sonner';
 import { TooltipProvider } from '@workspace/ui/components/tooltip';
@@ -23,6 +23,13 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: APP_DOMAIN,
   description: APP_DESC,
+  openGraph: {
+    title: APP_DOMAIN,
+    description: APP_DESC,
+    url: BASE_URL,
+    siteName: APP_DOMAIN,
+    images: [{ url: `${BASE_URL}/icon-default-192x192.png` }],
+  },
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
