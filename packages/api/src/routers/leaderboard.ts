@@ -4,7 +4,7 @@ import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboar
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
 import { REFRESH_RATE } from '@workspace/core/constants';
 import { today } from '@workspace/core/utils/helpers';
-import { and, count, db, desc, eq, gt } from '@workspace/db/drizzle';
+import { and, count, db, desc, eq, gt, gte } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { syncSummariesForAllUsers } from '@workspace/tasks/summaries/syncSummariesForAllUsers';
 import { z } from 'zod';
@@ -47,13 +47,27 @@ export const leaderboardRouter = createTRPCRouter({
             db
               .select()
               .from(UserSummaryLanguage)
-              .where(and(eq(UserSummaryLanguage.userId, leader.User.id), eq(UserSummaryLanguage.date, date)))
-              .orderBy(desc(UserSummaryLanguage.totalSeconds)),
+              .where(
+                and(
+                  eq(UserSummaryLanguage.userId, leader.User.id),
+                  eq(UserSummaryLanguage.date, date),
+                  gte(UserSummaryLanguage.totalSeconds, 60),
+                ),
+              )
+              .orderBy(desc(UserSummaryLanguage.totalSeconds))
+              .limit(3),
             db
               .select()
               .from(UserSummaryEditor)
-              .where(and(eq(UserSummaryEditor.userId, leader.User.id), eq(UserSummaryEditor.date, date)))
-              .orderBy(desc(UserSummaryEditor.totalSeconds)),
+              .where(
+                and(
+                  eq(UserSummaryEditor.userId, leader.User.id),
+                  eq(UserSummaryEditor.date, date),
+                  gte(UserSummaryEditor.totalSeconds, 60),
+                ),
+              )
+              .orderBy(desc(UserSummaryEditor.totalSeconds))
+              .limit(3),
           ]);
 
           return {
