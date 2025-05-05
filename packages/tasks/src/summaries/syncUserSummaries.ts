@@ -1,4 +1,4 @@
-import { LEADERBOARD_CONFIG_ID, WAKATIME_API_URI } from '@workspace/core/constants';
+import { LEADERBOARD_CONFIG_ID, WAKATIME_API_RATE_LIMIT_KEY, WAKATIME_API_URI } from '@workspace/core/constants';
 import { betterFetch } from '@workspace/core/utils/helpers';
 import { db, eq } from '@workspace/db/drizzle';
 import { redis } from '@workspace/db/redis';
@@ -12,7 +12,7 @@ import type { SummariesResult, Summary } from '../types';
 
 export const syncUserSummaries = wakaq.task(
   async (userId: unknown) => {
-    const rateLimitKey = 'syncUserSummaries-rate-limited';
+    const rateLimitKey = WAKATIME_API_RATE_LIMIT_KEY;
     const now = nowSeconds();
     const limitedUntil = await redis.expiretime(rateLimitKey);
     if (limitedUntil > now) {
@@ -22,7 +22,6 @@ export const syncUserSummaries = wakaq.task(
     }
 
     const result = z.string().nonempty().safeParse(userId);
-
     if (!result.success) {
       wakaq.logger?.error(result.error.message);
       return;
@@ -30,9 +29,8 @@ export const syncUserSummaries = wakaq.task(
 
     const user = await db.query.User.findFirst({
       where: eq(User.id, result.data),
-      columns: { id: true, accessToken: true, lastSyncedStatsAt: true },
+      columns: { id: true, accessToken: true, refreshToken: true, lastSyncedStatsAt: true },
     });
-
     if (!user) {
       wakaq.logger?.error('No user found with id: ', result.data);
       return;
