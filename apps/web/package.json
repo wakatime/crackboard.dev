@@ -28,6 +28,7 @@
     "cookies-next": "^5.1.0",
     "core-js": "^3.42.0",
     "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "holy-loader": "^2.3.13",
     "jiti": "^1.21.6",
     "next": "^15.3.1",

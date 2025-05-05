@@ -2,6 +2,7 @@
 
 import { formatNumberWithSuffix } from '@workspace/core/utils';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
@@ -55,10 +56,22 @@ export default function Footer() {
 }
 
 function FooterInfo({ config }: { config: NonNullable<RouterOutputs['leaderboard']['getLeaderboardPublicConfig']> }) {
-  let text = `Timezone ${config.timezone}`;
-  if (config.lastRefreshedAt) {
-    text = `${text} · Last updated ${formatDistanceToNowStrict(config.lastRefreshedAt, { addSuffix: true })}`;
-  }
-  text = `${text} · Refreshing every ${formatNumberWithSuffix(config.refreshRateInHours, 'hour')}`;
-  return <p className="text-muted-foreground text-sm">{text}</p>;
+  return (
+    <p className="text-muted-foreground text-sm">
+      <span>Timezone {config.timezone}</span>
+      {config.lastRefreshedAt && (
+        <>
+          {' · '}
+          <span>
+            Last updated{' '}
+            <span title={formatInTimeZone(config.lastRefreshedAt, config.timezone, 'h:mm aaa MMM do zzz')}>
+              {formatDistanceToNowStrict(config.lastRefreshedAt, { addSuffix: true })}
+            </span>
+          </span>
+        </>
+      )}
+      {' · '}
+      <span>Refreshing every {formatNumberWithSuffix(config.refreshRateInHours, 'hour')}</span>
+    </p>
+  );
 }
