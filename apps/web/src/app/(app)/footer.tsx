@@ -14,7 +14,7 @@ export default function Footer() {
     return (
       <footer className="bg-background mt-20">
         <div className="container mx-auto flex h-28 items-center gap-4 px-4 md:px-12">
-          <div className="ml-6 flex-1"></div>
+          <div className="ml-2 flex-1"></div>
 
           <div className="mr-2 flex items-center gap-2">
             <Link href="https://github.com/wakatime/crackboard.dev">
@@ -35,7 +35,7 @@ export default function Footer() {
   return (
     <footer className="bg-background mt-20">
       <div className="container mx-auto flex h-28 items-center gap-4 px-4 md:px-12">
-        <div className="text-muted-foreground ml-6 flex-1 text-sm">{text}</div>
+        <div className="text-muted-foreground ml-2 flex-1 text-sm">{text}</div>
 
         <div className="mr-2 flex items-center gap-2">
           <Link href="https://github.com/wakatime/crackboard.dev" title={leaderboardConfigQuery.data.commitSha}>
