@@ -102,6 +102,7 @@ export const leaderboardRouter = createTRPCRouter({
       createdAt: config.createdAt,
       numMembers,
       refreshRateInHours: REFRESH_RATE,
+      lastRefreshedAt: config.lastSyncedStatsAt,
     };
   }),
 });

@@ -1,0 +1,1 @@
+ALTER TABLE "LeaderboardConfig" ADD COLUMN "lastSyncedStatsAt" timestamp;

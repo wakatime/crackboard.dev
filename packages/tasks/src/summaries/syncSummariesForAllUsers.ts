@@ -1,5 +1,6 @@
-import { db } from '@workspace/db/drizzle';
-import { User } from '@workspace/db/schema';
+import { LEADERBOARD_CONFIG_ID } from '@workspace/core/constants';
+import { db, eq } from '@workspace/db/drizzle';
+import { LeaderboardConfig, User } from '@workspace/db/schema';
 
 import { wakaq } from '..';
 import { syncUserSummaries } from './syncUserSummaries';
@@ -21,6 +22,7 @@ export const syncSummariesForAllUsers = wakaq.task(
       hasMore = users.length === limit;
     }
 
+    await db.update(LeaderboardConfig).set({ lastSyncedStatsAt: new Date() }).where(eq(LeaderboardConfig.id, LEADERBOARD_CONFIG_ID));
     wakaq.logger?.info(`Finished syncing summaries for ${count} users`);
   },
   { name: 'syncSummariesForAllUsers' },

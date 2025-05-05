@@ -51,4 +51,5 @@ export const LeaderboardConfig = pgTable('LeaderboardConfig', {
   createdAt: timestamp()
     .notNull()
     .$default(() => new Date()),
+  lastSyncedStatsAt: timestamp(),
 });
