@@ -107,6 +107,7 @@ export const GET = async (req: NextRequest) => {
         id: wakatimeId,
         username: wakatimeUsername,
         wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
+        twitterUsername: wakatimeUser.twitter_username,
         fullName: wakatimeUser.full_name,
         avatarUrl: wakatimeUser.photo,
         isOwner: anyUser ? null : true, // first sign up is the owner
@@ -126,6 +127,7 @@ export const GET = async (req: NextRequest) => {
             fullName: wakatimeUser.full_name,
             avatarUrl: wakatimeUser.photo,
             wonderfulDevUsername: wakatimeUser.wonderfuldev_username,
+            twitterUsername: wakatimeUser.twitter_username,
           })
           .where(eq(User.id, wakatimeId))
           .returning()

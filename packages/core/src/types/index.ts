@@ -5,6 +5,8 @@ export interface PublicUser {
   url: string;
   wonderfulDevUrl: string | null;
   wonderfulDevUsername: string | null;
+  twitterUrl: string | null;
+  twitterUsername: string | null;
   username: string | null;
   avatarUrl?: string | null;
   bio?: string | null;
@@ -49,6 +51,7 @@ export interface WakaTimeUser {
   total_seconds?: number;
   username: string | null;
   wonderfuldev_username: string | null;
+  twitter_username: string | null;
   photo: string | null;
 }
 

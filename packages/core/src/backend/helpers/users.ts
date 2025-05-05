@@ -15,6 +15,8 @@ export const userToPublicUser = async (
     url: `https://wakatime.com/@${encodeURIComponent(user.username ?? user.id)}`,
     wonderfulDevUrl: user.wonderfulDevUsername ? `https://wonderful.dev/${encodeURIComponent(user.wonderfulDevUsername)}` : null,
     wonderfulDevUsername: user.wonderfulDevUsername,
+    twitterUrl: user.twitterUsername ? `https://x.com/${encodeURIComponent(user.twitterUsername)}` : null,
+    twitterUsername: user.twitterUsername,
     bio: user.bio,
   };
 };

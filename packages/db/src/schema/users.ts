@@ -21,6 +21,7 @@ export const User = pgTable(
     avatarUrl: text(),
     bio: text(),
     wonderfulDevUsername: text(),
+    twitterUsername: text(),
     isOwner: boolean(),
     lastSyncedStatsAt: timestamp(),
   },

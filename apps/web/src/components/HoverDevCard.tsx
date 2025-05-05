@@ -51,6 +51,13 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
           </Link>
         </div>
       ) : null}
+      {user.twitterUrl && user.twitterUsername ? (
+        <div className="mt-2">
+          <Link className="text-foreground font-medium hover:underline" href={user.twitterUrl} rel="nofollow noopener me" target="_blank">
+            x.com/{user.twitterUsername}
+          </Link>
+        </div>
+      ) : null}
     </div>
   );
 }
