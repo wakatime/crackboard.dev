@@ -29,6 +29,10 @@ export default function AdminSidebar() {
       url: '/admin/infra',
     },
     {
+      title: 'Tasks',
+      url: '/admin/tasks',
+    },
+    {
       title: 'Settings',
       url: '/admin/settings',
     },
