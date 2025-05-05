@@ -32,7 +32,7 @@ function LeadersTable() {
   const searchParams = useSearchParams();
   const utils = api.useUtils();
   const pathname = usePathname();
-  const [limit] = useState(20);
+  const [limit] = useState(500);
   const [hasRetried, setHasRetried] = useState(false);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const router = useRouter();
