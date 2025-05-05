@@ -25,7 +25,6 @@
     "@vercel/functions": "^2.0.1",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.43.1",
-    "openai": "catalog:",
     "prettier": "catalog:",
     "slugify": "^1.6.6",
     "superjson": "catalog:",

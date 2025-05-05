@@ -29,7 +29,6 @@
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.43.1",
     "ioredis": "^5.6.1",
-    "openai": "catalog:",
     "postgres": "^3.4.5",
     "zod": "catalog:"
   },
