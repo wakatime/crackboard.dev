@@ -33,7 +33,7 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
         )}
         {user.username && (
           <div>
-            <Link className="text-muted-foreground hover:text-foreground text-sm leading-4 font-medium hover:underline" href={user.url}>
+            <Link className="text-muted-foreground hover:text-foreground leading-4 font-medium hover:underline" href={user.url}>
               @{user.username}
             </Link>
           </div>
@@ -42,7 +42,7 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
       {user.wonderfulDevUrl && user.wonderfulDevUsername ? (
         <div className="mt-2">
           <Link
-            className="text-foreground font-medium hover:underline"
+            className="text-foreground text-sm font-medium hover:underline"
             href={user.wonderfulDevUrl}
             rel="nofollow noopener me"
             target="_blank"
@@ -53,11 +53,17 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
       ) : null}
       {user.twitterUrl && user.twitterUsername ? (
         <div className="mt-2">
-          <Link className="text-foreground font-medium hover:underline" href={user.twitterUrl} rel="nofollow noopener me" target="_blank">
+          <Link
+            className="text-foreground text-sm font-medium hover:underline"
+            href={user.twitterUrl}
+            rel="nofollow noopener me"
+            target="_blank"
+          >
             x.com/{user.twitterUsername}
           </Link>
         </div>
       ) : null}
+      {user.bio ? <div className="text-muted-foreground mt-3 text-sm">{user.bio}</div> : null}
     </div>
   );
 }
