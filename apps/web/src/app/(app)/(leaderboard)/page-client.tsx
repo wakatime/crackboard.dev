@@ -1,6 +1,6 @@
 'use client';
 
-import { dateStringToDate, dateToDateString, getReadableTextColor } from '@workspace/core/utils/helpers';
+import { dateStringToDate, dateToDateString, getReadableTextColor, truncate } from '@workspace/core/utils/helpers';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { Button } from '@workspace/ui/components/button';
 import { Calendar } from '@workspace/ui/components/calendar';
@@ -233,7 +233,7 @@ function LeadersTable() {
                           <p className="flex-1 truncate font-semibold">
                             <HoverCard>
                               <HoverCardTrigger asChild>
-                                <Link href={leader.user.url}>@{leader.user.id}</Link>
+                                <Link href={leader.user.url}>@{truncate(leader.user.id, 13)}</Link>
                               </HoverCardTrigger>
                               <HoverCardContent className="pointer-events-auto">
                                 <HoverDevCard user={leader.user} />
