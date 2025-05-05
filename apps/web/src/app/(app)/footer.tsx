@@ -5,6 +5,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
+import type { RouterOutputs } from '~/trpc/client';
 import { api } from '~/trpc/client';
 
 export default function Footer() {
@@ -26,17 +27,11 @@ export default function Footer() {
     );
   }
 
-  let text = `Timezone ${leaderboardConfigQuery.data.timezone}`;
-  if (leaderboardConfigQuery.data.lastRefreshedAt) {
-    text = `${text} · Last updated ${formatDistanceToNowStrict(leaderboardConfigQuery.data.lastRefreshedAt, { addSuffix: true })}`;
-  }
-  text = `${text} · Refreshing every ${formatNumberWithSuffix(leaderboardConfigQuery.data.refreshRateInHours, 'hour')}`;
-
   return (
     <footer className="bg-background mt-20">
       <div className="container mx-auto flex h-28 items-center gap-4 px-4 md:px-12">
         <div className="ml-2 flex-1">
-          <p className="text-muted-foreground text-sm">{text}</p>
+          <FooterInfo config={leaderboardConfigQuery.data} />
         </div>
 
         <div className="mr-2 flex items-center gap-2">
@@ -57,4 +52,13 @@ export default function Footer() {
       </div>
     </footer>
   );
+}
+
+function FooterInfo({ config }: { config: NonNullable<RouterOutputs['leaderboard']['getLeaderboardPublicConfig']> }) {
+  let text = `Timezone ${config.timezone}`;
+  if (config.lastRefreshedAt) {
+    text = `${text} · Last updated ${formatDistanceToNowStrict(config.lastRefreshedAt, { addSuffix: true })}`;
+  }
+  text = `${text} · Refreshing every ${formatNumberWithSuffix(config.refreshRateInHours, 'hour')}`;
+  return <p className="text-muted-foreground text-sm">{text}</p>;
 }
