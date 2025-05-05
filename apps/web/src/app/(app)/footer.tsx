@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="ml-2 flex-1"></div>
 
           <div className="mr-2 flex items-center gap-2">
-            <Link href="https://github.com/wakatime/crackboard.dev">
+            <Link href="https://github.com/wakatime/crackboard.dev" title="Open source on GitHub">
               <FaGithub />
             </Link>
           </div>
