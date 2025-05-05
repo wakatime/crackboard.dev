@@ -16,9 +16,9 @@ import { api } from '~/trpc/client';
 export default function TasksList() {
   const [q, setQ] = useState('');
   const debouncedQ = useDebounceValue<string>(q, 300)[0];
-  const tasksQuery = api.admin.infra.searchTasks.useQuery({ q: debouncedQ });
-  const { data: isDisabled, refetch } = api.admin.infra.getTasksEnabledStatus.useQuery();
-  const disableTasks = api.admin.infra.setTasksEnabledStatus.useMutation();
+  const tasksQuery = api.admin.tasks.searchTasks.useQuery({ q: debouncedQ });
+  const { data: isDisabled, refetch } = api.admin.tasks.getTasksEnabledStatus.useQuery();
+  const disableTasks = api.admin.tasks.setTasksEnabledStatus.useMutation();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQ(e.target.value);
