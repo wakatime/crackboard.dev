@@ -88,7 +88,7 @@ export const syncUserSummaries = wakaq.task(
 
     await db.update(User).set({ lastSyncedStatsAt: new Date() }).where(eq(User.id, user.id));
   },
-  { name: 'getUserSummary' },
+  { name: 'syncUserSummaries' },
 );
 
 async function _processSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }, summary: Summary) {
