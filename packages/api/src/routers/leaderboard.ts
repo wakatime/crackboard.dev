@@ -5,6 +5,7 @@ import { COMMIT_SHA } from '@workspace/core/constants';
 import { today } from '@workspace/core/utils/helpers';
 import { and, count, db, desc, eq, gt } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
+import { syncSummariesForAllUsers } from '@workspace/tasks/summaries/syncSummariesForAllUsers';
 import { z } from 'zod';
 
 import { createTRPCRouter, publicProcedure } from '../trpc';
@@ -67,9 +68,12 @@ export const leaderboardRouter = createTRPCRouter({
       const totalCount = await db
         .select({ count: count() })
         .from(UserSummary)
-        .innerJoin(User, eq(User.id, UserSummary.userId))
         .where(eq(UserSummary.date, date))
         .then((res) => res[0]?.count ?? 0);
+
+      if (totalCount === 0) {
+        await syncSummariesForAllUsers.enqueue();
+      }
 
       return {
         date,
@@ -79,6 +83,7 @@ export const leaderboardRouter = createTRPCRouter({
         prevPage: page > 2 ? page - 1 : null,
         nextPage: leaders.length >= limit ? page + 1 : null,
         totalPages: Math.ceil(totalCount / limit),
+        totalItems: totalCount,
       };
     }),
   getLeaderboardPublicConfig: publicProcedure.query(async () => {

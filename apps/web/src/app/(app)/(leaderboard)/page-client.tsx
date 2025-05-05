@@ -13,7 +13,7 @@ import { add, format, isFuture, isToday, isYesterday, sub } from 'date-fns';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { LuChevronLeft, LuChevronRight, LuLoaderCircle, LuUser } from 'react-icons/lu';
 
 import HoverDevCard from '~/components/HoverDevCard';
@@ -30,8 +30,10 @@ export default function PageClient() {
 function LeadersTable() {
   const { theme } = useTheme();
   const searchParams = useSearchParams();
+  const utils = api.useUtils();
   const pathname = usePathname();
   const [limit] = useState(20);
+  const [hasRetried, setHasRetried] = useState(false);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const router = useRouter();
 
@@ -77,6 +79,16 @@ function LeadersTable() {
   const nextDate = useMemo(() => {
     return add(currentDate, { days: 1 });
   }, [currentDate]);
+
+  // refetch leaders once if we don't have any for the current day, because it syncs with WakaTime on the first fetch
+  useEffect(() => {
+    if (leadersQuery.isSuccess && !hasRetried) {
+      if (leadersQuery.data.totalItems === 0) {
+        setHasRetried(true);
+        void utils.leaderboard.getLeaders.refetch();
+      }
+    }
+  }, [leadersQuery.isSuccess, leadersQuery.data?.totalItems, hasRetried, utils.leaderboard.getLeaders]);
 
   const handleSetPage = useCallback(
     (page: number) => {
