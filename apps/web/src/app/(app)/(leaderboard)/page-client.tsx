@@ -139,10 +139,8 @@ function LeadersTable() {
                 mode="single"
                 selected={currentDate}
                 onSelect={(date) => {
-                  if (date) {
-                    handleSetDate(date);
-                    setDatePickerOpen(false);
-                  }
+                  handleSetDate(date);
+                  setDatePickerOpen(false);
                 }}
                 initialFocus
                 required
