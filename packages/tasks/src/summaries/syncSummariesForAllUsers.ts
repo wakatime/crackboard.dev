@@ -6,8 +6,22 @@ import { syncUserSummaries } from './syncUserSummaries';
 
 export const syncSummariesForAllUsers = wakaq.task(
   async () => {
-    const allUsers = await db.select({ id: User.id }).from(User);
-    await Promise.all(allUsers.map((user) => syncUserSummaries.enqueue(user.id)));
+    const limit = 100;
+    let offset = 0;
+    let hasMore = true;
+    let count = 0;
+
+    while (hasMore) {
+      const users = await db.select({ id: User.id }).from(User).limit(limit).offset(offset);
+
+      await Promise.all(users.map((user) => syncUserSummaries.enqueue(user.id)));
+
+      count += users.length;
+      offset += limit;
+      hasMore = users.length === limit;
+    }
+
+    wakaq.logger?.info(`Finished syncing summaries for ${count} users`);
   },
   { name: 'getSummaryForAllUsers' },
 );
