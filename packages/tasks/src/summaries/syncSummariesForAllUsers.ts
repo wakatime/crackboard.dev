@@ -23,5 +23,5 @@ export const syncSummariesForAllUsers = wakaq.task(
 
     wakaq.logger?.info(`Finished syncing summaries for ${count} users`);
   },
-  { name: 'getSummaryForAllUsers' },
+  { name: 'syncSummariesForAllUsers' },
 );
