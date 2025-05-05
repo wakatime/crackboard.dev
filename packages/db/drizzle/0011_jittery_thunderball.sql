@@ -1,0 +1,1 @@
+ALTER TABLE "LeaderboardConfig" ADD COLUMN "timezone" varchar DEFAULT 'UTC' NOT NULL;

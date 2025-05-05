@@ -27,6 +27,8 @@ export const REFRESH_RATE = parseInt(env.NEXT_PUBLIC_REFRESH_RATE ?? '12');
 
 export const COMMIT_SHA = env.NEXT_PUBLIC_COMMIT_SHA ?? '';
 
+export const LEADERBOARD_CONFIG_ID = 'leaderboard-config';
+
 export const AUDIT_LOG_LOGIN = 'login';
 export const AUDIT_LOG_USERNAME_CHANGED = 'username changed';
 export const AUDIT_LOG_USER_CREATED = 'user created';

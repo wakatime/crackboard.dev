@@ -1,8 +1,8 @@
-import { WAKATIME_API_URI } from '@workspace/core/constants';
+import { LEADERBOARD_CONFIG_ID, WAKATIME_API_URI } from '@workspace/core/constants';
 import { betterFetch } from '@workspace/core/utils/helpers';
 import { db, eq } from '@workspace/db/drizzle';
 import { redis } from '@workspace/db/redis';
-import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
+import { LeaderboardConfig, User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { differenceInMinutes } from 'date-fns';
 import { Duration } from 'ts-duration';
 import { z } from 'zod';
@@ -46,9 +46,17 @@ export const syncUserSummaries = wakaq.task(
 
     wakaq.logger?.debug(`Fetching WakaTime summaries for user ${user.id}.`);
 
+    const timezone =
+      (
+        await db
+          .select({ timezone: LeaderboardConfig.timezone })
+          .from(LeaderboardConfig)
+          .where(eq(LeaderboardConfig.id, LEADERBOARD_CONFIG_ID))
+      )[0]?.timezone ?? 'UTC';
+
     const params = new URLSearchParams({
       range: 'Last 7 Days',
-      timezone: 'UTC',
+      timezone,
     });
     const url = `${WAKATIME_API_URI}/users/current/summaries?${params.toString()}`;
     let res: Response;

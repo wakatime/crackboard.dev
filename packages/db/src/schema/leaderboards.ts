@@ -1,4 +1,4 @@
-import { boolean, date, index, jsonb, pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
+import { boolean, date, index, jsonb, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
 import type { Leader } from '../types';
 import { citext } from './types';
@@ -47,4 +47,8 @@ export const LeaderboardConfig = pgTable('LeaderboardConfig', {
   isPublic: boolean().notNull().default(true),
   isInviteOnly: boolean().notNull().default(false),
   inviteCode: varchar(),
+  timezone: varchar().notNull().default('UTC'),
+  createdAt: timestamp()
+    .notNull()
+    .$default(() => new Date()),
 });

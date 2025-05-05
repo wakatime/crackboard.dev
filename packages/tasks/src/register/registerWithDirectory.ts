@@ -33,7 +33,7 @@ export const registerWithDirectory = wakaq.task(
     });
 
     if (res.status !== 200 && res.status !== 201) {
-      wakaq.logger?.error('Failed to register with WakaTime directory:', await res.text());
+      wakaq.logger?.error(`Failed to register with WakaTime directory (${res.status}): ${await res.text()}`);
       return;
     }
   },

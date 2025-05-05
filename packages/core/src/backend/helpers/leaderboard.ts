@@ -2,9 +2,8 @@ import { createId } from '@paralleldrive/cuid2';
 import { db, eq } from '@workspace/db/drizzle';
 import { LeaderboardConfig } from '@workspace/db/schema';
 
+import { LEADERBOARD_CONFIG_ID } from '../../constants';
 import type { UpdateLeaderboardConfigData } from '../../validators';
-
-const LEADERBOARD_CONFIG_ID = 'leaderboard-config';
 
 export const getLeaderboardConfig = async () => {
   const config = await db.transaction(async (tx) => {
