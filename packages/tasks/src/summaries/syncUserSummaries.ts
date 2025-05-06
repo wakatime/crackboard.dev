@@ -38,7 +38,7 @@ export const syncUserSummaries = wakaq.task(
     }
 
     const minsSinceSync = user.lastSyncedStatsAt ? differenceInMinutes(new Date(), user.lastSyncedStatsAt) : Infinity;
-    if (minsSinceSync < 30) {
+    if (minsSinceSync < 5) {
       wakaq.logger?.info(`Recently synced this user’s stats ${minsSinceSync} mins ago, skipping`);
       return;
     }
