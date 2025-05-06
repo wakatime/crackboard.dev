@@ -1,5 +1,7 @@
 # crackedboard.dev
 
+[![wakatime](https://wakatime.com/badge/github/wakatime/crackboard.dev.svg)](https://wakatime.com/badge/github/wakatime/crackboard.dev)
+
 - Prod: https://crackedboard.dev
 - Dev: http://localhost:3000
 
