@@ -21,6 +21,8 @@ export const userToPublicUser = async (
     wonderfulDevUsername: user.wonderfulDevUsername,
     twitterUrl: user.twitterUsername ? `https://x.com/${encodeURIComponent(user.twitterUsername)}` : null,
     twitterUsername: user.twitterUsername,
+    githubUrl: user.githubUsername ? `https://github.com/${encodeURIComponent(user.githubUsername)}` : null,
+    githubUsername: user.githubUsername,
     bio: user.bio,
   };
 };
@@ -43,6 +45,7 @@ export const createOrUpdateUser = async (
               avatarUrl: wakaUser.photo,
               wonderfulDevUsername: wakaUser.wonderfuldev_username,
               twitterUsername: wakaUser.twitter_username,
+              githubUsername: wakaUser.github_username,
               bio: wakaUser.bio,
               accessToken,
               refreshToken,
@@ -61,6 +64,7 @@ export const createOrUpdateUser = async (
         username: wakaUser.username,
         wonderfulDevUsername: wakaUser.wonderfuldev_username,
         twitterUsername: wakaUser.twitter_username,
+        githubUsername: wakaUser.github_username,
         bio: wakaUser.bio,
         fullName: wakaUser.full_name,
         avatarUrl: wakaUser.photo,
@@ -83,6 +87,7 @@ export const createOrUpdateUser = async (
             avatarUrl: wakaUser.photo,
             wonderfulDevUsername: wakaUser.wonderfuldev_username,
             twitterUsername: wakaUser.twitter_username,
+            githubUsername: wakaUser.github_username,
             bio: wakaUser.bio,
             accessToken,
             refreshToken,
@@ -105,6 +110,7 @@ export const updateUser = async (wakaUser: WakaTimeUser) => {
       avatarUrl: wakaUser.photo,
       wonderfulDevUsername: wakaUser.wonderfuldev_username,
       twitterUsername: wakaUser.twitter_username,
+      githubUsername: wakaUser.github_username,
       bio: wakaUser.bio,
     })
     .where(eq(User.id, wakaUser.id));

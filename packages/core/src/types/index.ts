@@ -7,6 +7,8 @@ export interface PublicUser {
   wonderfulDevUsername: string | null;
   twitterUrl: string | null;
   twitterUsername: string | null;
+  githubUrl: string | null;
+  githubUsername: string | null;
   username: string | null;
   avatarUrl?: string | null;
   bio?: string | null;
@@ -53,6 +55,7 @@ export interface WakaTimeUser {
   username: string | null;
   wonderfuldev_username: string | null;
   twitter_username: string | null;
+  github_username: string | null;
   photo: string | null;
 }
 

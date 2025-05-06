@@ -23,6 +23,7 @@ export const User = pgTable(
     bio: text(),
     wonderfulDevUsername: text(),
     twitterUsername: text(),
+    githubUsername: text(),
     isOwner: boolean(),
     lastSyncedStatsAt: timestamp(),
   },

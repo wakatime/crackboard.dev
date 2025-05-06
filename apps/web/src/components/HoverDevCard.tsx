@@ -44,10 +44,22 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
           <Link
             className="text-foreground text-sm font-medium hover:underline"
             href={user.wonderfulDevUrl}
-            rel="nofollow noopener me"
+            rel="nofollow noopener"
             target="_blank"
           >
             wonderful.dev/{user.wonderfulDevUsername}
+          </Link>
+        </div>
+      ) : null}
+      {user.githubUrl && user.githubUsername ? (
+        <div className="mt-2">
+          <Link
+            className="text-foreground text-sm font-medium hover:underline"
+            href={user.githubUrl}
+            rel="nofollow noopener"
+            target="_blank"
+          >
+            github.com/{user.githubUsername}
           </Link>
         </div>
       ) : null}
@@ -56,7 +68,7 @@ export default function HoverProfileDetailsCard({ user }: { user: PublicUser }) 
           <Link
             className="text-foreground text-sm font-medium hover:underline"
             href={user.twitterUrl}
-            rel="nofollow noopener me"
+            rel="nofollow noopener"
             target="_blank"
           >
             x.com/{user.twitterUsername}
