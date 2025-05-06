@@ -4,7 +4,7 @@ import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboar
 import { userToPublicUser } from '@workspace/core/backend/helpers/users';
 import { REFRESH_RATE } from '@workspace/core/constants';
 import { today } from '@workspace/core/utils/helpers';
-import { and, count, db, desc, eq, gt, gte } from '@workspace/db/drizzle';
+import { and, count, db, desc, eq, gt, gte, sql } from '@workspace/db/drizzle';
 import { User, UserSummary, UserSummaryEditor, UserSummaryLanguage } from '@workspace/db/schema';
 import { syncSummariesForAllUsers } from '@workspace/tasks/summaries/syncSummariesForAllUsers';
 import { z } from 'zod';
@@ -31,11 +31,24 @@ export const leaderboardRouter = createTRPCRouter({
 
       const date = input.date ?? today();
 
+      const Languages = db.$with('UserSummaryLanguage').as(
+        db
+          .select({
+            count: sql<number>`count(${UserSummaryLanguage.programLanguageName})`.as('count'),
+            userId: UserSummaryLanguage.userId,
+          })
+          .from(UserSummaryLanguage)
+          .where(and(eq(UserSummaryLanguage.date, date), gte(UserSummaryLanguage.totalSeconds, 60)))
+          .groupBy(UserSummaryLanguage.userId),
+      );
+
       const leaders = await db
+        .with(Languages)
         .select()
         .from(UserSummary)
         .innerJoin(User, eq(User.id, UserSummary.userId))
-        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60)))
+        .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
+        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
         .orderBy(desc(UserSummary.totalSeconds))
         .limit(limit)
         .offset(limit * (page - 1));

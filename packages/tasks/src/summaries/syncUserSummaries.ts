@@ -82,7 +82,7 @@ export const syncUserSummaries = wakaq.task(
         await syncUserSummaries.enqueue(userId);
         return;
       }
-      wakaq.logger?.error('Failed to fetch summary!', await res.text());
+      wakaq.logger?.error(`Failed to fetch summary (${res.status}): ${await res.text()}`);
       return;
     }
 
