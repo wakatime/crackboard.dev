@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@workspace/ui/component
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@workspace/ui/components/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@workspace/ui/components/tooltip';
 import { cn } from '@workspace/ui/lib/utils';
-import { add, format, isFuture, isToday, isYesterday, sub } from 'date-fns';
+import { add, format, isAfter, isBefore, isFuture, isToday, isYesterday, sub } from 'date-fns';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTheme } from 'next-themes';
@@ -28,6 +28,9 @@ export default function PageClient() {
   );
 }
 
+const FROM_DTAE = new Date(2025, 0, 1);
+const TO_DTAE = new Date();
+
 function LeadersTable() {
   const { theme } = useTheme();
   const searchParams = useSearchParams();
@@ -38,12 +41,16 @@ function LeadersTable() {
   const router = useRouter();
 
   const currentDate = useMemo(() => {
-    const date = searchParams.get('date');
-    if (!date) {
+    const dateStr = searchParams.get('date');
+    if (!dateStr) {
       return new Date();
     }
     try {
-      return dateStringToDate(date);
+      const date = dateStringToDate(dateStr);
+      if (isBefore(date, FROM_DTAE) || isAfter(date, TO_DTAE)) {
+        return new Date();
+      }
+      return date;
     } catch (error) {
       console.error(error);
       return new Date();
@@ -80,6 +87,43 @@ function LeadersTable() {
     return add(currentDate, { days: 1 });
   }, [currentDate]);
 
+  const handleSetPage = useCallback(
+    (page: number, replace?: boolean) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (page > 1) {
+        params.set('page', String(page));
+      } else {
+        params.delete('page');
+      }
+      const url = pathname + params.toString() ? `?${params.toString()}` : '';
+      if (replace) {
+        router.replace(url);
+      } else {
+        router.push(url);
+      }
+    },
+    [pathname, router, searchParams],
+  );
+
+  const handleSetDate = useCallback(
+    (date: Date, replace?: boolean) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (isToday(date)) {
+        params.delete('date');
+      } else {
+        params.set('date', dateToDateString(date));
+      }
+
+      const url = pathname + params.toString() ? `?${params.toString()}` : '';
+      if (replace) {
+        router.replace(url);
+      } else {
+        router.push(url);
+      }
+    },
+    [pathname, router, searchParams],
+  );
+
   // refetch leaders once if we don't have any for the current day, because it syncs with WakaTime on the first fetch
   useEffect(() => {
     if (leadersQuery.isSuccess && !hasRetried) {
@@ -90,31 +134,18 @@ function LeadersTable() {
     }
   }, [leadersQuery.isSuccess, leadersQuery.data?.totalItems, hasRetried, utils.leaderboard.getLeaders]);
 
-  const handleSetPage = useCallback(
-    (page: number) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (page > 1) {
-        params.set('page', String(page));
-      } else {
-        params.delete('page');
-      }
-      router.push(`${pathname}?${params.toString()}`);
-    },
-    [pathname, router, searchParams],
-  );
+  // If search params date is a future date (after TO_DATE) or before 2025 (before FROM_DATE) we will revert back to today
+  useEffect(() => {
+    const date = searchParams.get('date');
+    if (!date) {
+      return;
+    }
 
-  const handleSetDate = useCallback(
-    (date: Date) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (isToday(date)) {
-        params.delete('date');
-      } else {
-        params.set('date', dateToDateString(date));
-      }
-      router.push(`${pathname}?${params.toString()}`);
-    },
-    [pathname, router, searchParams],
-  );
+    const jsDate = dateStringToDate(date);
+    if (isBefore(jsDate, FROM_DTAE) || isAfter(jsDate, TO_DTAE)) {
+      handleSetDate(new Date(), true);
+    }
+  }, [handleSetDate, searchParams]);
 
   return (
     <>
@@ -123,7 +154,12 @@ function LeadersTable() {
         <div className="flex gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="outline" onClick={() => handleSetDate(previousDate)}>
+              <Button
+                size="icon"
+                variant="outline"
+                disabled={isBefore(previousDate, new Date(2025, 0, 1))}
+                onClick={() => handleSetDate(previousDate)}
+              >
                 <LuChevronLeft />
                 <div className="sr-only">{isYesterday(previousDate) ? 'Yesterday' : formatDate(previousDate)}</div>
               </Button>
@@ -140,12 +176,19 @@ function LeadersTable() {
                 mode="single"
                 selected={currentDate}
                 onSelect={(date) => {
-                  handleSetDate(date);
+                  if (date) {
+                    const d = new Date();
+                    d.setUTCFullYear(date.getFullYear());
+                    d.setUTCMonth(date.getMonth());
+                    d.setUTCDate(date.getDate());
+                    handleSetDate(d);
+                  }
                   setDatePickerOpen(false);
                 }}
                 initialFocus
                 required
-                toDate={new Date()}
+                fromDate={FROM_DTAE}
+                toDate={TO_DTAE}
               />
             </PopoverContent>
           </Popover>
