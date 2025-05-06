@@ -114,6 +114,7 @@ export const leaderboardRouter = createTRPCRouter({
         nextPage: leaders.length >= limit ? page + 1 : null,
         totalPages: Math.ceil(totalCount / limit),
         totalItems: totalCount,
+        timezone: config.timezone,
       };
     }),
   getLeaderboardPublicConfig: publicProcedure.query(async () => {

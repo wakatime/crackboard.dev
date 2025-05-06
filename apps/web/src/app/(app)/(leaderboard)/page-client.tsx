@@ -191,7 +191,11 @@ function LeadersTable() {
             ) : leadersQuery.data.items.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5}>
-                  <div className="text-muted-foreground p-4 text-center">No users found.</div>
+                  <div className="text-muted-foreground p-4 text-center">
+                    {isToday(currentDate)
+                      ? `It’s a new day, the clock resets at midnight ${leadersQuery.data.timezone}. Get your coding on!`
+                      : 'No devs found.'}
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (
