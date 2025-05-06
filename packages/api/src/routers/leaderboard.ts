@@ -94,9 +94,11 @@ export const leaderboardRouter = createTRPCRouter({
       );
 
       const totalCount = await db
+        .with(Languages)
         .select({ count: count() })
         .from(UserSummary)
-        .where(eq(UserSummary.date, date))
+        .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
+        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
         .then((res) => res[0]?.count ?? 0);
 
       if (totalCount === 0) {
