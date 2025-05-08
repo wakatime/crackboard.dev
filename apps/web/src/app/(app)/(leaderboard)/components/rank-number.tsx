@@ -31,10 +31,13 @@ export default function RankNumber({ rank }: { rank: number }) {
         <AlertDialogHeader>
           <AlertDialogTitle>What is cracked?</AlertDialogTitle>
           <AlertDialogDescription>
-            <p>It takes something special to #1 on the daily coding leaderboard.</p>
-            <p>Sometimes it’s energy drinks, other times it’s the motivation of building something impactful.</p>
-            <p className="my-2">
-              Whatever your reasons, join the discussion on{' '}
+            <p>
+              Making it to #1 on the daily coding leaderboard takes something special. Sometimes it’s energy drinks, a late night coding
+              spree, or the motivation of building something impactful.
+            </p>
+            <p className="my-2">Whatever fuels your streak, you're not alone.</p>
+            <p>
+              Join the conversation on{' '}
               <Link className="underline" href="https://wonderful.dev/timeline">
                 wonderful.dev
               </Link>
