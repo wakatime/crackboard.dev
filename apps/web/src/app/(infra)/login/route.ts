@@ -1,3 +1,4 @@
+import { authenticatedUserFromRequest } from '@workspace/core/backend/auth';
 import { createCSRFToken } from '@workspace/core/backend/csrf';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { incrementRateLimitCounter, isRateLimited } from '@workspace/core/backend/rateLimit';
@@ -27,6 +28,11 @@ export const GET = async (req: NextRequest) => {
       console.error(`Invalid invite code: ${inviteCode}`);
       return new NextResponse('Invalid invite code.', { status: 400 });
     }
+  }
+
+  const user = await authenticatedUserFromRequest();
+  if (user) {
+    return NextResponse.redirect('/');
   }
 
   const token = createCSRFToken();
