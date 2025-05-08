@@ -195,7 +195,7 @@ function LeadersTable() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" disabled={isFuture(nextDate)} onClick={() => handleSetDate(nextDate)}>
+              <Button size="icon" variant="outline" disabled={isFuture(nextDate)} onClick={() => handleSetDate(nextDate)}>
                 <LuChevronRight />
                 <div className="sr-only">{isToday(nextDate) ? 'Today' : formatDate(nextDate)}</div>
               </Button>
