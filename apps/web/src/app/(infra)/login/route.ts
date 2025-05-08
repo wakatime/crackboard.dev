@@ -2,7 +2,7 @@ import { authenticatedUserFromRequest } from '@workspace/core/backend/auth';
 import { createCSRFToken } from '@workspace/core/backend/csrf';
 import { getLeaderboardConfig } from '@workspace/core/backend/helpers/leaderboard';
 import { incrementRateLimitCounter, isRateLimited } from '@workspace/core/backend/rateLimit';
-import { CSRF_COOKIE, CSRF_EXPIRES, WAKATIME_AUTHORIZE_URL, WAKATIME_REDIRECT_URI } from '@workspace/core/constants';
+import { BASE_URL, CSRF_COOKIE, CSRF_EXPIRES, WAKATIME_AUTHORIZE_URL, WAKATIME_REDIRECT_URI } from '@workspace/core/constants';
 import type { OAuthLoginState } from '@workspace/core/types';
 import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
@@ -32,7 +32,7 @@ export const GET = async (req: NextRequest) => {
 
   const user = await authenticatedUserFromRequest();
   if (user) {
-    return NextResponse.redirect('/');
+    return NextResponse.redirect(`${BASE_URL}/`);
   }
 
   const token = createCSRFToken();
