@@ -20,6 +20,8 @@ import { LuChevronLeft, LuChevronRight, LuLoaderCircle, LuUser } from 'react-ico
 import HoverDevCard from '~/components/HoverDevCard';
 import { api } from '~/trpc/client';
 
+import RankNumber from './components/rank-number';
+
 export default function PageClient() {
   return (
     <main className="container mx-auto my-8 px-4 md:px-12">
@@ -245,15 +247,7 @@ function LeadersTable() {
               leadersQuery.data.items.map((leader, i) => (
                 <TableRow key={leader.user.id}>
                   <TableCell className="pl-4">
-                    {i === 0 ? (
-                      <p className="text-base leading-5 font-bold text-yellow-500">
-                        👑 #1
-                        <br />
-                        cracked
-                      </p>
-                    ) : (
-                      <p className="text-base font-semibold">#{i + 1}</p>
-                    )}
+                    <RankNumber rank={i + 1} />
                   </TableCell>
                   <TableCell>
                     <div className="flex max-w-md min-w-0 items-center gap-2">
