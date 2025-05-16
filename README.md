@@ -1,8 +1,8 @@
-# crackedboard.dev
+# crackboard.dev
 
 [![wakatime](https://wakatime.com/badge/github/wakatime/crackboard.dev.svg)](https://wakatime.com/badge/github/wakatime/crackboard.dev)
 
-- Prod: https://crackedboard.dev
+- Prod: https://crackboard.dev
 - Dev: http://localhost:3000
 
 ## Setup
