@@ -45,7 +45,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body className={cn(fontSans.variable, 'bg-background flex min-h-screen flex-col font-sans antialiased')}>
         <HolyLoader color="#2666FF" height={3} showSpinner={false} ignoreSearchParams zIndex={99999} />
         <TrpcProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
             <TooltipProvider>
               <AuthProvider currentUser={currentUser}>{children}</AuthProvider>
             </TooltipProvider>
