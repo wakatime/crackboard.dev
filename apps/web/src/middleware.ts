@@ -8,15 +8,11 @@ const isMobileApp = (req: NextRequest) => {
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse | void> {
+  if (req.nextUrl.hostname === 'crackedboard.dev') {
+    return NextResponse.redirect('https://crackboard.dev/');
+  }
+
   const isFromApp = isMobileApp(req);
-
-  // const sessionId = await sessionIdFromRequest(req);
-
-  // if (sessionId && req.nextUrl.pathname === '/') {
-  //   const url = makeUrlSafe('/home');
-  //   url.search = req.nextUrl.search;
-  //   return NextResponse.redirect(url);
-  // }
 
   // validate csrf token on modifying requests
   const method = req.method.toUpperCase();
