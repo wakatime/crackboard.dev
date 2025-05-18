@@ -41,7 +41,7 @@ export default function NavBar() {
             <>
               <ThemeToggleButton />
               <Button asChild>
-                <Link href="/flow/login">Sign In</Link>
+                <Link href={`${BASE_URL}/flow/login`}>Sign In</Link>
               </Button>
             </>
           )}

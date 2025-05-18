@@ -8,10 +8,6 @@ const isMobileApp = (req: NextRequest) => {
 };
 
 export async function middleware(req: NextRequest): Promise<NextResponse | void> {
-  if (req.nextUrl.hostname === 'crackedboard.dev') {
-    return NextResponse.redirect('https://crackboard.dev/');
-  }
-
   const isFromApp = isMobileApp(req);
 
   // validate csrf token on modifying requests
