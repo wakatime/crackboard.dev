@@ -1,6 +1,6 @@
 'use client';
 
-import { APP_DOMAIN } from '@workspace/core/constants';
+import { APP_DOMAIN, BASE_URL } from '@workspace/core/constants';
 import { Avatar, AvatarFallback, AvatarImage } from '@workspace/ui/components/avatar';
 import { Button } from '@workspace/ui/components/button';
 import {
@@ -25,11 +25,11 @@ export default function NavBar() {
   return (
     <header className="bg-background">
       <div className="container mx-auto flex h-28 items-center gap-4 px-4 md:px-12">
-        <Link href="/">
+        <Link href={BASE_URL}>
           <Image alt={APP_DOMAIN} height={120} src="/logo.svg" width={120} className="inline object-contain" />
         </Link>
         <div className="flex-1 text-center">
-          <Link className="mr-12 text-xl font-semibold" href="/">
+          <Link className="mr-12 text-xl font-semibold" href={BASE_URL}>
             {APP_DOMAIN}
           </Link>
         </div>
