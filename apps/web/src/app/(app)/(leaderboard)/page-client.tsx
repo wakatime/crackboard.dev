@@ -92,6 +92,10 @@ function LeadersTable() {
     return add(currentDate, { days: 1 });
   }, [currentDate]);
 
+  const isCurrentUserRanked = useMemo(() => {
+    return !!(currentUser ? leadersQuery.data?.items.find((leader) => leader.user.id === currentUser.id) : false);
+  }, [currentUser, leadersQuery.data?.items]);
+
   const handleSetPage = useCallback(
     (page: number, replace?: boolean) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -217,7 +221,7 @@ function LeadersTable() {
               <TableHead className="pl-4">
                 <div className="flex items-center gap-1">
                   Position
-                  {!!currentUser && (
+                  {!!currentUser && isCurrentUserRanked && (
                     <Link href={`#@${currentUser.username ?? currentUser.id}`}>
                       <TbUserDown />
                     </Link>
