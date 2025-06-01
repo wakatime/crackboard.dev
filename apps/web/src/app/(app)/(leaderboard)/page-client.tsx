@@ -16,8 +16,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { LuChevronLeft, LuChevronRight, LuLoaderCircle, LuUser } from 'react-icons/lu';
+import { TbUserDown } from 'react-icons/tb';
 
 import HoverDevCard from '~/components/HoverDevCard';
+import { useAuth } from '~/providers/auth-providers';
 import { api } from '~/trpc/client';
 
 import RankNumber from './components/rank-number';
@@ -34,6 +36,7 @@ const FROM_DTAE = new Date(2025, 0, 1);
 const TO_DTAE = new Date();
 
 function LeadersTable() {
+  const { currentUser } = useAuth();
   const { theme } = useTheme();
   const searchParams = useSearchParams();
   const utils = api.useUtils();
@@ -211,7 +214,16 @@ function LeadersTable() {
         <Table>
           <TableHeader>
             <TableRow noHover={true}>
-              <TableHead className="pl-4">Position</TableHead>
+              <TableHead className="pl-4">
+                <div className="flex items-center gap-1">
+                  Position
+                  {!!currentUser && (
+                    <Link href={`#@${currentUser.username ?? currentUser.id}`}>
+                      <TbUserDown />
+                    </Link>
+                  )}
+                </div>
+              </TableHead>
               <TableHead>User</TableHead>
               <TableHead>{isToday(currentDate) ? 'Time Today' : formatDate(currentDate)}</TableHead>
               <TableHead>Languages</TableHead>
@@ -245,7 +257,7 @@ function LeadersTable() {
               </TableRow>
             ) : (
               leadersQuery.data.items.map((leader, i) => (
-                <TableRow key={leader.user.id}>
+                <TableRow key={leader.user.id} id={`@${leader.user.username ?? leader.user.id}`}>
                   <TableCell className="pl-4">
                     <RankNumber rank={i + 1} />
                   </TableCell>
