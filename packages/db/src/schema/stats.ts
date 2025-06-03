@@ -13,7 +13,7 @@ export const UserSummary = pgTable(
       .references(() => User.id, { onDelete: 'cascade' }),
     totalSeconds: integer().notNull(),
   },
-  (table) => [unique().on(table.date, table.userId), index().on(table.totalSeconds.desc())],
+  (table) => [unique().on(table.date, table.userId), index().on(table.date.desc(), table.totalSeconds.desc())],
 );
 
 export const UserSummaryLanguage = pgTable(
@@ -28,7 +28,7 @@ export const UserSummaryLanguage = pgTable(
       .references(() => ProgramLanguage.name, { onDelete: 'cascade' }),
     totalSeconds: integer().notNull(),
   },
-  (table) => [unique().on(table.date, table.userId, table.programLanguageName), index().on(table.totalSeconds.desc())],
+  (table) => [unique().on(table.date, table.userId, table.programLanguageName), index().on(table.date.desc(), table.totalSeconds.desc())],
 );
 
 export const UserSummaryEditor = pgTable(
@@ -43,5 +43,5 @@ export const UserSummaryEditor = pgTable(
       .references(() => Editor.name, { onDelete: 'cascade' }),
     totalSeconds: integer().notNull(),
   },
-  (table) => [unique().on(table.date, table.userId, table.editorName), index().on(table.totalSeconds.desc())],
+  (table) => [unique().on(table.date, table.userId, table.editorName), index().on(table.date.desc(), table.totalSeconds.desc())],
 );
