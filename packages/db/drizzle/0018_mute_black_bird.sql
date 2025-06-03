@@ -1,0 +1,3 @@
+CREATE INDEX "UserSummary_totalSeconds_index" ON "UserSummary" USING btree ("totalSeconds" DESC NULLS LAST);--> statement-breakpoint
+CREATE INDEX "UserSummaryEditor_totalSeconds_index" ON "UserSummaryEditor" USING btree ("totalSeconds" DESC NULLS LAST);--> statement-breakpoint
+CREATE INDEX "UserSummaryLanguage_totalSeconds_index" ON "UserSummaryLanguage" USING btree ("totalSeconds" DESC NULLS LAST);
