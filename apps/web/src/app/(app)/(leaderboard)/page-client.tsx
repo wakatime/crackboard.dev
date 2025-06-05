@@ -168,6 +168,7 @@ function LeadersTable() {
                 variant="outline"
                 disabled={isBefore(previousDate, new Date(2025, 0, 1))}
                 onClick={() => handleSetDate(previousDate)}
+                className="cursor-pointer"
               >
                 <LuChevronLeft />
                 <div className="sr-only">{isYesterday(previousDate) ? 'Yesterday' : formatDate(previousDate)}</div>
@@ -178,7 +179,9 @@ function LeadersTable() {
 
           <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
             <PopoverTrigger asChild>
-              <Button variant="outline">{formatDate(currentDate)}</Button>
+              <Button variant="outline" className="cursor-pointer">
+                {formatDate(currentDate)}
+              </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
               <Calendar
@@ -204,7 +207,13 @@ function LeadersTable() {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="outline" disabled={isFuture(nextDate)} onClick={() => handleSetDate(nextDate)}>
+              <Button
+                size="icon"
+                variant="outline"
+                disabled={isFuture(nextDate)}
+                onClick={() => handleSetDate(nextDate)}
+                className="cursor-pointer"
+              >
                 <LuChevronRight />
                 <div className="sr-only">{isToday(nextDate) ? 'Today' : formatDate(nextDate)}</div>
               </Button>
