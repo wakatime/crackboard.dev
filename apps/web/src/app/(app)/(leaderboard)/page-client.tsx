@@ -92,8 +92,8 @@ function LeadersTable() {
     return add(currentDate, { days: 1 });
   }, [currentDate]);
 
-  const isCurrentUserRanked = useMemo(() => {
-    return !!(currentUser ? leadersQuery.data?.items.find((leader) => leader.user.id === currentUser.id) : false);
+  const currentUserRank = useMemo(() => {
+    return (currentUser ? (leadersQuery.data?.items.findIndex((leader) => leader.user.id === currentUser.id) ?? -1) : -1) + 1;
   }, [currentUser, leadersQuery.data?.items]);
 
   const handleSetPage = useCallback(
@@ -221,10 +221,15 @@ function LeadersTable() {
               <TableHead className="pl-4">
                 <div className="flex items-center gap-1">
                   Position
-                  {!!currentUser && isCurrentUserRanked && (
-                    <Link href={`#@${currentUser.username ?? currentUser.id}`}>
-                      <TbUserDown />
-                    </Link>
+                  {!!currentUser && currentUserRank > 0 && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link href={`#@${currentUser.username ?? currentUser.id}`}>
+                          <TbUserDown />
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>{`You’re ranked ${formatRank(currentUserRank)}`}</TooltipContent>
+                    </Tooltip>
                   )}
                 </div>
               </TableHead>
@@ -414,4 +419,17 @@ function formatSeconds(totalSeconds: number) {
 
 function formatDate(date: Date) {
   return format(date, 'E MMM do yyyy');
+}
+
+function formatRank(rank: number): string {
+  switch (rank) {
+    case 1:
+      return '1st place';
+    case 2:
+      return '2nd place';
+    case 3:
+      return '3rd place';
+    default:
+      return rank.toString();
+  }
 }
