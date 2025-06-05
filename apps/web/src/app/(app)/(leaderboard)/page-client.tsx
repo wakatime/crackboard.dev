@@ -228,7 +228,7 @@ function LeadersTable() {
                           <TbUserDown />
                         </Link>
                       </TooltipTrigger>
-                      <TooltipContent>{`You’re ranked ${formatRank(currentUserRank)}`}</TooltipContent>
+                      <TooltipContent>{`${isToday(currentDate) ? 'You’re' : 'You'} ranked ${formatRank(currentUserRank)}`}</TooltipContent>
                     </Tooltip>
                   )}
                 </div>
