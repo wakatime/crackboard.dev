@@ -76,7 +76,7 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
-    "next": "^15.3.1",
+    "next": "^15.3.6",
     "postcss": "^8.5.3",
     "prettier": "catalog:",
     "react": "catalog:react19",

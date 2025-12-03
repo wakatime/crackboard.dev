@@ -35,7 +35,7 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
-    "next": "^15.3.1",
+    "next": "^15.3.6",
     "typescript": "catalog:",
     "typescript-eslint": "^8.31.1"
   }
