@@ -14,18 +14,18 @@
     "with-env": "dotenv -e ../../.env -c --"
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "^0.13.4",
-    "resend": "^4.5.0",
+    "@t3-oss/env-nextjs": "^0.13.8",
+    "resend": "^6.5.2",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
-    "dotenv-cli": "^8.0.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "@types/node": "^22.15.3",
+    "@types/node": "^24.10.1",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.31.1"
+    "typescript-eslint": "^8.48.1"
   }
 }
