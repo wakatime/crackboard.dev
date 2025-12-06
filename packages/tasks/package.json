@@ -21,7 +21,7 @@
     "@workspace/core": "workspace:*",
     "@workspace/db": "workspace:*",
     "@workspace/external": "workspace:*",
-    "@aws-sdk/client-s3": "^3.943.0",
+    "@aws-sdk/client-s3": "^3.946.0",
     "@paralleldrive/cuid2": "^3.0.4",
     "@vscode/vscode-languagedetection": "^1.0.22",
     "date-fns": "^4.1.0",
