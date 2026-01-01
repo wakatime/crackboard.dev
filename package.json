@@ -37,9 +37,9 @@
     "@workspace/tsconfig": "workspace:*",
     "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "turbo": "^2.6.3"
+    "turbo": "^2.7.2"
   },
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.27.0",
   "engines": {
     "node": "20.x"
   }

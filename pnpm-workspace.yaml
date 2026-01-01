@@ -1,33 +1,32 @@
-packages:
-  - apps/*
-  - packages/*
-
-onlyBuiltDependencies:
-  - core-js
-  - esbuild
-  - sharp
-
-catalog:
-  # Dev tooling
-  eslint: ^8.57.0
-  prettier: ^3.5.3
-  tailwindcss: ^3.4.17
-  typescript: ^5.8.2
-
-  # Misc
-  zod: ^4.1.13
-  'superjson': 2.2.2
-  'sharp': 0.34.1
-
-  # Tanstack & tRPC
-  '@tanstack/react-query': ^5.75.2
-  '@trpc/client': ^11.1.2
-  '@trpc/react-query': ^11.1.2
-  '@trpc/server': ^11.1.2
-
-catalogs:
-  react19:
-    react: 19.0.0
-    react-dom: 19.0.0
-    '@types/react': ^19.0.12
-    '@types/react-dom': ^19.0.4
+{
+  "packages": [
+    "apps/*",
+    "packages/*"
+  ],
+  "onlyBuiltDependencies": [
+    "core-js",
+    "esbuild",
+    "sharp"
+  ],
+  "catalog": {
+    "eslint": "^9.39.2",
+    "prettier": "^3.7.4",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "zod": "^4.3.4",
+    "superjson": "2.2.6",
+    "sharp": "0.34.5",
+    "@tanstack/react-query": "^5.90.16",
+    "@trpc/client": "^11.8.1",
+    "@trpc/react-query": "^11.8.1",
+    "@trpc/server": "^11.8.1"
+  },
+  "catalogs": {
+    "react19": {
+      "react": "19.2.3",
+      "react-dom": "19.2.3",
+      "@types/react": "^19.2.7",
+      "@types/react-dom": "^19.2.3"
+    }
+  }
+}
