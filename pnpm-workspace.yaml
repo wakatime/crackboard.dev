@@ -7,6 +7,9 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
 
+# Only install packages after they've been published for 14+ days
+minimumReleaseAge: 20160
+
 catalog:
   # Dev tooling
   eslint: ^9.39.2
