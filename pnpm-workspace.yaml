@@ -7,8 +7,8 @@ onlyBuiltDependencies:
   - esbuild
   - sharp
 
-# Only install packages after they've been published for 14+ days
-minimumReleaseAge: 20160
+# Only install packages after they've been published for 1+ days
+minimumReleaseAge: 1440
 
 catalog:
   # Dev tooling
