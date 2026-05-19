@@ -1,6 +1,7 @@
 {
   "extends": "@workspace/tsconfig/internal-package.json",
   "compilerOptions": {
+    "rootDir": "src",
     "outDir": "dist",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },

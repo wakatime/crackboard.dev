@@ -109,7 +109,7 @@ export async function validateCSRFTokenCookie(
   return timingSafeEqual(encoder.encode(token), encoder.encode(cookieToken));
 }
 
-async function timingSafeEqual(bufferSource1: webcrypto.BufferSource, bufferSource2: webcrypto.BufferSource) {
+async function timingSafeEqual(bufferSource1: NodeJS.BufferSource, bufferSource2: NodeJS.BufferSource) {
   // https://github.com/w3c/webcrypto/issues/270#issuecomment-1899234835
   const algorithm = { name: 'HMAC', hash: 'SHA-256' };
   const key = (await crypto.subtle.generateKey(algorithm, false, ['sign', 'verify'])) as webcrypto.CryptoKey;
