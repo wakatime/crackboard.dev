@@ -1,36 +1,33 @@
-packages:
-  - apps/*
-  - packages/*
-
-onlyBuiltDependencies:
-  - core-js
-  - esbuild
-  - sharp
-
-# Only install packages after they've been published for 1+ days
-minimumReleaseAge: 1440
-
-catalog:
-  # Dev tooling
-  eslint: ^9.39.2
-  prettier: ^3.7.4
-  tailwindcss: ^4.1.18
-  typescript: ^5.9.3
-
-  # Misc
-  zod: ^4.3.4
-  'superjson': 2.2.6
-  'sharp': 0.34.5
-
-  # Tanstack & tRPC
-  '@tanstack/react-query': ^5.90.16
-  '@trpc/client': ^11.8.1
-  '@trpc/react-query': ^11.8.1
-  '@trpc/server': ^11.8.1
-
-catalogs:
-  react19:
-    react: 19.2.3
-    react-dom: 19.2.3
-    '@types/react': ^19.2.7
-    '@types/react-dom': ^19.2.3
+{
+  "packages": [
+    "apps/*",
+    "packages/*"
+  ],
+  "catalog": {
+    "@tanstack/react-query": "^5.100.11",
+    "@trpc/client": "^11.17.0",
+    "@trpc/react-query": "^11.17.0",
+    "@trpc/server": "^11.17.0",
+    "eslint": "^10.4.0",
+    "prettier": "^3.8.3",
+    "sharp": "0.34.5",
+    "superjson": "2.2.6",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "zod": "^4.4.3"
+  },
+  "catalogs": {
+    "react19": {
+      "@types/react": "^19.2.14",
+      "@types/react-dom": "^19.2.3",
+      "react": "19.2.6",
+      "react-dom": "19.2.6"
+    }
+  },
+  "minimumReleaseAge": 1440,
+  "onlyBuiltDependencies": [
+    "core-js",
+    "esbuild",
+    "sharp"
+  ]
+}

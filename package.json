@@ -31,15 +31,17 @@
     "expo:prebuild:clean": "pnpm -F @workspace/mobile prebuild:clean",
     "prebuild": "pnpm -F @workspace/mobile prebuild",
     "prebuild:clean": "pnpm -F @workspace/mobile prebuild:clean",
+    "upgrade": "ncu -ws -u",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "@workspace/tsconfig": "workspace:*",
+    "npm-check-updates": "^22.2.0",
     "prettier": "catalog:",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "turbo": "^2.7.2"
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "turbo": "^2.9.14"
   },
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "pnpm@11.1.3",
   "engines": {
     "node": "20.x"
   }
