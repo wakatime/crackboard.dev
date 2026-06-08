@@ -50,7 +50,7 @@ export const GET = async (req: NextRequest) => {
     client_id: env.WAKATIME_APP_ID,
     response_type: 'code',
     redirect_uri: WAKATIME_REDIRECT_URI,
-    scope: 'email,read_summaries.editors,read_summaries.languages',
+    scope: 'email,read_summaries',
     state: btoa(JSON.stringify(state)),
   });
   const redirectUrl = `${WAKATIME_AUTHORIZE_URL}?${params.toString()}`;
