@@ -26,6 +26,7 @@ pnpm ios
 ## Tech Stack
 
 - [Next.js](https://nextjs.org)
+- [WakaQ](https://github.com/wakatime/wakaq-ts)
 - [Drizzle](https://orm.drizzle.team/docs/overview)
 - [Tailwind CSS](https://tailwindcss.com)
 - [shadcn/ui](https://ui.shadcn.com/docs)
