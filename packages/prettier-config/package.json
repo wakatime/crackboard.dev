@@ -11,9 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "prettier": "catalog:",
-    "prettier-plugin-tailwindcss": "^0.8.0",
     "@workspace/tsconfig": "workspace:*",
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "catalog:"
   },
   "prettier": "@workspace/prettier-config"
