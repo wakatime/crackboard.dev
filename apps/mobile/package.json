@@ -17,7 +17,6 @@
     "android:build": "eas build --platform android --local --profile production"
   },
   "dependencies": {
-    "@workspace/core": "workspace:*",
     "@expo/react-native-action-sheet": "^4.1.1",
     "@expo/vector-icons": "15.1.1",
     "@formidable-webview/webshell": "^2.6.0",
@@ -31,9 +30,10 @@
     "@shopify/flash-list": "^2.3.1",
     "@shopify/restyle": "^2.4.5",
     "@tanstack/react-query": "catalog:",
-    "@tiptap/react": "^3.23.4",
+    "@tiptap/react": "^3.28.0",
     "@trpc/client": "11.17.0",
     "@trpc/react-query": "11.17.0",
+    "@workspace/core": "workspace:*",
     "css-to-react-native": "^3.2.0",
     "date-fns": "^4.2.1",
     "expo": "55.0.24",
@@ -88,10 +88,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@workspace/api": "workspace:*",
-    "@workspace/db": "workspace:*",
-    "@workspace/eslint-config": "workspace:*",
-    "@workspace/tsconfig": "workspace:*",
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.5",
     "@babel/runtime": "^7.29.2",
@@ -102,6 +98,10 @@
     "@types/react-dom": "catalog:react19",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@types/react-test-renderer": "^19.1.0",
+    "@workspace/api": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/tsconfig": "workspace:*",
     "babel-preset-expo": "^55.0.21",
     "eslint": "catalog:",
     "prettier": "^3.8.3",

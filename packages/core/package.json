@@ -25,11 +25,11 @@
     "dev": "node scripts/git-hash.mjs"
   },
   "dependencies": {
-    "@workspace/db": "workspace:*",
     "@aws-sdk/client-s3": "^3.1049.0",
     "@panva/hkdf": "^1.2.1",
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
+    "@workspace/db": "workspace:*",
     "date-fns": "^4.2.1",
     "decode-ico": "^0.4.1",
     "he": "^1.2.0",
@@ -45,8 +45,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "http": "^0.0.1-security",
-    "prettier": "catalog:",
     "@types/he": "^1.2.3",
     "@types/node": "^25.9.0",
     "@types/pluralize": "^0.0.33",
@@ -54,7 +52,9 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
-    "next": "^16.2.6",
+    "http": "^0.0.1-security",
+    "next": "^16.2.10",
+    "prettier": "catalog:",
     "typescript": "catalog:"
   }
 }
