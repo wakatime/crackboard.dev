@@ -25,7 +25,7 @@
     "dev": "node scripts/git-hash.mjs"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1090.0",
+    "@aws-sdk/client-s3": "^3.1120.0",
     "@panva/hkdf": "^1.2.1",
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
@@ -33,15 +33,15 @@
     "date-fns": "^4.4.0",
     "decode-ico": "^0.4.1",
     "he": "^1.2.0",
-    "human-id": "^4.2.0",
-    "jose": "^6.2.3",
+    "human-id": "^4.2.1",
+    "jose": "^6.2.10",
     "node-html-parser": "^7.1.0",
     "pluralize": "^8.0.0",
     "sharp": "catalog:",
     "slugify": "^1.6.9",
-    "tldts": "^7.4.9",
+    "tldts": "^7.4.11",
     "ts-duration": "^1.1.0",
-    "uuid": "^14.0.1",
+    "uuid": "^14.0.2",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -53,7 +53,7 @@
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "http": "0.0.1-security",
-    "next": "^16.2.10",
+    "next": "^16.3.3",
     "prettier": "catalog:",
     "typescript": "catalog:"
   }

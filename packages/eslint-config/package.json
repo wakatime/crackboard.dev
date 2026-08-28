@@ -15,15 +15,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@next/eslint-plugin-next": "^16.2.10",
-    "@typescript-eslint/eslint-plugin": "^8.64.0",
-    "@typescript-eslint/parser": "^8.64.0",
+    "@next/eslint-plugin-next": "^16.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/parser": "^8.68.0",
     "@workspace/prettier-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
-    "eslint-config-next": "^16.2.10",
+    "eslint-config-next": "^16.3.3",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-config-turbo": "^2.10.5",
+    "eslint-config-turbo": "^2.10.12",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-no-relative-import-paths": "^1.6.1",
@@ -35,6 +35,6 @@
     "eslint-plugin-typescript-sort-keys": "^3.3.0",
     "prettier": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.64.0"
+    "typescript-eslint": "^8.68.0"
   }
 }

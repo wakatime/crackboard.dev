@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.11",
-    "resend": "^6.17.2",
+    "resend": "^6.24.0",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -26,6 +26,6 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.64.0"
+    "typescript-eslint": "^8.68.0"
   }
 }
