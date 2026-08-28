@@ -141,6 +141,13 @@
       "when": 1748954036827,
       "tag": "0019_perpetual_jocasta",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1780894904239,
+      "tag": "0020_lucky_arachne",
+      "breakpoints": true
     }
   ]
 }

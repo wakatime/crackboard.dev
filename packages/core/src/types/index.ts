@@ -175,5 +175,7 @@ export interface WakaTimeSummary {
     minutes: number;
     text: string;
     total_seconds: number;
+    ai_input_tokens?: number;
+    ai_output_tokens?: number;
   };
 }

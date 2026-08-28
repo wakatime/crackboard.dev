@@ -96,17 +96,26 @@ export const syncUserSummaries = wakaq.task(
 );
 
 async function _processSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }, summary: Summary) {
+  const aiInputTokens = summary.grand_total.ai_input_tokens ?? 0;
+  const aiOutputTokens = summary.grand_total.ai_output_tokens ?? 0;
+
   await db
     .insert(UserSummary)
     .values({
       date: summary.range.date,
       userId: user.id,
       totalSeconds: Math.floor(summary.grand_total.total_seconds),
+      aiInputTokens,
+      aiOutputTokens,
+      aiTotalTokens: aiInputTokens + aiOutputTokens,
     })
     .onConflictDoUpdate({
       target: [UserSummary.date, UserSummary.userId],
       set: {
         totalSeconds: Math.floor(summary.grand_total.total_seconds),
+        aiInputTokens,
+        aiOutputTokens,
+        aiTotalTokens: aiInputTokens + aiOutputTokens,
       },
     });
 

@@ -18,6 +18,7 @@ export const leaderboardRouter = createTRPCRouter({
         date: z.string().date().optional(),
         page: z.number().positive().min(1).nullish(),
         limit: z.number().positive().min(1).max(500).optional(),
+        mode: z.enum(['time', 'tokens']).optional(),
       }),
     )
     .query(async ({ ctx: { currentUser }, input }) => {
@@ -30,6 +31,7 @@ export const leaderboardRouter = createTRPCRouter({
       const page = input.page ?? 1;
 
       const date = input.date ?? today();
+      const mode = input.mode ?? 'time';
 
       const Languages = db.$with('UserSummaryLanguage').as(
         db
@@ -42,16 +44,26 @@ export const leaderboardRouter = createTRPCRouter({
           .groupBy(UserSummaryLanguage.userId),
       );
 
-      const leaders = await db
-        .with(Languages)
-        .select()
-        .from(UserSummary)
-        .innerJoin(User, eq(User.id, UserSummary.userId))
-        .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
-        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
-        .orderBy(desc(UserSummary.totalSeconds))
-        .limit(limit)
-        .offset(limit * (page - 1));
+      const leaders =
+        mode === 'tokens'
+          ? await db
+              .select()
+              .from(UserSummary)
+              .innerJoin(User, eq(User.id, UserSummary.userId))
+              .where(and(eq(UserSummary.date, date), gt(UserSummary.aiTotalTokens, 0)))
+              .orderBy(desc(UserSummary.aiTotalTokens), desc(UserSummary.totalSeconds))
+              .limit(limit)
+              .offset(limit * (page - 1))
+          : await db
+              .with(Languages)
+              .select()
+              .from(UserSummary)
+              .innerJoin(User, eq(User.id, UserSummary.userId))
+              .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
+              .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
+              .orderBy(desc(UserSummary.totalSeconds))
+              .limit(limit)
+              .offset(limit * (page - 1));
 
       const items = await Promise.all(
         leaders.map(async (leader) => {
@@ -86,6 +98,9 @@ export const leaderboardRouter = createTRPCRouter({
           return {
             date,
             totalSeconds: leader.UserSummary.totalSeconds,
+            aiInputTokens: leader.UserSummary.aiInputTokens,
+            aiOutputTokens: leader.UserSummary.aiOutputTokens,
+            aiTotalTokens: leader.UserSummary.aiTotalTokens,
             user,
             languages,
             editors,
@@ -93,13 +108,20 @@ export const leaderboardRouter = createTRPCRouter({
         }),
       );
 
-      const totalCount = await db
-        .with(Languages)
-        .select({ count: count() })
-        .from(UserSummary)
-        .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
-        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
-        .then((res) => res[0]?.count ?? 0);
+      const totalCount =
+        mode === 'tokens'
+          ? await db
+              .select({ count: count() })
+              .from(UserSummary)
+              .where(and(eq(UserSummary.date, date), gt(UserSummary.aiTotalTokens, 0)))
+              .then((res) => res[0]?.count ?? 0)
+          : await db
+              .with(Languages)
+              .select({ count: count() })
+              .from(UserSummary)
+              .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
+              .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
+              .then((res) => res[0]?.count ?? 0);
 
       if (totalCount === 0) {
         await syncSummariesForAllUsers.enqueue();
@@ -109,6 +131,7 @@ export const leaderboardRouter = createTRPCRouter({
         date,
         items,
         limit,
+        mode,
         page,
         prevPage: page > 2 ? page - 1 : null,
         nextPage: leaders.length >= limit ? page + 1 : null,
