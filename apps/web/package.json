@@ -10,7 +10,7 @@
     "lint:fix": "eslint src --fix",
     "start": "pnpm with-env next start -H 0.0.0.0 -p ${PORT:-8080}",
     "clean": "git clean -xdf .next .turbo node_modules",
-    "with-env": "dotenv -e ../../.env -c --"
+    "with-env": "node ./node_modules/dotenv-cli/cli.js -e ../../.env -c --"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -29,6 +29,7 @@
     "core-js": "^3.50.0",
     "date-fns": "^4.4.0",
     "date-fns-tz": "^3.2.0",
+    "dotenv-cli": "^11.0.0",
     "holy-loader": "^2.3.14",
     "jiti": "^2.7.0",
     "lucide-react": "1.48.0",
@@ -55,7 +56,6 @@
     "@types/react-dom": "catalog:react19",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
-    "dotenv-cli": "^11.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",

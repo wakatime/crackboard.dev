@@ -545,6 +545,9 @@ importers:
       date-fns-tz:
         specifier: ^3.2.0
         version: 3.2.0(date-fns@4.4.0)
+      dotenv-cli:
+        specifier: ^11.0.0
+        version: 11.0.0
       holy-loader:
         specifier: ^2.3.14
         version: 2.3.14(react@19.2.8)
@@ -618,9 +621,6 @@ importers:
       '@workspace/tsconfig':
         specifier: workspace:*
         version: link:../../packages/typescript-config
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.0.0
       eslint:
         specifier: 'catalog:'
         version: 10.9.1(jiti@2.7.0)(supports-color@8.1.1)
@@ -1000,6 +1000,9 @@ importers:
       dotenv:
         specifier: ^18.0.4
         version: 18.0.4
+      dotenv-cli:
+        specifier: ^11.0.0
+        version: 11.0.0
       ioredis:
         specifier: ^6.0.0
         version: 6.0.0(supports-color@8.1.1)
@@ -1043,9 +1046,6 @@ importers:
       '@workspace/tsconfig':
         specifier: workspace:*
         version: link:../typescript-config
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.0.0
       eslint:
         specifier: 'catalog:'
         version: 10.9.1(jiti@2.7.0)(supports-color@8.1.1)

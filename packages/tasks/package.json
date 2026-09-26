@@ -15,7 +15,7 @@
     "scheduler": "pnpm with-env tsx src/scripts/wakaqScheduler.ts",
     "info": "pnpm with-env tsx src/scripts/wakaqInfo.ts",
     "purge": "pnpm with-env tsx src/scripts/wakaqPurge.ts",
-    "with-env": "dotenv -e ../../.env -c --"
+    "with-env": "node ./node_modules/dotenv-cli/cli.js -e ../../.env -c --"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",
@@ -27,6 +27,7 @@
     "@workspace/external": "workspace:*",
     "date-fns": "^4.4.0",
     "dotenv": "^18.0.4",
+    "dotenv-cli": "^11.0.0",
     "ioredis": "^6.0.0",
     "nanoid": "^6.0.1",
     "next": "^16.3.6",
@@ -43,7 +44,6 @@
     "@types/web-app-manifest": "^1.0.9",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
-    "dotenv-cli": "^11.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
