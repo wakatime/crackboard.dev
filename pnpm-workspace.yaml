@@ -2,6 +2,12 @@ packages:
   - apps/*
   - packages/*
 
+allowBuilds:
+  core-js: true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+
 catalog:
   '@tanstack/react-query': ^5.102.8
   '@trpc/client': ^11.18.0
@@ -22,7 +28,12 @@ catalogs:
     react: ^19.2.8
     react-dom: ^19.2.8
 
-onlyBuiltDependencies:
-  - core-js
-  - esbuild
-  - sharp
+minimumReleaseAgeExclude:
+  - '@aws-sdk/client-s3@3.1141.0'
+  - '@aws-sdk/s3-request-presigner@3.1141.0'
+  - '@types/node@26.6.3'
+  - dotenv@18.0.4
+  - react-hook-form@7.89.0
+  - react-native-pager-view@9.0.5
+  - react-native-web@0.21.3
+  - resend@6.30.0

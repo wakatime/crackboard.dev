@@ -15,17 +15,17 @@
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.13.11",
-    "resend": "^6.24.0",
+    "resend": "^6.30.0",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^25.9.5",
+    "@types/node": "^26.6.3",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "dotenv-cli": "^11.0.0",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.68.0"
+    "typescript-eslint": "^8.70.1"
   }
 }

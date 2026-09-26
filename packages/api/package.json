@@ -14,17 +14,17 @@
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1120.0",
-    "@aws-sdk/s3-request-presigner": "^3.1120.0",
+    "@aws-sdk/client-s3": "^3.1141.0",
+    "@aws-sdk/s3-request-presigner": "^3.1141.0",
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@trpc/server": "catalog:",
-    "@vercel/functions": "^3.9.5",
+    "@vercel/functions": "^3.9.9",
     "@workspace/core": "workspace:*",
     "@workspace/db": "workspace:*",
     "@workspace/tasks": "workspace:*",
     "date-fns": "^4.4.0",
-    "drizzle-orm": "^0.45.2",
+    "drizzle-orm": "^0.45.3",
     "prettier": "catalog:",
     "slugify": "^1.6.9",
     "superjson": "catalog:",
@@ -35,8 +35,8 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
-    "next": "^16.3.3",
+    "next": "^16.3.6",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.68.0"
+    "typescript-eslint": "^8.70.1"
   }
 }

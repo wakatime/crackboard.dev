@@ -25,7 +25,7 @@
     "dev": "node scripts/git-hash.mjs"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1120.0",
+    "@aws-sdk/client-s3": "^3.1141.0",
     "@panva/hkdf": "^1.2.1",
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
@@ -34,26 +34,26 @@
     "decode-ico": "^0.4.1",
     "he": "^1.2.0",
     "human-id": "^4.2.1",
-    "jose": "^6.2.10",
-    "node-html-parser": "^7.1.0",
+    "jose": "^6.2.12",
+    "node-html-parser": "^9.0.4",
     "pluralize": "^8.0.0",
     "sharp": "catalog:",
     "slugify": "^1.6.9",
-    "tldts": "^7.4.11",
+    "tldts": "^7.4.15",
     "ts-duration": "^1.1.0",
     "uuid": "^14.0.2",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@types/he": "^1.2.3",
-    "@types/node": "^25.9.5",
+    "@types/node": "^26.6.3",
     "@types/pluralize": "^0.0.33",
     "@types/uuid": "^11.0.0",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "http": "0.0.1-security",
-    "next": "^16.3.3",
+    "next": "^16.3.6",
     "prettier": "catalog:",
     "typescript": "catalog:"
   }

@@ -23,12 +23,12 @@
     "with-env": "dotenv -e ../../.env -c --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1120.0",
+    "@aws-sdk/client-s3": "^3.1141.0",
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "date-fns": "^4.4.0",
-    "drizzle-orm": "^0.45.2",
-    "ioredis": "^5.11.1",
+    "drizzle-orm": "^0.45.3",
+    "ioredis": "^6.0.0",
     "postgres": "^3.4.9",
     "zod": "catalog:"
   },
@@ -36,10 +36,10 @@
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
     "dotenv-cli": "^11.0.0",
-    "drizzle-kit": "^0.31.10",
+    "drizzle-kit": "^0.31.11",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.68.0"
+    "typescript-eslint": "^8.70.1"
   }
 }
