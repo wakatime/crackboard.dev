@@ -30,6 +30,7 @@
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@workspace/db": "workspace:*",
+    "cookies-next": "^6.1.1",
     "date-fns": "^4.4.0",
     "decode-ico": "^0.4.1",
     "he": "^1.2.0",
