@@ -29,7 +29,6 @@
     "android": "pnpm -F @workspace/mobile android",
     "expo:prebuild": "pnpm -F @workspace/mobile prebuild",
     "expo:prebuild:clean": "pnpm -F @workspace/mobile prebuild:clean",
-    "prebuild": "pnpm -F @workspace/mobile prebuild",
     "prebuild:clean": "pnpm -F @workspace/mobile prebuild:clean",
     "update": "pnpm update -r --latest",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
