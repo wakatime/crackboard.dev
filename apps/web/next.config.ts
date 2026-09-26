@@ -12,7 +12,6 @@ createJiti(fileURLToPath(import.meta.url))('./src/env');
 
 const config: NextConfig = {
   reactStrictMode: false,
-  eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   transpilePackages: ['@workspace/api', '@workspace/db', '@workspace/tasks', '@workspace/core', '@workspace/ui', '@workspace/external'],
 

@@ -7,7 +7,7 @@ const isMobileApp = (req: NextRequest) => {
   return req.headers.get('x-trpc-source') === 'expo-react';
 };
 
-export async function middleware(req: NextRequest): Promise<NextResponse | void> {
+export async function proxy(req: NextRequest): Promise<NextResponse | void> {
   const isFromApp = isMobileApp(req);
 
   // validate csrf token on modifying requests
@@ -33,7 +33,7 @@ export async function middleware(req: NextRequest): Promise<NextResponse | void>
   return res;
 }
 
-// https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+// https://nextjs.org/docs/app/api-reference/file-conventions/proxy#matcher
 export const config = {
   matcher: [
     /*
