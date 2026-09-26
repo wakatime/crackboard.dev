@@ -20,22 +20,23 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "clean": "rm -rf .turbo node_modules",
-    "with-env": "dotenv -e ../../.env -c --"
+    "with-env": "node ./node_modules/dotenv-cli/cli.js -e ../../.env -c --"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1141.0",
     "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "date-fns": "^4.4.0",
+    "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.45.3",
     "ioredis": "^6.0.0",
     "postgres": "^3.4.9",
+    "tsx": "^4.23.15",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/tsconfig": "workspace:*",
-    "dotenv-cli": "^11.0.0",
     "drizzle-kit": "^0.31.11",
     "eslint": "catalog:",
     "prettier": "catalog:",

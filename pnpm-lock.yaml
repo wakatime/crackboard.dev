@@ -213,6 +213,10 @@ pnpmfileChecksum: sha256-qBcOLsP8xZxwUV5fk9Z3e2cStBpzGFD6wAE8cIrLHIU=
 importers:
 
   .:
+    dependencies:
+      turbo:
+        specifier: ^2.11.4
+        version: 2.11.4
     devDependencies:
       '@workspace/tsconfig':
         specifier: workspace:*
@@ -223,9 +227,6 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.8.1
         version: 0.8.1(prettier@3.9.6)
-      turbo:
-        specifier: ^2.11.4
-        version: 2.11.4
 
   apps/mobile:
     dependencies:
@@ -812,6 +813,9 @@ importers:
       date-fns:
         specifier: ^4.4.0
         version: 4.4.0
+      dotenv-cli:
+        specifier: ^11.0.0
+        version: 11.0.0
       drizzle-orm:
         specifier: ^0.45.3
         version: 0.45.3(gel@2.0.2(supports-color@8.1.1))(postgres@3.4.9)
@@ -821,6 +825,9 @@ importers:
       postgres:
         specifier: ^3.4.9
         version: 3.4.9
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       zod:
         specifier: 'catalog:'
         version: 4.4.3
@@ -831,9 +838,6 @@ importers:
       '@workspace/tsconfig':
         specifier: workspace:*
         version: link:../typescript-config
-      dotenv-cli:
-        specifier: ^11.0.0
-        version: 11.0.0
       drizzle-kit:
         specifier: ^0.31.11
         version: 0.31.11
