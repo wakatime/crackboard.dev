@@ -1,4 +1,4 @@
-import { date, index, integer, pgTable, unique } from 'drizzle-orm/pg-core';
+import { bigint, date, index, integer, pgTable, unique } from 'drizzle-orm/pg-core';
 
 import { Editor, ProgramLanguage } from './leaderboards';
 import { citext } from './types';
@@ -12,8 +12,15 @@ export const UserSummary = pgTable(
       .notNull()
       .references(() => User.id, { onDelete: 'cascade' }),
     totalSeconds: integer().notNull(),
+    aiInputTokens: bigint({ mode: 'number' }).notNull().default(0),
+    aiOutputTokens: bigint({ mode: 'number' }).notNull().default(0),
+    aiTotalTokens: bigint({ mode: 'number' }).notNull().default(0),
   },
-  (table) => [unique().on(table.date, table.userId), index().on(table.date.desc(), table.totalSeconds.desc())],
+  (table) => [
+    unique().on(table.date, table.userId),
+    index().on(table.date.desc(), table.totalSeconds.desc()),
+    index().on(table.date.desc(), table.aiTotalTokens.desc()),
+  ],
 );
 
 export const UserSummaryLanguage = pgTable(

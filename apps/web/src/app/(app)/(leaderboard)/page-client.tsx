@@ -14,8 +14,8 @@ import { add, format, isAfter, isBefore, isFuture, isToday, isYesterday, sub } f
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { LuChevronLeft, LuChevronRight, LuLoaderCircle, LuUser } from 'react-icons/lu';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LuChevronLeft, LuChevronRight, LuClock3, LuLoaderCircle, LuSparkles, LuUser } from 'react-icons/lu';
 import { TbUserDown } from 'react-icons/tb';
 
 import HoverDevCard from '~/components/HoverDevCard';
@@ -34,6 +34,7 @@ export default function PageClient() {
 
 const FROM_DTAE = new Date(2025, 0, 1);
 const TO_DTAE = new Date();
+type LeaderboardMode = 'time' | 'tokens';
 
 function LeadersTable() {
   const { currentUser } = useAuth();
@@ -41,7 +42,7 @@ function LeadersTable() {
   const searchParams = useSearchParams();
   const utils = api.useUtils();
   const pathname = usePathname();
-  const [hasRetried, setHasRetried] = useState(false);
+  const retriedQueryKeyRef = useRef<string | null>(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const router = useRouter();
 
@@ -70,9 +71,13 @@ function LeadersTable() {
     return Number(page);
   }, [searchParams]);
 
+  const mode = useMemo<LeaderboardMode>(() => {
+    return searchParams.get('mode') === 'tokens' ? 'tokens' : 'time';
+  }, [searchParams]);
+
   const dateString = useMemo(() => dateToDateString(currentDate), [currentDate]);
 
-  const leadersQuery = api.leaderboard.getLeaders.useQuery({ date: dateString, page });
+  const leadersQuery = api.leaderboard.getLeaders.useQuery({ date: dateString, mode, page });
   const programLanguagesQuery = api.languages.getAllProgramLanguages.useQuery();
   const editorsQuery = api.editors.getAllEditors.useQuery();
 
@@ -96,6 +101,28 @@ function LeadersTable() {
     return (currentUser ? (leadersQuery.data?.items.findIndex((leader) => leader.user.id === currentUser.id) ?? -1) : -1) + 1;
   }, [currentUser, leadersQuery.data?.items]);
 
+  const createUrl = useCallback(
+    (params: URLSearchParams) => {
+      const search = params.toString();
+      return search ? `${pathname}?${search}` : pathname;
+    },
+    [pathname],
+  );
+
+  const handleSetMode = useCallback(
+    (mode: LeaderboardMode) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (mode === 'tokens') {
+        params.set('mode', mode);
+      } else {
+        params.delete('mode');
+      }
+      params.delete('page');
+      router.push(createUrl(params));
+    },
+    [createUrl, router, searchParams],
+  );
+
   const handleSetPage = useCallback(
     (page: number, replace?: boolean) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -104,14 +131,14 @@ function LeadersTable() {
       } else {
         params.delete('page');
       }
-      const url = pathname + params.toString() ? `?${params.toString()}` : '';
+      const url = createUrl(params);
       if (replace) {
         router.replace(url);
       } else {
         router.push(url);
       }
     },
-    [pathname, router, searchParams],
+    [createUrl, router, searchParams],
   );
 
   const handleSetDate = useCallback(
@@ -122,26 +149,26 @@ function LeadersTable() {
       } else {
         params.set('date', dateToDateString(date));
       }
+      params.delete('page');
 
-      const url = pathname + params.toString() ? `?${params.toString()}` : '';
+      const url = createUrl(params);
       if (replace) {
         router.replace(url);
       } else {
         router.push(url);
       }
     },
-    [pathname, router, searchParams],
+    [createUrl, router, searchParams],
   );
 
   // refetch leaders once if we don't have any for the current day, because it syncs with WakaTime on the first fetch
   useEffect(() => {
-    if (leadersQuery.isSuccess && !hasRetried) {
-      if (leadersQuery.data.totalItems === 0) {
-        setHasRetried(true);
-        void utils.leaderboard.getLeaders.refetch();
-      }
+    const retryKey = `${mode}:${dateString}`;
+    if (leadersQuery.isSuccess && retriedQueryKeyRef.current !== retryKey && leadersQuery.data.totalItems === 0) {
+      retriedQueryKeyRef.current = retryKey;
+      void utils.leaderboard.getLeaders.refetch();
     }
-  }, [leadersQuery.isSuccess, leadersQuery.data?.totalItems, hasRetried, utils.leaderboard.getLeaders]);
+  }, [dateString, leadersQuery.isSuccess, leadersQuery.data?.totalItems, mode, utils.leaderboard.getLeaders]);
 
   // If search params date is a future date (after TO_DATE) or before 2025 (before FROM_DATE) we will revert back to today
   useEffect(() => {
@@ -158,8 +185,27 @@ function LeadersTable() {
 
   return (
     <>
-      <div className="mb-4 flex items-center gap-4">
-        <div className="flex-1"></div>
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant={mode === 'time' ? 'default' : 'outline'}
+            aria-pressed={mode === 'time'}
+            onClick={() => handleSetMode('time')}
+            className="cursor-pointer"
+          >
+            <LuClock3 />
+            Coding Time
+          </Button>
+          <Button
+            variant={mode === 'tokens' ? 'default' : 'outline'}
+            aria-pressed={mode === 'tokens'}
+            onClick={() => handleSetMode('tokens')}
+            className="cursor-pointer"
+          >
+            <LuSparkles />
+            AI Tokens
+          </Button>
+        </div>
         <div className="flex gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -188,13 +234,11 @@ function LeadersTable() {
                 mode="single"
                 selected={currentDate}
                 onSelect={(date) => {
-                  if (date) {
-                    const d = new Date();
-                    d.setUTCFullYear(date.getFullYear());
-                    d.setUTCMonth(date.getMonth());
-                    d.setUTCDate(date.getDate());
-                    handleSetDate(d);
-                  }
+                  const d = new Date();
+                  d.setUTCFullYear(date.getFullYear());
+                  d.setUTCMonth(date.getMonth());
+                  d.setUTCDate(date.getDate());
+                  handleSetDate(d);
                   setDatePickerOpen(false);
                 }}
                 initialFocus
@@ -243,9 +287,19 @@ function LeadersTable() {
                 </div>
               </TableHead>
               <TableHead>User</TableHead>
-              <TableHead>{isToday(currentDate) ? 'Time Today' : formatDate(currentDate)}</TableHead>
-              <TableHead>Languages</TableHead>
-              <TableHead>Editors</TableHead>
+              {mode === 'tokens' ? (
+                <>
+                  <TableHead>{isToday(currentDate) ? 'Tokens Today' : formatDate(currentDate)}</TableHead>
+                  <TableHead>Input Tokens</TableHead>
+                  <TableHead>Output Tokens</TableHead>
+                </>
+              ) : (
+                <>
+                  <TableHead>{isToday(currentDate) ? 'Time Today' : formatDate(currentDate)}</TableHead>
+                  <TableHead>Languages</TableHead>
+                  <TableHead>Editors</TableHead>
+                </>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -267,9 +321,11 @@ function LeadersTable() {
               <TableRow>
                 <TableCell colSpan={5}>
                   <div className="text-muted-foreground p-4 text-center">
-                    {isToday(currentDate)
-                      ? `It’s a new day, the clock resets at midnight ${leadersQuery.data.timezone}. Get your coding on!`
-                      : 'No devs found.'}
+                    {mode === 'tokens'
+                      ? 'No AI token usage found.'
+                      : isToday(currentDate)
+                        ? `It’s a new day, the clock resets at midnight ${leadersQuery.data.timezone}. Get your coding on!`
+                        : 'No devs found.'}
                   </div>
                 </TableCell>
               </TableRow>
@@ -343,53 +399,69 @@ function LeadersTable() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <div className="text-lg">{formatSeconds(leader.totalSeconds)}</div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex max-w-md min-w-xs flex-wrap gap-2">
-                      {leader.languages.map((language, index) => {
-                        if (language.totalSeconds < 60 && index > 0) {
-                          return null;
-                        }
-                        const bgColor = languages.get(language.programLanguageName) ?? undefined;
-                        const color = getReadableTextColor(bgColor, theme === 'dark' ? 'white' : 'black');
-                        return (
-                          <Button
-                            key={language.programLanguageName}
-                            size="sm"
-                            variant="secondary"
-                            className="h-fit px-2 py-1.5 text-xs"
-                            style={{ backgroundColor: bgColor, color }}
-                          >
-                            {`${language.programLanguageName} - ${formatSeconds(language.totalSeconds)}`}
-                          </Button>
-                        );
-                      })}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex max-w-md min-w-xs flex-wrap gap-2">
-                      {leader.editors.map((editor, index) => {
-                        if (editor.totalSeconds < 60 && index > 0) {
-                          return null;
-                        }
-                        const bgColor = editors.get(editor.editorName) ?? undefined;
-                        const color = getReadableTextColor(bgColor, theme === 'dark' ? 'white' : 'black');
-                        return (
-                          <Button
-                            key={editor.editorName}
-                            size="sm"
-                            variant="secondary"
-                            className="h-fit px-2 py-1.5 text-xs"
-                            style={{ backgroundColor: bgColor, color }}
-                          >
-                            {`${editor.editorName} - ${formatSeconds(editor.totalSeconds)}`}
-                          </Button>
-                        );
-                      })}
-                    </div>
-                  </TableCell>
+                  {mode === 'tokens' ? (
+                    <>
+                      <TableCell>
+                        <div className="text-lg font-medium">{formatTokens(leader.aiTotalTokens)}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-muted-foreground">{formatTokens(leader.aiInputTokens)}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-muted-foreground">{formatTokens(leader.aiOutputTokens)}</div>
+                      </TableCell>
+                    </>
+                  ) : (
+                    <>
+                      <TableCell>
+                        <div className="text-lg">{formatSeconds(leader.totalSeconds)}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex max-w-md min-w-xs flex-wrap gap-2">
+                          {leader.languages.map((language, index) => {
+                            if (language.totalSeconds < 60 && index > 0) {
+                              return null;
+                            }
+                            const bgColor = languages.get(language.programLanguageName) ?? undefined;
+                            const color = getReadableTextColor(bgColor, theme === 'dark' ? 'white' : 'black');
+                            return (
+                              <Button
+                                key={language.programLanguageName}
+                                size="sm"
+                                variant="secondary"
+                                className="h-fit px-2 py-1.5 text-xs"
+                                style={{ backgroundColor: bgColor, color }}
+                              >
+                                {`${language.programLanguageName} - ${formatSeconds(language.totalSeconds)}`}
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex max-w-md min-w-xs flex-wrap gap-2">
+                          {leader.editors.map((editor, index) => {
+                            if (editor.totalSeconds < 60 && index > 0) {
+                              return null;
+                            }
+                            const bgColor = editors.get(editor.editorName) ?? undefined;
+                            const color = getReadableTextColor(bgColor, theme === 'dark' ? 'white' : 'black');
+                            return (
+                              <Button
+                                key={editor.editorName}
+                                size="sm"
+                                variant="secondary"
+                                className="h-fit px-2 py-1.5 text-xs"
+                                style={{ backgroundColor: bgColor, color }}
+                              >
+                                {`${editor.editorName} - ${formatSeconds(editor.totalSeconds)}`}
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))
             )}
@@ -406,6 +478,10 @@ function LeadersTable() {
 
 function numberWithCommas(x: number) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function formatTokens(totalTokens: number) {
+  return numberWithCommas(Math.round(totalTokens));
 }
 
 function formatSeconds(totalSeconds: number) {

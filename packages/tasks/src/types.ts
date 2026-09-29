@@ -36,6 +36,8 @@ export interface Summary {
     hours: number;
     minutes: number;
     total_seconds: number;
+    ai_input_tokens?: number;
+    ai_output_tokens?: number;
     digital: string;
     decimal: string;
     text: string;
