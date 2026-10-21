@@ -39,7 +39,13 @@ export interface Summary {
     digital: string;
     decimal: string;
     text: string;
+    ai_additions?: number;
+    ai_deletions?: number;
+    human_additions?: number;
+    human_deletions?: number;
+    ai_model_total_cost?: number;
   };
+  categories?: Pick<Stat, 'name' | 'total_seconds'>[];
   range: {
     start: string;
     end: string;

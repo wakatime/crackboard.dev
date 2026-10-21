@@ -96,17 +96,32 @@ export const syncUserSummaries = wakaq.task(
 );
 
 async function _processSummary(user: { id: string; accessToken: string; lastSyncedStatsAt: Date | null }, summary: Summary) {
+  const aiCodeSeconds = summary.categories?.find((category) => category.name === 'AI Coding')?.total_seconds;
+  const metrics = {
+    aiLines:
+      summary.grand_total.ai_additions === undefined || summary.grand_total.ai_deletions === undefined
+        ? null
+        : summary.grand_total.ai_additions + summary.grand_total.ai_deletions,
+    humanLines:
+      summary.grand_total.human_additions === undefined || summary.grand_total.human_deletions === undefined
+        ? null
+        : summary.grand_total.human_additions + summary.grand_total.human_deletions,
+    aiSpend: summary.grand_total.ai_model_total_cost ?? null,
+    aiCodeSeconds: aiCodeSeconds === undefined ? (summary.categories ? 0 : null) : Math.floor(aiCodeSeconds),
+  };
   await db
     .insert(UserSummary)
     .values({
       date: summary.range.date,
       userId: user.id,
       totalSeconds: Math.floor(summary.grand_total.total_seconds),
+      ...metrics,
     })
     .onConflictDoUpdate({
       target: [UserSummary.date, UserSummary.userId],
       set: {
         totalSeconds: Math.floor(summary.grand_total.total_seconds),
+        ...metrics,
       },
     });
 

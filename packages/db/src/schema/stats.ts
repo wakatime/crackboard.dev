@@ -1,4 +1,4 @@
-import { date, index, integer, pgTable, unique } from 'drizzle-orm/pg-core';
+import { date, index, integer, pgTable, real, unique } from 'drizzle-orm/pg-core';
 
 import { Editor, ProgramLanguage } from './leaderboards';
 import { citext } from './types';
@@ -12,6 +12,10 @@ export const UserSummary = pgTable(
       .notNull()
       .references(() => User.id, { onDelete: 'cascade' }),
     totalSeconds: integer().notNull(),
+    aiLines: integer(),
+    humanLines: integer(),
+    aiSpend: real(),
+    aiCodeSeconds: integer(),
   },
   (table) => [unique().on(table.date, table.userId), index().on(table.date.desc(), table.totalSeconds.desc())],
 );

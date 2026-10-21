@@ -18,6 +18,7 @@ export const leaderboardRouter = createTRPCRouter({
         date: z.string().date().optional(),
         page: z.number().positive().min(1).nullish(),
         limit: z.number().positive().min(1).max(500).optional(),
+        metric: z.enum(['totalCodeTime', 'aiLines', 'humanLines', 'aiSpend', 'aiCodeTime', 'humanCodeTime']).default('aiLines'),
       }),
     )
     .query(async ({ ctx: { currentUser }, input }) => {
@@ -30,6 +31,14 @@ export const leaderboardRouter = createTRPCRouter({
       const page = input.page ?? 1;
 
       const date = input.date ?? today();
+      const metricValue = {
+        totalCodeTime: sql<number>`${UserSummary.totalSeconds}`,
+        aiLines: sql<number>`${UserSummary.aiLines}`,
+        humanLines: sql<number>`${UserSummary.humanLines}`,
+        aiSpend: sql<number>`${UserSummary.aiSpend}`,
+        aiCodeTime: sql<number>`${UserSummary.aiCodeSeconds}`,
+        humanCodeTime: sql<number>`greatest(0, ${UserSummary.totalSeconds} - ${UserSummary.aiCodeSeconds})`,
+      }[input.metric];
 
       const Languages = db.$with('UserSummaryLanguage').as(
         db
@@ -41,6 +50,7 @@ export const leaderboardRouter = createTRPCRouter({
           .where(and(eq(UserSummaryLanguage.date, date), gte(UserSummaryLanguage.totalSeconds, 60)))
           .groupBy(UserSummaryLanguage.userId),
       );
+      const languageFilter = input.metric === 'totalCodeTime' ? gt(Languages.count, 0) : undefined;
 
       const leaders = await db
         .with(Languages)
@@ -48,8 +58,8 @@ export const leaderboardRouter = createTRPCRouter({
         .from(UserSummary)
         .innerJoin(User, eq(User.id, UserSummary.userId))
         .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
-        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
-        .orderBy(desc(UserSummary.totalSeconds))
+        .where(and(eq(UserSummary.date, date), gt(metricValue, input.metric.endsWith('Time') ? 60 : 0), languageFilter))
+        .orderBy(desc(metricValue), UserSummary.userId)
         .limit(limit)
         .offset(limit * (page - 1));
 
@@ -86,6 +96,14 @@ export const leaderboardRouter = createTRPCRouter({
           return {
             date,
             totalSeconds: leader.UserSummary.totalSeconds,
+            metricValue:
+              input.metric === 'humanCodeTime'
+                ? Math.max(0, leader.UserSummary.totalSeconds - (leader.UserSummary.aiCodeSeconds ?? 0))
+                : input.metric === 'aiCodeTime'
+                  ? leader.UserSummary.aiCodeSeconds
+                  : input.metric === 'totalCodeTime'
+                    ? leader.UserSummary.totalSeconds
+                    : leader.UserSummary[input.metric],
             user,
             languages,
             editors,
@@ -98,11 +116,16 @@ export const leaderboardRouter = createTRPCRouter({
         .select({ count: count() })
         .from(UserSummary)
         .leftJoin(Languages, eq(Languages.userId, UserSummary.userId))
-        .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60), gt(Languages.count, 0)))
+        .where(and(eq(UserSummary.date, date), gt(metricValue, input.metric.endsWith('Time') ? 60 : 0), languageFilter))
         .then((res) => res[0]?.count ?? 0);
 
       if (totalCount === 0) {
-        await syncSummariesForAllUsers.enqueue();
+        const hasActivity = await db
+          .select({ userId: UserSummary.userId })
+          .from(UserSummary)
+          .where(and(eq(UserSummary.date, date), gt(UserSummary.totalSeconds, 60)))
+          .limit(1);
+        if (hasActivity.length === 0) await syncSummariesForAllUsers.enqueue();
       }
 
       return {
