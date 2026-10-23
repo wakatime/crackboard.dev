@@ -62,7 +62,7 @@ function LeadersTable({ initialMetric }: { initialMetric?: string }) {
   const pathname = usePathname();
   const hasRetried = useRef(false);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
-  const [savedMetric, setSavedMetric] = useState<Metric>(initialMetric && initialMetric in METRICS ? (initialMetric as Metric) : 'aiLines');
+  const [savedMetric, setSavedMetric] = useState<Metric>(initialMetric && initialMetric in METRICS ? (initialMetric as Metric) : 'aiSpend');
   const router = useRouter();
 
   const currentDate = useMemo(() => {
