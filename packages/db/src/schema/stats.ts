@@ -15,7 +15,6 @@ export const UserSummary = pgTable(
     aiLines: integer(),
     humanLines: integer(),
     aiSpend: real(),
-    aiCodeSeconds: integer(),
   },
   (table) => [unique().on(table.date, table.userId), index().on(table.date.desc(), table.totalSeconds.desc())],
 );

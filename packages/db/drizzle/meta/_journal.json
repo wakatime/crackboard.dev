@@ -148,6 +148,13 @@
       "when": 1792616927801,
       "tag": "0020_hot_madripoor",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1792753577920,
+      "tag": "0021_remove_ai_code_seconds",
+      "breakpoints": true
     }
   ]
 }

@@ -18,7 +18,7 @@ export const leaderboardRouter = createTRPCRouter({
         date: z.string().date().optional(),
         page: z.number().positive().min(1).nullish(),
         limit: z.number().positive().min(1).max(500).optional(),
-        metric: z.enum(['totalCodeTime', 'aiLines', 'humanLines', 'aiSpend', 'aiCodeTime', 'humanCodeTime']).default('aiLines'),
+        metric: z.enum(['totalCodeTime', 'aiLines', 'humanLines', 'aiSpend']).default('aiLines'),
       }),
     )
     .query(async ({ ctx: { currentUser }, input }) => {
@@ -36,8 +36,6 @@ export const leaderboardRouter = createTRPCRouter({
         aiLines: sql<number>`${UserSummary.aiLines}`,
         humanLines: sql<number>`${UserSummary.humanLines}`,
         aiSpend: sql<number>`${UserSummary.aiSpend}`,
-        aiCodeTime: sql<number>`${UserSummary.aiCodeSeconds}`,
-        humanCodeTime: sql<number>`greatest(0, ${UserSummary.totalSeconds} - ${UserSummary.aiCodeSeconds})`,
       }[input.metric];
 
       const Languages = db.$with('UserSummaryLanguage').as(
@@ -96,14 +94,7 @@ export const leaderboardRouter = createTRPCRouter({
           return {
             date,
             totalSeconds: leader.UserSummary.totalSeconds,
-            metricValue:
-              input.metric === 'humanCodeTime'
-                ? Math.max(0, leader.UserSummary.totalSeconds - (leader.UserSummary.aiCodeSeconds ?? 0))
-                : input.metric === 'aiCodeTime'
-                  ? leader.UserSummary.aiCodeSeconds
-                  : input.metric === 'totalCodeTime'
-                    ? leader.UserSummary.totalSeconds
-                    : leader.UserSummary[input.metric],
+            metricValue: input.metric === 'totalCodeTime' ? leader.UserSummary.totalSeconds : leader.UserSummary[input.metric],
             user,
             languages,
             editors,

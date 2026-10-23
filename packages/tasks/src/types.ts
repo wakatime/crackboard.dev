@@ -45,7 +45,6 @@ export interface Summary {
     human_deletions?: number;
     ai_model_total_cost?: number;
   };
-  categories?: Pick<Stat, 'name' | 'total_seconds'>[];
   range: {
     start: string;
     end: string;

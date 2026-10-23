@@ -45,9 +45,7 @@ const METRICS = {
   aiLines: 'AI Lines of code',
   humanLines: 'Human lines of code',
   aiSpend: 'AI Spend',
-  aiCodeTime: 'AI Code Time',
-  humanCodeTime: 'Human Code Time',
-  totalCodeTime: 'Combined total code time',
+  totalCodeTime: 'Code time',
 } as const;
 type Metric = keyof typeof METRICS;
 const METRIC_COOKIE = 'leaderboard-metric';
